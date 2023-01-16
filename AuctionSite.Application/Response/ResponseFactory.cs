@@ -3,7 +3,7 @@ using AuctionSite.Domain.Util;
 using AuctionSite.Models.Response;
 using FluentValidation.Results;
 
-namespace AuctionSite.Application.Response
+namespace AuctionSite.Application
 {
     [Implementation(typeof(IResponseFactory))]
     public class ResponseFactory : IResponseFactory

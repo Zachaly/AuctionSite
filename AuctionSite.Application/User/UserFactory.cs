@@ -4,7 +4,7 @@ using AuctionSite.Domain.Util;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
 
-namespace AuctionSite.Application.User
+namespace AuctionSite.Application
 {
     [Implementation(typeof(IUserFactory))]
     public class UserFactory : IUserFactory
