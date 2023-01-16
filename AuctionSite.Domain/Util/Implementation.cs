@@ -1,6 +1,6 @@
 ﻿namespace AuctionSite.Domain.Util
 {
-    internal class Implementation : Attribute
+    public class Implementation : Attribute
     {
         public Type Interface { get; set; }
 
