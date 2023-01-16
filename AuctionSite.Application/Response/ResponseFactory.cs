@@ -9,33 +9,46 @@ namespace AuctionSite.Application
     public class ResponseFactory : IResponseFactory
     {
         public DataResponseModel<T> CreateFailure<T>(string errorMessage)
-        {
-            throw new NotImplementedException();
-        }
+            => new DataResponseModel<T>
+            {
+                Error = errorMessage,
+                Data = default(T),
+                Success = false
+            };
 
         public ResponseModel CreateFailure(string errorMessage)
-        {
-            throw new NotImplementedException();
-        }
+            => new ResponseModel
+            {
+                Success = false,
+                Error = errorMessage,
+            };
 
         public DataResponseModel<T> CreateSuccess<T>(T data)
-        {
-            throw new NotImplementedException();
-        }
+            => new DataResponseModel<T> 
+            { 
+                Success = true,
+                Data = data 
+            };
 
         public ResponseModel CreateSuccess()
-        {
-            throw new NotImplementedException();
-        }
+            => new ResponseModel 
+            { 
+                Success = true
+            };
 
         public DataResponseModel<T> CreateValidationError<T>(ValidationResult validationResult)
-        {
-            throw new NotImplementedException();
-        }
+            => new DataResponseModel<T>
+            {
+                Data = default(T),
+                ValidationErrors = validationResult.ToDictionary(),
+                Success = false
+            };
 
         public ResponseModel CreateValidationError(ValidationResult validationResult)
-        {
-            throw new NotImplementedException();
-        }
+            => new ResponseModel
+            {
+                Success = false,
+                ValidationErrors = validationResult.ToDictionary()
+            };
     }
 }

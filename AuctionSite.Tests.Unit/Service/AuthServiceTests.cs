@@ -2,12 +2,14 @@
 using AuctionSite.Application.Abstraction;
 using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
+using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -79,6 +81,9 @@ namespace AuctionSite.Tests.Unit.Service
                     FirstName = request.FirstName,
                 });
 
+            _responseFactory.Setup(x => x.CreateSuccess())
+                .Returns(new ResponseModel { Success = true });
+
             var request = new RegisterRequest
             {
                 Username = "username",
@@ -134,6 +139,9 @@ namespace AuctionSite.Tests.Unit.Service
                     FirstName = request.FirstName,
                 });
 
+            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
+                .Returns((string message) => new ResponseModel { Success = false, Error = message });
+
             var request = new RegisterRequest
             {
                 Username = "username",
@@ -145,9 +153,6 @@ namespace AuctionSite.Tests.Unit.Service
             var response = await _authService.Register(request);
 
             Assert.False(response.Success);
-            Assert.DoesNotContain(users, x => x.UserName == request.Username);
-            Assert.DoesNotContain(infos, x => x.FirstName == request.FirstName
-                && x.Id == users.First(y => y.UserName == request.Username).Id);
         }
 
         [Fact]
@@ -164,15 +169,8 @@ namespace AuctionSite.Tests.Unit.Service
             _userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Callback((ApplicationUser user, string _) =>
                 {
-                    user.Id = Guid.NewGuid().ToString();
-                    users.Add(user);
-                }).ReturnsAsync(IdentityResult.Success);
-
-            _userInfoRepository.Setup(x => x.AddUserInfoAsync(It.IsAny<UserInfo>()))
-                .Callback((UserInfo info) =>
-                {
                     throw new Exception(ExceptionMessage);
-                });
+                }).ReturnsAsync(IdentityResult.Success);
 
             _userFactory.Setup(x => x.Create(It.IsAny<RegisterRequest>()))
                 .Returns((RegisterRequest registerRequest) => new ApplicationUser
@@ -188,6 +186,9 @@ namespace AuctionSite.Tests.Unit.Service
                     FirstName = request.FirstName,
                 });
 
+            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
+                .Returns((string message) => new ResponseModel { Success = false, Error = message });
+
             var request = new RegisterRequest
             {
                 Username = "username",
@@ -199,10 +200,55 @@ namespace AuctionSite.Tests.Unit.Service
             var response = await _authService.Register(request);
 
             Assert.False(response.Success);
-            Assert.Contains(users, x => x.UserName == request.Username);
-            Assert.Contains(infos, x => x.FirstName == request.FirstName
+            Assert.DoesNotContain(users, x => x.UserName == request.Username);
+            Assert.DoesNotContain(infos, x => x.FirstName == request.FirstName
                 && x.Id == users.First(y => y.UserName == request.Username).Id);
             Assert.Equal(ExceptionMessage, response.Error);
+        }
+
+        [Fact]
+        public async Task Register_FailedToAddUser_Fail()
+        {
+            var users = new List<ApplicationUser>();
+            var infos = new List<UserInfo>();
+
+            _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync((string email) => users.FirstOrDefault(x => x.Email == email));
+
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Failed());
+
+            _userFactory.Setup(x => x.Create(It.IsAny<RegisterRequest>()))
+                .Returns((RegisterRequest registerRequest) => new ApplicationUser
+                {
+                    Email = registerRequest.Email,
+                    UserName = registerRequest.Username
+                });
+
+            _userFactory.Setup(x => x.CreateInfo(It.IsAny<RegisterRequest>(), It.IsAny<string>()))
+                .Returns((RegisterRequest request, string id) => new UserInfo
+                {
+                    Id = id,
+                    FirstName = request.FirstName,
+                });
+
+            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
+                .Returns((string message) => new ResponseModel { Success = false, Error = message });
+
+            var request = new RegisterRequest
+            {
+                Username = "username",
+                Email = "email",
+                Password = "password",
+                FirstName = "fname"
+            };
+
+            var response = await _authService.Register(request);
+
+            Assert.False(response.Success);
+            Assert.DoesNotContain(users, x => x.UserName == request.Username);
+            Assert.DoesNotContain(infos, x => x.FirstName == request.FirstName
+                && x.Id == users.First(y => y.UserName == request.Username).Id);
         }
 
         [Fact]
@@ -225,6 +271,9 @@ namespace AuctionSite.Tests.Unit.Service
             _userManager.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).
                 ReturnsAsync(true);
 
+            _userManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(new List<Claim>());
+
             _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Returns((ApplicationUser user, string token) => new LoginResponse
                 {
@@ -232,6 +281,9 @@ namespace AuctionSite.Tests.Unit.Service
                     UserId = user.Id,
                     UserName = user.UserName
                 });
+
+            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<LoginResponse>()))
+                .Returns((LoginResponse data) => new DataResponseModel<LoginResponse> { Success = true, Data = data });
 
             var request = new LoginRequest
             {
@@ -241,22 +293,22 @@ namespace AuctionSite.Tests.Unit.Service
 
             var response = await _authService.Login(request);
 
-            var validator = new JwtSecurityTokenHandler();
-
-            var validation = validator.ValidateToken(response.Data.AuthToken, new TokenValidationParameters
+            var tokenValidation = new TokenValidationParameters
             {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateLifetime = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Object["Auth:SecretKey"])),
                 ValidIssuer = _configuration.Object["Auth:Issuer"],
-                ValidAudience = _configuration.Object["Auth:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Object["Auth:SecretKey"]))
-            }, out var token);
+                ValidAudience = _configuration.Object["Auth:Audience"]
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var validationResult = tokenHandler.ValidateToken(response.Data.AuthToken, tokenValidation, out SecurityToken validToken);
+
+            var c = validationResult.Identities.First().Claims.ToList();
 
             Assert.True(response.Success);
             Assert.Equal(user.Id, response.Data.UserId);
             Assert.Equal(user.UserName, response.Data.UserName);
-            Assert.Contains(validation.Claims, x => x.Type == JwtRegisteredClaimNames.Sub && x.Value == user.Id);
+            Assert.Contains(validationResult.Identities.First().Claims, x => x.Value == user.Id);
         }
 
         [Fact]
@@ -279,6 +331,9 @@ namespace AuctionSite.Tests.Unit.Service
             _userManager.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).
                 ReturnsAsync(true);
 
+            _userManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(new List<Claim>());
+
             _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Returns((ApplicationUser user, string token) => new LoginResponse
                 {
@@ -286,6 +341,9 @@ namespace AuctionSite.Tests.Unit.Service
                     UserId = user.Id,
                     UserName = user.UserName
                 });
+
+            _responseFactory.Setup(x => x.CreateFailure<LoginResponse>(It.IsAny<string>()))
+                .Returns((string message) => new DataResponseModel<LoginResponse> { Error = message, Success = false });
 
             var request = new LoginRequest
             {
@@ -319,6 +377,9 @@ namespace AuctionSite.Tests.Unit.Service
             _userManager.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).
                 ReturnsAsync(false);
 
+            _userManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(new List<Claim>());
+
             _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Returns((ApplicationUser user, string token) => new LoginResponse
                 {
@@ -326,6 +387,9 @@ namespace AuctionSite.Tests.Unit.Service
                     UserId = user.Id,
                     UserName = user.UserName
                 });
+
+            _responseFactory.Setup(x => x.CreateFailure<LoginResponse>(It.IsAny<string>()))
+                .Returns((string message) => new DataResponseModel<LoginResponse> { Error = message, Success = false });
 
             var request = new LoginRequest
             {

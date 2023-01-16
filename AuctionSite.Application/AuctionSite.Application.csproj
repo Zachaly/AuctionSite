@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AuctionSite.Database\AuctionSite.Database.csproj" />
     <ProjectReference Include="..\AuctionSite.Domain\AuctionSite.Domain.csproj" />
     <ProjectReference Include="..\AuctionSite.Models\AuctionSite.Models.csproj" />

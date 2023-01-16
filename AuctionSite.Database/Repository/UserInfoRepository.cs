@@ -16,22 +16,29 @@ namespace AuctionSite.Database.Repository
 
         public Task AddUserInfoAsync(UserInfo userInfo)
         {
-            throw new NotImplementedException();
+            _dbContext.UserInfo.Add(userInfo);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public Task DeleteUserInfoAsync(string id)
         {
-            throw new NotImplementedException();
+            _dbContext.UserInfo.Remove(_dbContext.UserInfo.Find(id));
+
+            return _dbContext.SaveChangesAsync();
         }
 
-        public Task<T> GetUserInfoByIdAsync<T>(string id, Func<UserInfo, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<T> GetUserInfoByIdAsync<T>(string id, Func<UserInfo, T> selector)
+            => _dbContext.UserInfo
+                .Where(info => info.Id == id)
+                .Select(selector)
+                .FirstOrDefault();
 
         public Task UpdateUserInfoAsync(UserInfo userInfo)
         {
-            throw new NotImplementedException();
+            _dbContext.UserInfo.Update(userInfo);
+
+            return _dbContext.SaveChangesAsync();
         }
     }
 }
