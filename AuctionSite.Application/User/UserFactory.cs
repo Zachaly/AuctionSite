@@ -24,7 +24,7 @@ namespace AuctionSite.Application
                 Country = request.Country,
                 FirstName = request.FirstName,
                 Gender = request.Gender,
-                Id = userId,
+                UserId = userId,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 PostalCode = request.PostalCode,

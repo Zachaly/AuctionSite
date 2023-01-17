@@ -27,7 +27,7 @@ namespace AuctionSite.Tests.Unit.Factory
 
             var info = factory.CreateInfo(request, UserId);
 
-            Assert.Equal(UserId, info.Id);
+            Assert.Equal(UserId, info.UserId);
             Assert.Equal(request.Address, info.Address);
             Assert.Equal(request.City, info.City);
             Assert.Equal(request.Country, info.Country);

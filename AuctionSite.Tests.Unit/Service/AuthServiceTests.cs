@@ -77,7 +77,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateInfo(It.IsAny<RegisterRequest>(), It.IsAny<string>()))
                 .Returns((RegisterRequest request, string id) => new UserInfo
                 { 
-                    Id = id,
+                    UserId = id,
                     FirstName = request.FirstName,
                 });
 
@@ -97,7 +97,7 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.True(response.Success);
             Assert.Contains(users, x => x.UserName == request.Username);
             Assert.Contains(infos, x => x.FirstName == request.FirstName 
-                && x.Id == users.First(y => y.UserName == request.Username).Id);
+                && x.UserId == users.First(y => y.UserName == request.Username).Id);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateInfo(It.IsAny<RegisterRequest>(), It.IsAny<string>()))
                 .Returns((RegisterRequest request, string id) => new UserInfo
                 {
-                    Id = id,
+                    UserId = id,
                     FirstName = request.FirstName,
                 });
 
@@ -182,7 +182,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateInfo(It.IsAny<RegisterRequest>(), It.IsAny<string>()))
                 .Returns((RegisterRequest request, string id) => new UserInfo
                 {
-                    Id = id,
+                    UserId = id,
                     FirstName = request.FirstName,
                 });
 
@@ -202,7 +202,7 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.False(response.Success);
             Assert.DoesNotContain(users, x => x.UserName == request.Username);
             Assert.DoesNotContain(infos, x => x.FirstName == request.FirstName
-                && x.Id == users.First(y => y.UserName == request.Username).Id);
+                && x.UserId == users.First(y => y.UserName == request.Username).Id);
             Assert.Equal(ExceptionMessage, response.Error);
         }
 
@@ -228,7 +228,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateInfo(It.IsAny<RegisterRequest>(), It.IsAny<string>()))
                 .Returns((RegisterRequest request, string id) => new UserInfo
                 {
-                    Id = id,
+                    UserId = id,
                     FirstName = request.FirstName,
                 });
 
@@ -248,7 +248,7 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.False(response.Success);
             Assert.DoesNotContain(users, x => x.UserName == request.Username);
             Assert.DoesNotContain(infos, x => x.FirstName == request.FirstName
-                && x.Id == users.First(y => y.UserName == request.Username).Id);
+                && x.UserId == users.First(y => y.UserName == request.Username).Id);
         }
 
         [Fact]

@@ -17,7 +17,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             var info = new UserInfo
             {
-                Id = "id",
+                UserId = "id",
                 FirstName = "name",
             };
 
@@ -31,10 +31,10 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             var infos = new List<UserInfo>
             {
-                new UserInfo { Id = "id1" },
-                new UserInfo { Id = "id2" },
-                new UserInfo { Id = "id3" },
-                new UserInfo { Id = "id4" },
+                new UserInfo { UserId = "id1" },
+                new UserInfo { UserId = "id2" },
+                new UserInfo { UserId = "id3" },
+                new UserInfo { UserId = "id4" },
             };
 
             AddContent(infos);
@@ -45,7 +45,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             await repository.DeleteUserInfoAsync(Id);
 
-            Assert.DoesNotContain(infos.FirstOrDefault(x => x.Id == Id), _dbContext.UserInfo);
+            Assert.DoesNotContain(infos.FirstOrDefault(x => x.UserId == Id), _dbContext.UserInfo);
         }
 
         [Fact]
@@ -53,10 +53,10 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             var infos = new List<UserInfo>
             {
-                new UserInfo { Id = "id1", FirstName = "fname1" },
-                new UserInfo { Id = "id2", FirstName = "fname2" },
-                new UserInfo { Id = "id3", FirstName = "fname3" },
-                new UserInfo { Id = "id4", FirstName = "fname4" },
+                new UserInfo { UserId = "id1", FirstName = "fname1" },
+                new UserInfo { UserId = "id2", FirstName = "fname2" },
+                new UserInfo { UserId = "id3", FirstName = "fname3" },
+                new UserInfo { UserId = "id4", FirstName = "fname4" },
             };
 
             AddContent(infos);
@@ -67,8 +67,8 @@ namespace AuctionSite.Tests.Unit.Repository
 
             var info = await repository.GetUserInfoByIdAsync(Id, x => x);
 
-            Assert.Equal(Id, info.Id);
-            Assert.Equal(infos.FirstOrDefault(x => x.Id == Id).FirstName, info.FirstName);
+            Assert.Equal(Id, info.UserId);
+            Assert.Equal(infos.FirstOrDefault(x => x.UserId == Id).FirstName, info.FirstName);
         }
 
         [Fact]
@@ -76,10 +76,10 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             var infos = new List<UserInfo>
             {
-                new UserInfo { Id = "id1", FirstName = "fname1" },
-                new UserInfo { Id = "id2", FirstName = "fname2" },
-                new UserInfo { Id = "id3", FirstName = "fname3" },
-                new UserInfo { Id = "id4", FirstName = "fname4" },
+                new UserInfo { UserId = "id1", FirstName = "fname1" },
+                new UserInfo { UserId = "id2", FirstName = "fname2" },
+                new UserInfo { UserId = "id3", FirstName = "fname3" },
+                new UserInfo { UserId = "id4", FirstName = "fname4" },
             };
 
             AddContent(infos);

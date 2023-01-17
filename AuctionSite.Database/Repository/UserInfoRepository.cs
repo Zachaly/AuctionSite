@@ -30,7 +30,7 @@ namespace AuctionSite.Database.Repository
 
         public async Task<T> GetUserInfoByIdAsync<T>(string id, Func<UserInfo, T> selector)
             => _dbContext.UserInfo
-                .Where(info => info.Id == id)
+                .Where(info => info.UserId == id)
                 .Select(selector)
                 .FirstOrDefault();
 
