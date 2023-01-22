@@ -1,0 +1,61 @@
+<div class="row justify-content-md-center">
+    <form class="col col-sm-5" (ngSubmit)="submit()">
+        <div class="mt-2">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control border-warning" [(ngModel)]="model.email">
+        </div>
+        <div class="mt-2">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control border-warning" [(ngModel)]="model.username">
+        </div>
+        <div class="mt-2">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control border-warning" [(ngModel)]="model.password">
+        </div>
+        <div class="mt-2">
+            <label for="confirmpassword">Confirm password</label>
+            <input type="password" name="confirmpassword" class="form-control border-warning" [(ngModel)]="confirmPassword">
+        </div>
+        <div class="mt-2">
+            <label for="fname">First name</label>
+            <input type="text" name="fname" class="form-control" [(ngModel)]="model.firstName">
+        </div>
+        <div class="mt-2">
+            <label for="lname">Last name</label>
+            <input type="text" name="lname" class="form-control" [(ngModel)]="model.lastName">
+        </div>
+        <div class="mt-2">
+            <label for="phonenum">Phone number</label>
+            <input type="text" name="phonenum" class="form-control" [(ngModel)]="model.phoneNumber">
+        </div>
+        <div class="mt-2">
+            <label for="city">City</label>
+            <input type="text" name="city" class="form-control" [(ngModel)]="model.city">
+        </div>
+        <div class="mt-2">
+            <label for="postalcode">Postal code</label>
+            <input type="text" name="postalcode" class="form-control" [(ngModel)]="model.postalCode">
+        </div>
+        <div class="mt-2">
+            <label for="country">Country</label>
+            <input type="text" name="country" class="form-control" [(ngModel)]="model.country">
+        </div>
+        <div class="mt-2">
+            <label for="address">Address</label>
+            <input type="text" name="address" class="form-control" [(ngModel)]="model.address">
+        </div>
+        <div class="mt-2 form-check">
+            <input type="radio" class="form-check-input" name="gender" [value]="gender.not_specified" [(ngModel)]="model.gender">
+            <label for="gender">Not specified</label>
+        </div>
+        <div class="mt-2 form-check">
+            <input type="radio" class="form-check-input" name="gender" [value]="gender.male" [(ngModel)]="model.gender">
+            <label for="gender">Male</label>
+        </div>
+        <div class="mt-2 form-check">
+            <input type="radio" class="form-check-input" name="gender" [value]="gender.female" [(ngModel)]="model.gender">
+            <label for="gender">Female</label>
+        </div>
+        <button class="btn btn-primary mt-2">Register</button>
+    </form>
+</div>
