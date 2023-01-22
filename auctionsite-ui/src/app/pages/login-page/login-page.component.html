@@ -1,0 +1,13 @@
+<div class="row justify-content-md-center">
+    <form class="col col-sm-5" (ngSubmit)="submit()">
+        <div class="mt-2">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" [(ngModel)]="model.email">
+        </div>
+        <div class="mt-2">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" [(ngModel)]="model.password">
+        </div>
+        <button class="btn btn-primary mt-2">Login</button>
+    </form>
+</div>
