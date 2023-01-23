@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSite.Api", "AuctionS
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "auctionsite-ui", "auctionsite-ui\auctionsite-ui.esproj", "{43FD01FA-CC9A-450C-86C8-D9CA4D5086C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSite.Tests.Integration", "AuctionSite.Tests.Integration\AuctionSite.Tests.Integration.csproj", "{AEFE9C2B-2E7F-47CD-A9A7-669E30A7648B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{43FD01FA-CC9A-450C-86C8-D9CA4D5086C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43FD01FA-CC9A-450C-86C8-D9CA4D5086C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43FD01FA-CC9A-450C-86C8-D9CA4D5086C9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AEFE9C2B-2E7F-47CD-A9A7-669E30A7648B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFE9C2B-2E7F-47CD-A9A7-669E30A7648B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFE9C2B-2E7F-47CD-A9A7-669E30A7648B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFE9C2B-2E7F-47CD-A9A7-669E30A7648B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
