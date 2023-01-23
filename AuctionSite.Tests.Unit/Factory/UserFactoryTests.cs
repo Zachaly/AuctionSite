@@ -72,5 +72,42 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(user.UserName, response.UserName);
             Assert.Equal(Token, response.AuthToken);
         }
+
+        [Fact]
+        public void CreateProfileModel()
+        {
+            var factory = new UserFactory();
+
+            var user = new ApplicationUser
+            {
+                UserName = "username",
+                Id = "id",
+                Info = new UserInfo
+                {
+                    UserId = "id",
+                    Address = "addr",
+                    City = "city",
+                    Country = "ctn",
+                    FirstName = "first",
+                    Gender = Domain.Enum.Gender.Male,
+                    LastName = "last",
+                    PhoneNumber = "phone",
+                    PostalCode = "12345",
+                },
+            };
+
+            var model = factory.CreateProfileModel(user);
+
+            Assert.Equal(user.UserName, model.UserName);
+            Assert.Equal(user.Id, model.Id);
+            Assert.Equal(user.Info.FirstName, model.FirstName);
+            Assert.Equal(user.Info.Address, model.Address);
+            Assert.Equal(user.Info.Country, model.Country);
+            Assert.Equal(user.Info.LastName, model.LastName);
+            Assert.Equal(user.Info.PhoneNumber, model.PhoneNumber);
+            Assert.Equal(user.Info.PostalCode, model.PostalCode);
+            Assert.Equal(user.Info.Gender, model.Gender);
+            Assert.Equal(user.Info.City, model.City);
+        }
     }
 }

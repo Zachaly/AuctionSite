@@ -1,0 +1,16 @@
+<div class="row justify-content-md-center">
+    <div class="col col-sm-5 mt-2">
+        <app-profile-list-item name="Username" [value]="profile.userName"/>
+        <app-profile-list-item name="First name" [value]="profile.firstName"/>
+        <app-profile-list-item name="Last name" [value]="profile.lastName"/>
+        <app-profile-list-item name="Country" [value]="profile.country"/>
+        <app-profile-list-item name="City" [value]="profile.city"/>
+        <app-profile-list-item name="Postal code" [value]="profile.postalCode"/>
+        <app-profile-list-item name="Addresss" [value]="profile.address"/>
+        <app-profile-list-item name="Phone number" [value]="profile.phoneNumber"/>
+        <app-profile-list-item name="Gender" [value]="genderToString(profile.gender ?? 0)"/>
+        <div class="row mt-2">
+            <button type="button" (click)="goToUpdate()" class="btn btn-warning">Update</button>
+        </div>
+    </div>
+</div>

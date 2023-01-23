@@ -1,6 +1,9 @@
 using AuctionSite.Api.Infrastructure;
 using AuctionSite.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.RegisterServices();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureIdentity();
+
+builder.Services.AddAuthentication(config => {
+    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(config =>
+{
+    var bytes = Encoding.UTF8.GetBytes(builder.Configuration["Auth:SecretKey"]);
+    var key = new SymmetricSecurityKey(bytes);
+
+    config.SaveToken = true;
+    config.RequireHttpsMetadata = false;
+    config.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = key,
+        ValidIssuer = builder.Configuration["Auth:Issuer"],
+        ValidAudience = builder.Configuration["Auth:Audience"],
+    };
+});
 
 var app = builder.Build();
 

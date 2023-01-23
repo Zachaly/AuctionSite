@@ -1,6 +1,7 @@
 ﻿using AuctionSite.Application.Abstraction;
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
+using AuctionSite.Models.User;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
 
@@ -35,6 +36,21 @@ namespace AuctionSite.Application
             {
                 AuthToken = token,
                 UserId = user.Id,
+                UserName = user.UserName
+            };
+
+        public UserProfileModel CreateProfileModel(ApplicationUser user)
+            => new UserProfileModel
+            {
+                Id = user.Id,
+                Address = user.Info.Address,
+                City = user.Info.City,
+                Country = user.Info.Country,
+                FirstName = user.Info.FirstName,
+                Gender = user.Info.Gender,
+                LastName = user.Info.LastName,
+                PhoneNumber = user.Info.PhoneNumber,
+                PostalCode = user.Info.PostalCode,
                 UserName = user.UserName
             };
     }

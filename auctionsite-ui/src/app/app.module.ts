@@ -9,6 +9,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import { FormsModule } from '@angular/forms';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { UpdateProfilePageComponent } from './pages/update-profile-page/update-profile-page.component';
+import { ProfileListItemComponent } from './components/profile-list-item/profile-list-item.component';
 
 const routes: Routes = [
   {
@@ -22,6 +25,14 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterPageComponent
+  },
+  {
+    path: 'profile/:userId',
+    component: ProfilePageComponent
+  },
+  {
+    path: 'update-profile',
+    component: UpdateProfilePageComponent
   }
 ]
 
@@ -31,7 +42,10 @@ const routes: Routes = [
     MainPageComponent,
     NavbarComponent,
     LoginPageComponent,
-    RegisterPageComponent
+    RegisterPageComponent,
+    ProfilePageComponent,
+    UpdateProfilePageComponent,
+    ProfileListItemComponent
   ],
   imports: [
     BrowserModule,

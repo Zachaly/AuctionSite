@@ -1,4 +1,5 @@
 ﻿using AuctionSite.Domain.Entity;
+using AuctionSite.Models.User;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
 
@@ -9,5 +10,6 @@ namespace AuctionSite.Application.Abstraction
         UserInfo CreateInfo(RegisterRequest request, string userId);
         ApplicationUser Create(RegisterRequest request);
         LoginResponse CreateLoginResponse(ApplicationUser user, string token);
+        UserProfileModel CreateProfileModel(ApplicationUser user);
     }
 }

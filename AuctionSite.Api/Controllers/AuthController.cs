@@ -17,6 +17,12 @@ namespace AuctionSite.Api.Controllers
             _authService = authService;
         }
 
+
+        /// <summary>
+        /// Creates new user
+        /// </summary>
+        /// <response code="201">User created successfully</response>
+        /// <response code="400">User could not be created</response>
         [HttpPost("register")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -27,6 +33,11 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnCreatedOrBadRequest("");
         }
 
+        /// <summary>
+        /// Returns user authorization info
+        /// </summary>
+        /// <response code="200">Login model</response>
+        /// <response code="400">Credentials are invalid</response>
         [HttpPost("login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

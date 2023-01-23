@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import UserModel from 'src/models/UserModel';
 
 @Component({
   selector: 'app-navbar',
@@ -8,13 +9,13 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent {
   authorized: boolean = false
-  username: string = ''
-  constructor(private authService: AuthService){
+  user: UserModel = { authToken: '', userId: '', userName: '' }
+  constructor(private authService: AuthService) {
     authService.onToggleAuth().subscribe(value => this.authorized = value)
-    authService.onToggleUser().subscribe(value => this.username = value.userName)
+    authService.onToggleUser().subscribe(value => this.user = value)
   }
 
-  logout(){
+  logout() {
     this.authService.logout()
   }
 }
