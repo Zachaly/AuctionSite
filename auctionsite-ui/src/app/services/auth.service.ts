@@ -46,7 +46,7 @@ export class AuthService {
             onSuccess()
           }
         },
-        error: onError()
+        error: err => onError(err)
       })
   }
 

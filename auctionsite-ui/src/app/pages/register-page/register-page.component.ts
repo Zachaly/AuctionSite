@@ -3,6 +3,7 @@ import RegisterModel from 'src/models/RegisterModel';
 import { Gender } from 'src/models/enum/Gender';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register-page',
@@ -27,6 +28,9 @@ export class RegisterPageComponent {
       this.confirmPassword = ''
       return
     }
-    this.authService.register(this.model, () => this.router.navigateByUrl('/login'), (err: any) => console.log('err'))
+    this.authService.register(this.model, () => this.router.navigateByUrl('/login'), (err: HttpErrorResponse) => {
+      alert(err.error.error)
+      this.model.email = ''
+    })
   }
 }

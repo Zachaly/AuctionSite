@@ -9,7 +9,7 @@
         <app-profile-list-item name="Addresss" [value]="profile.address"/>
         <app-profile-list-item name="Phone number" [value]="profile.phoneNumber"/>
         <app-profile-list-item name="Gender" [value]="genderToString(profile.gender ?? 0)"/>
-        <div class="row mt-2">
+        <div *ngIf="userId == profile.id" class="row mt-2">
             <button type="button" (click)="goToUpdate()" class="btn btn-warning">Update</button>
         </div>
     </div>
