@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace AuctionSite.Tests.Integration

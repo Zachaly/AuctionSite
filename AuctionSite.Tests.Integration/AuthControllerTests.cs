@@ -2,8 +2,6 @@
 using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
-using System.Net;
-using System.Net.Http.Json;
 
 namespace AuctionSite.Tests.Integration
 {

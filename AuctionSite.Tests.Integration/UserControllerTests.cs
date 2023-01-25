@@ -2,8 +2,7 @@
 using AuctionSite.Models.Response;
 using AuctionSite.Models.User;
 using AuctionSite.Models.User.Request;
-using System.Net;
-using System.Net.Http.Json;
+
 namespace AuctionSite.Tests.Integration
 {
     public class UserControllerTests : IntegrationTest
