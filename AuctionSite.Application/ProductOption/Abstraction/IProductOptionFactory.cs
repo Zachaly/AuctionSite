@@ -8,6 +8,7 @@ namespace AuctionSite.Application.Abstraction
     {
         ProductOption Create(AddProductOptionRequest request);
         ProductOption Create(AddProductOptionRequest request, int productId);
+        ProductOption CreateWithoutProductId(AddProductOptionRequest request);
         ProductOptionModel CreateModel(ProductOption option);
     }
 }

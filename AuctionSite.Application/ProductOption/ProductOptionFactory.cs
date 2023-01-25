@@ -23,5 +23,10 @@ namespace AuctionSite.Application
         {
             throw new NotImplementedException();
         }
+
+        public ProductOption CreateWithoutProductId(AddProductOptionRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -7,6 +7,8 @@ namespace AuctionSite.Database
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<UserInfo> UserInfo { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<ProductOption> ProductOption { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
