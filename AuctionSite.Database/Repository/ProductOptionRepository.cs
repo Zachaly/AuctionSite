@@ -16,12 +16,16 @@ namespace AuctionSite.Database.Repository
 
         public Task AddProductOptionAsync(ProductOption option)
         {
-            throw new NotImplementedException();
+            _dbContext.ProductOption.AddAsync(option);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public Task DeleteProductOptionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            _dbContext.ProductOption.Remove(_dbContext.ProductOption.Find(id));
+
+            return _dbContext.SaveChangesAsync();
         }
     }
 }

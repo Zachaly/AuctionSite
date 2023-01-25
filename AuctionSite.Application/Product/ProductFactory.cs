@@ -17,18 +17,34 @@ namespace AuctionSite.Application
         }
 
         public Product Create(AddProductRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new Product
+            {
+                Description = request.Description,
+                Name = request.Name,
+                OptionName = request.OptionName,
+                Options = request.Options.Select(opt => _productOptionFactory.Create(opt)).ToArray(),
+                OwnerId = request.UserId,
+                Price = request.Price,
+            };
 
         public ProductListItemModel CreateListItem(Product product)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductListItemModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+            };
 
         public ProductModel CreateModel(Product product)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductModel
+            {
+                Id = product.Id,
+                Description = product.Description,
+                Name = product.Name,
+                OptionName = product.OptionName,
+                Options = product.Options.Select(opt => _productOptionFactory.CreateModel(opt)),
+                Price = product.Price.ToString(),
+                UserId = product.OwnerId,
+                UserName = product.Owner.UserName
+            };
     }
 }

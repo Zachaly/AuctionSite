@@ -22,24 +22,70 @@ namespace AuctionSite.Application
             _productRepository = productRepository;
         }
 
-        public Task<ResponseModel> AddProductAsync(AddProductRequest request)
+        public async Task<ResponseModel> AddProductAsync(AddProductRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var product = _productFactory.Create(request);
+
+                await _productRepository.AddProductAsync(product);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<ResponseModel> DeleteProductByIdAsync(int id)
+        public async Task<ResponseModel> DeleteProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _productRepository.DeleteProductByIdAsync(id);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
         public DataResponseModel<ProductModel> GetProductById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var product = _productRepository.GetProductById(id, prod => _productFactory.CreateModel(prod));
+
+                if(product is null)
+                {
+                    return _responseFactory.CreateFailure<ProductModel>("Product nor found");
+                }
+
+                return _responseFactory.CreateSuccess(product);
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure<ProductModel>(ex.Message);
+            }
         }
 
         public DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(PagedRequest request)
         {
-            throw new NotImplementedException();
+            var index = request.PageIndex ?? 0;
+            var pageSize = request.PageSize ?? 10;
+
+            try
+            {
+                var data = _productRepository.GetProducts(index, pageSize, product => _productFactory.CreateListItem(product));
+
+                return _responseFactory.CreateSuccess(data);
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure<IEnumerable<ProductListItemModel>>(ex.Message);
+            }
         }
     }
 }

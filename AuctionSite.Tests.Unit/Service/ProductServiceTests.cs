@@ -91,7 +91,7 @@ namespace AuctionSite.Tests.Unit.Service
 
             Assert.False(res.Success);
             Assert.Equal(ErrorMessage, res.Error);
-            Assert.Contains(products, x => x.Name == request.Name);
+            Assert.DoesNotContain(products, x => x.Name == request.Name);
         }
 
         [Fact]

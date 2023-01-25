@@ -53,7 +53,7 @@ namespace AuctionSite.Tests.Unit.Repository
         }
 
         [Fact]
-        public async Task GetProducts()
+        public void GetProducts()
         {
             AddContent(new List<Product>
             {
@@ -69,7 +69,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             var res = _repository.GetProducts(1, 4, x => x);
 
-            Assert.Equivalent(_dbContext.Product.Skip(1).Take(4), res);
+            Assert.Equivalent(_dbContext.Product.Skip(4).Take(4).Select(x => x.Id), res.Select(x => x.Id));
         }
 
         [Fact]

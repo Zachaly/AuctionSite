@@ -21,14 +21,34 @@ namespace AuctionSite.Application
             _productOptionRepository = productOptionRepository;
         }
 
-        public Task<ResponseModel> AddProductOptionAsync(AddProductOptionRequest request)
+        public async Task<ResponseModel> AddProductOptionAsync(AddProductOptionRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var option = _productOptionFactory.Create(request);
+
+                await _productOptionRepository.AddProductOptionAsync(option);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<ResponseModel> DeleteProductOptionByIdAsync(int id)
+        public async Task<ResponseModel> DeleteProductOptionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _productOptionRepository.DeleteProductOptionByIdAsync(id);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

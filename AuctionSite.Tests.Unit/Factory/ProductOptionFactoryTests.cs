@@ -13,26 +13,6 @@ namespace AuctionSite.Tests.Unit.Factory
 
             var request = new AddProductOptionRequest
             {
-                Quantity = 1,
-                Value = "val"
-            };
-
-            const int Id = 2;
-
-            var option = factory.Create(request, Id);
-
-            Assert.Equal(request.Value, option.Value);
-            Assert.Equal(request.Quantity, option.Quantity);
-            Assert.Equal(Id, option.Id);
-        }
-
-        [Fact]
-        public void Create()
-        {
-            var factory = new ProductOptionFactory();
-
-            var request = new AddProductOptionRequest
-            {
                 ProductId = 1,
                 Quantity = 2,
                 Value = "val"
@@ -65,7 +45,7 @@ namespace AuctionSite.Tests.Unit.Factory
         }
 
         [Fact]
-        public void CreateWithoutProductId()
+        public void Create_WithoutProductId()
         {
             var factory = new ProductOptionFactory();
 
@@ -75,10 +55,11 @@ namespace AuctionSite.Tests.Unit.Factory
                 Value = "val"
             };
 
-            var option = factory.CreateWithoutProductId(request);
+            var option = factory.Create(request);
 
             Assert.Equal(request.Value, option.Value);
             Assert.Equal(request.Quantity, option.Quantity);
+            Assert.Equal(0, option.ProductId);
         }
     }
 }

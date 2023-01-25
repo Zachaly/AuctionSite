@@ -9,24 +9,20 @@ namespace AuctionSite.Application
     [Implementation(typeof(IProductOptionFactory))]
     public class ProductOptionFactory : IProductOptionFactory
     {
-        public ProductOption Create(AddProductOptionRequest request, int productId)
-        {
-            throw new NotImplementedException();
-        }
-
         public ProductOptionModel CreateModel(ProductOption option)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductOptionModel
+            {
+                Id = option.Id,
+                Quantity = option.Quantity,
+                Value = option.Value,
+            };
 
         public ProductOption Create(AddProductOptionRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProductOption CreateWithoutProductId(AddProductOptionRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductOption
+            {
+                ProductId = request.ProductId.GetValueOrDefault(),
+                Quantity = request.Quantity,
+                Value = request.Value,
+            };
     }
 }

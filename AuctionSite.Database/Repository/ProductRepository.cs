@@ -1,6 +1,7 @@
 ﻿using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionSite.Database.Repository
 {
@@ -16,22 +17,26 @@ namespace AuctionSite.Database.Repository
 
         public Task AddProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            _dbContext.Product.Add(product);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public Task DeleteProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            _dbContext.Product.Remove(_dbContext.Product.Find(id));
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public T GetProductById<T>(int id, Func<Product, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.Product.Include(product => product.Owner)
+                .Include(product => product.Options)
+                .Where(product => product.Id == id)
+                .Select(selector)
+                .FirstOrDefault();
 
         public IEnumerable<T> GetProducts<T>(int pageIndex, int pageSize, Func<Product, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.Product.Skip(pageIndex * pageSize).Take(pageSize).Select(selector);
     }
 }
