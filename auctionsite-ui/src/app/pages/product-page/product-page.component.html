@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col col-6">Placeholder for image gallery</div>
+    <div class="col col-6">
+        <h1 class="text-center">{{product.name}}</h1>
+        <p class="fs-3">
+            {{product.description}}
+        </p>
+        <div class="label-flex">
+            <label class="fs-3" for="currentOption">{{product.optionName}}:</label>
+            <select name="currentOption" class="form-select m-lg-4" [(ngModel)]="currentOption">
+                <option *ngFor="let option of product.options" [ngValue]="option">
+                    {{option.value}} - {{option.quantity}}
+                </option>
+            </select>
+        </div>
+        <p class="fs-3">Available: {{currentOption.quantity}}</p>
+        <div class="label-flex">
+            <label for="quantity" class="fs-3">Quantity:</label>
+            <input name="quantity" class="form-control m-lg-4" type="number" min="0" [max]="currentOption.quantity">
+        </div>
+        <button class="btn btn-success form-control mt-1">Order</button>
+    </div>
+</div>

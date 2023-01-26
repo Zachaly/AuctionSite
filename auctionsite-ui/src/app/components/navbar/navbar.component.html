@@ -14,6 +14,9 @@
         <div class="d-flex" *ngIf="authorized">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
+                    <a routerLink="/add-product" class="nav-link text-light">Add product</a>
+                </li>
+                <li class="nav-item">
                     <a [routerLink]="['/profile', user.userId]" class="nav-link text-light">{{ user.userName }} </a>
                 </li>
                 <li class="nav-item">
