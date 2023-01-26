@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import RegisterModel from 'src/models/RegisterModel';
+import RegisterModel from 'src/models/request/RegisterModel';
 import UserModel from 'src/models/UserModel';
-import LoginModel from 'src/models/LoginModel';
+import LoginModel from 'src/models/request/LoginModel';
 import DataResponseModel from 'src/models/DataResponseModel';
 import { Observable, Subject } from 'rxjs';
 

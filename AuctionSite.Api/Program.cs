@@ -1,9 +1,13 @@
 using AuctionSite.Api.Infrastructure;
 using AuctionSite.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
+[assembly: ApiController]
+
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,4 @@
-import { Gender } from "./enum/Gender";
+import { Gender } from "../enum/Gender";
 
 export default interface RegisterModel {
     username: string,

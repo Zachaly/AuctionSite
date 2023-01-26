@@ -12,6 +12,10 @@ import { FormsModule } from '@angular/forms';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { UpdateProfilePageComponent } from './pages/update-profile-page/update-profile-page.component';
 import { ProfileListItemComponent } from './components/profile-list-item/profile-list-item.component';
+import { AddProductPageComponent } from './pages/add-product-page/add-product-page.component';
+import { AddedProductOptionComponent } from './components/added-product-option/added-product-option.component';
+import { ProductListItemComponent } from './components/product-list-item/product-list-item.component';
+import { ProductPageComponent } from './pages/product-page/product-page.component';
 
 const routes: Routes = [
   {
@@ -33,6 +37,14 @@ const routes: Routes = [
   {
     path: 'update-profile',
     component: UpdateProfilePageComponent
+  },
+  {
+    path: 'add-product',
+    component: AddProductPageComponent
+  },
+  {
+    path: 'product/:id',
+    component: ProductPageComponent
   }
 ]
 
@@ -45,7 +57,11 @@ const routes: Routes = [
     RegisterPageComponent,
     ProfilePageComponent,
     UpdateProfilePageComponent,
-    ProfileListItemComponent
+    ProfileListItemComponent,
+    AddProductPageComponent,
+    AddedProductOptionComponent,
+    ProductListItemComponent,
+    ProductPageComponent,
   ],
   imports: [
     BrowserModule,

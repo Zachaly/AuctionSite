@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import RegisterModel from 'src/models/RegisterModel';
+import RegisterModel from 'src/models/request/RegisterModel';
 import { Gender } from 'src/models/enum/Gender';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
