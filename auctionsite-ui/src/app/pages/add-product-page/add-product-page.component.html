@@ -4,18 +4,22 @@
         <div class="mt-2">
             <label for="name">Product name</label>
             <input type="text" name="name" class="form-control" [(ngModel)]="product.name">
+            <app-error-list [errors]="validationErrors.Name"/>
         </div>
         <div class="mt-2">
             <label for="description">Product description</label>
             <textarea name="description" class="form-control" rows="5" [(ngModel)]="product.description"></textarea>
+            <app-error-list [errors]="validationErrors.Description"/>
         </div>
         <div class="mt-2">
             <label for="price">Price</label>
             <input type="text" name="price" class="form-control" [(ngModel)]="product.price">
+            <app-error-list [errors]="validationErrors.Price"/>
         </div>
         <div class="mt-2">
             <label for="price">Option name</label>
             <input type="text" name="price" class="form-control" [(ngModel)]="product.optionName">
+            <app-error-list [errors]="validationErrors.OptionName"/>
         </div>
         <button class="btn btn-success mt-2 form-control">Add product</button>
     </form>
