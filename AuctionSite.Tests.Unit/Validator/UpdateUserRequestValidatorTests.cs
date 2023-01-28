@@ -121,7 +121,7 @@ namespace AuctionSite.Tests.Unit.Validator
         {
             var request = new UpdateUserRequest
             {
-                Country = new string('a', 25),
+                Country = new string('a', 26),
                 Id = "userid"
             };
 

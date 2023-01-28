@@ -60,7 +60,7 @@ namespace AuctionSite.Tests.Unit.Validator
         {
             var request = new AddProductOptionRequest
             {
-                Quantity = -1,
+                Quantity = 1,
                 Value = new string('a', 21)
             };
 

@@ -1,11 +1,7 @@
 ﻿using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Product.Validator;
 using AuctionSite.Models.ProductOption.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AuctionSite.Models.ProductOption.Validator;
 
 namespace AuctionSite.Tests.Unit.Validator
 {
@@ -15,7 +11,7 @@ namespace AuctionSite.Tests.Unit.Validator
 
         public AddProductRequestValidatorTests()
         {
-            _validator = new AddProductRequestValidator();
+            _validator = new AddProductRequestValidator(new AddProductOptionValidator());
         }
 
         [Fact]

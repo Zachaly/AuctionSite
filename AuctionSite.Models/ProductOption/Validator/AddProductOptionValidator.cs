@@ -7,7 +7,8 @@ namespace AuctionSite.Models.ProductOption.Validator
     {
         public AddProductOptionValidator()
         {
-
+            RuleFor(x => x.Value).NotEmpty().MaximumLength(20);
+            RuleFor(x => x.Quantity).GreaterThan(0);
         }
     }
 }

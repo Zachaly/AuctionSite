@@ -148,7 +148,7 @@ namespace AuctionSite.Tests.Unit.Validator
                 Email = "email@email.com",
                 Password = "zaq1@WSX",
                 Username = "user name",
-                Country = new string('a', 25)
+                Country = new string('a', 26)
             };
 
             var result = _validator.Validate(request);
