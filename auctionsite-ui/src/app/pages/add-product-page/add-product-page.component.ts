@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -25,6 +26,14 @@ export class AddProductPageComponent implements OnInit {
     quantity: 0
   }
 
+  validationErrors = {
+    Name: [],
+    Description: [],
+    OptionName: [],
+    Price: [],
+    Options: []
+  }
+
   constructor(private authService: AuthService, private router: Router, private productService: ProductService) { }
 
   ngOnInit(): void {
@@ -41,9 +50,17 @@ export class AddProductPageComponent implements OnInit {
       return
     }
 
-    this.productService.addProduct(this.product).subscribe(res => {
-      alert('Product added')
-      this.router.navigateByUrl('/')
+    this.productService.addProduct(this.product).subscribe({
+      next: res => {
+        alert('Product added')
+        this.router.navigateByUrl('/')
+      },
+      error: (err: HttpErrorResponse) => {
+        if(err.error.validationErrors){
+          console.log(err.error.validationErrors)
+          this.validationErrors = err.error.validationErrors
+        }
+      }
     })
   }
 

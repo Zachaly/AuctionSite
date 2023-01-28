@@ -5,6 +5,9 @@
         <p class="fs-3">
             {{product.description}}
         </p>
+        <p class="fs-5 nav-link">
+            Offer created by: <a class="link-info" [routerLink]="['/profile', product.userId]" >{{ product.userName }}</a>
+        </p>
         <div class="label-flex">
             <label class="fs-3" for="currentOption">{{product.optionName}}:</label>
             <select name="currentOption" class="form-select m-lg-4" [(ngModel)]="currentOption">

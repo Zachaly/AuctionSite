@@ -187,7 +187,7 @@ namespace AuctionSite.Tests.Unit.Service
                 LastName = "lname",
                 PhoneNumber = "num",
                 PostalCode = "post",
-                UserName = "usr"
+                UserName = "username"
             };
 
             var res = await _userService.UpdateUserAsync(request);

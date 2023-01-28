@@ -5,6 +5,7 @@ using AuctionSite.Domain.Util;
 using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
+using AuctionSite.Models.User.Validator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -68,6 +69,13 @@ namespace AuctionSite.Application
 
         public async Task<ResponseModel> Register(RegisterRequest request)
         {
+            var validation = new RegisterRequestValidator().Validate(request);
+
+            if (!validation.IsValid)
+            {
+                return _responseFactory.CreateValidationError(validation);
+            }
+
             var user = _userFactory.Create(request);
             try
             {

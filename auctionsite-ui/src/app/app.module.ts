@@ -16,6 +16,7 @@ import { AddProductPageComponent } from './pages/add-product-page/add-product-pa
 import { AddedProductOptionComponent } from './components/added-product-option/added-product-option.component';
 import { ProductListItemComponent } from './components/product-list-item/product-list-item.component';
 import { ProductPageComponent } from './pages/product-page/product-page.component';
+import { ErrorListComponent } from './components/error-list/error-list.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,7 @@ const routes: Routes = [
     AddedProductOptionComponent,
     ProductListItemComponent,
     ProductPageComponent,
+    ErrorListComponent,
   ],
   imports: [
     BrowserModule,

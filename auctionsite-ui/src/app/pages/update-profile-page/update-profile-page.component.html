@@ -3,34 +3,42 @@
         <div class="mt-2">
             <label for="username">Username</label>
             <input type="text" name="username" class="form-control border-warning" [(ngModel)]="user.userName">
+            <app-error-list [errors]="validationErrors.UserName"/>
         </div>
         <div class="mt-2">
             <label for="fname">First name</label>
             <input type="text" name="fname" class="form-control" [(ngModel)]="user.firstName">
+            <app-error-list [errors]="validationErrors.FirstName"/>
         </div>
         <div class="mt-2">
             <label for="lname">Last name</label>
             <input type="text" name="lname" class="form-control" [(ngModel)]="user.lastName">
+            <app-error-list [errors]="validationErrors.LastName"/>
         </div>
         <div class="mt-2">
             <label for="phonenum">Phone number</label>
             <input type="text" name="phonenum" class="form-control" [(ngModel)]="user.phoneNumber">
+            <app-error-list [errors]="validationErrors.PhoneNumber"/>
         </div>
         <div class="mt-2">
             <label for="city">City</label>
             <input type="text" name="city" class="form-control" [(ngModel)]="user.city">
+            <app-error-list [errors]="validationErrors.City"/>
         </div>
         <div class="mt-2">
             <label for="postalcode">Postal code</label>
             <input type="text" name="postalcode" class="form-control" [(ngModel)]="user.postalCode">
+            <app-error-list [errors]="validationErrors.PostalCode"/>
         </div>
         <div class="mt-2">
             <label for="country">Country</label>
             <input type="text" name="country" class="form-control" [(ngModel)]="user.country">
+            <app-error-list [errors]="validationErrors.Country"/>
         </div>
         <div class="mt-2">
             <label for="address">Address</label>
             <input type="text" name="address" class="form-control" [(ngModel)]="user.address">
+            <app-error-list [errors]="validationErrors.Address"/>
         </div>
         <div class="mt-2 form-check">
             <input type="radio" class="form-check-input" name="gender" [value]="gender.not_specified" [(ngModel)]="user.gender">

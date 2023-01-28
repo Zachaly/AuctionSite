@@ -1,5 +1,6 @@
 ﻿using AuctionSite.Domain.Entity;
 using AuctionSite.Models.ProductOption.Request;
+using AuctionSite.Models.Response;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AuctionSite.Tests.Integration
@@ -71,13 +72,17 @@ namespace AuctionSite.Tests.Integration
             var request = new AddProductOptionRequest
             {
                 ProductId = product.Id,
+                Quantity = -1,
+                Value = "val"
             };
 
             var response = await _httpClient.PostAsJsonAsync(ApiPath, request);
+            var error = await response.Content.ReadFromJsonAsync<ResponseModel>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.DoesNotContain(GetFromDatabase<ProductOption>(), x => x.Quantity == request.Quantity && x.Value == request.Value);
             Assert.Single(GetFromDatabase<ProductOption>());
+            Assert.Contains(error.ValidationErrors.Keys, x => x == "Quantity");
         }
 
         [Fact]

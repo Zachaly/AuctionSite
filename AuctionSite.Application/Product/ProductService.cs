@@ -4,6 +4,8 @@ using AuctionSite.Domain.Util;
 using AuctionSite.Models;
 using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
+using AuctionSite.Models.Product.Validator;
+using AuctionSite.Models.ProductOption.Validator;
 using AuctionSite.Models.Response;
 
 namespace AuctionSite.Application
@@ -24,6 +26,13 @@ namespace AuctionSite.Application
 
         public async Task<ResponseModel> AddProductAsync(AddProductRequest request)
         {
+            var validation = new AddProductRequestValidator(new AddProductOptionRequestValidator()).Validate(request);
+
+            if(!validation.IsValid)
+            {
+                return _responseFactory.CreateValidationError(validation);
+            }
+
             try
             {
                 var product = _productFactory.Create(request);

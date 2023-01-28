@@ -18,19 +18,34 @@ export class RegisterPageComponent {
   }
   @Input() confirmPassword: string = ''
   gender = Gender
+  confirmPasswordError: string[] = []
+
+  validationErrors = { 
+    Email: [],
+    Username: [],
+    Password: [],
+    FirstName: [],
+    LastName: [],
+    City: [],
+    Country: [],
+    Address: [],
+    PostalCode: [],
+    PhoneNumber: []
+  }
 
   constructor(private authService: AuthService, private router: Router) { }
 
   submit() {
     if (this.confirmPassword !== this.model.password) {
-      alert('Password do not match')
-      this.model.password = ''
-      this.confirmPassword = ''
+      this.confirmPasswordError.push('Passwords do not match!')
+      
       return
     }
     this.authService.register(this.model, () => this.router.navigateByUrl('/login'), (err: HttpErrorResponse) => {
-      alert(err.error.error)
-      this.model.email = ''
+      if(err.error.validationErrors){
+        this.validationErrors = err.error.validationErrors
+      }
+      console.log(this.validationErrors)
     })
   }
 }
