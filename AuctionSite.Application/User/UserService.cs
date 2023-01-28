@@ -5,6 +5,7 @@ using AuctionSite.Domain.Util;
 using AuctionSite.Models.Response;
 using AuctionSite.Models.User;
 using AuctionSite.Models.User.Request;
+using AuctionSite.Models.User.Validator;
 using Microsoft.AspNetCore.Identity;
 
 namespace AuctionSite.Application.User
@@ -48,6 +49,13 @@ namespace AuctionSite.Application.User
 
         public async Task<ResponseModel> UpdateUserAsync(UpdateUserRequest request)
         {
+            var validation = new UpdateUserRequestValidator().Validate(request);
+
+            if(!validation.IsValid) 
+            {
+                return _responseFactory.CreateValidationError(validation);
+            }
+
             try
             {
                 var user = await _userManager.FindByIdAsync(request.Id);

@@ -87,7 +87,7 @@ namespace AuctionSite.Tests.Unit.Service
             var request = new RegisterRequest
             {
                 Username = "username",
-                Email = "email",
+                Email = "email@email.com",
                 Password = "password",
                 FirstName = "fname"
             };
@@ -105,7 +105,7 @@ namespace AuctionSite.Tests.Unit.Service
         {
             var users = new List<ApplicationUser>
             {
-                new ApplicationUser { Id = "id", Email = "email" }
+                new ApplicationUser { Id = "id", Email = "email@email.com" }
             };
             var infos = new List<UserInfo>();
 
@@ -145,7 +145,7 @@ namespace AuctionSite.Tests.Unit.Service
             var request = new RegisterRequest
             {
                 Username = "username",
-                Email = "email",
+                Email = "email@email.com",
                 Password = "password",
                 FirstName = "fname"
             };
@@ -192,7 +192,7 @@ namespace AuctionSite.Tests.Unit.Service
             var request = new RegisterRequest
             {
                 Username = "username",
-                Email = "email",
+                Email = "email@email.com",
                 Password = "password",
                 FirstName = "fname"
             };
@@ -238,7 +238,7 @@ namespace AuctionSite.Tests.Unit.Service
             var request = new RegisterRequest
             {
                 Username = "username",
-                Email = "email",
+                Email = "email@email.com",
                 Password = "password",
                 FirstName = "fname"
             };
@@ -254,15 +254,15 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public async Task Login_Success()
         {
-            var user = new ApplicationUser { Id = "id2", Email = "email2" };
+            var user = new ApplicationUser { Id = "id2", Email = "email@email.com2" };
 
             var users = new List<ApplicationUser>
             {
-                new ApplicationUser { Id = "id1", Email = "email1" },
+                new ApplicationUser { Id = "id1", Email = "email@email.com1" },
                 user,
-                new ApplicationUser { Id = "id3", Email = "email3" },
-                new ApplicationUser { Id = "id4", Email = "email4" },
-                new ApplicationUser { Id = "id5", Email = "email5" }
+                new ApplicationUser { Id = "id3", Email = "email@email.com3" },
+                new ApplicationUser { Id = "id4", Email = "email@email.com4" },
+                new ApplicationUser { Id = "id5", Email = "email@email.com5" }
             };
 
             _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
@@ -314,15 +314,15 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public async Task Login_UserNotFound_Fail()
         {
-            var user = new ApplicationUser { Id = "id2", Email = "email2" };
+            var user = new ApplicationUser { Id = "id2", Email = "email@email.com2" };
 
             var users = new List<ApplicationUser>
             {
-                new ApplicationUser { Id = "id1", Email = "email1" },
+                new ApplicationUser { Id = "id1", Email = "email@email.com1" },
                 user,
-                new ApplicationUser { Id = "id3", Email = "email3" },
-                new ApplicationUser { Id = "id4", Email = "email4" },
-                new ApplicationUser { Id = "id5", Email = "email5" }
+                new ApplicationUser { Id = "id3", Email = "email@email.com3" },
+                new ApplicationUser { Id = "id4", Email = "email@email.com4" },
+                new ApplicationUser { Id = "id5", Email = "email@email.com5" }
             };
 
             _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
@@ -360,15 +360,15 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public async Task Login_PasswordIncorrect_Fail()
         {
-            var user = new ApplicationUser { Id = "id2", Email = "email2" };
+            var user = new ApplicationUser { Id = "id2", Email = "email@email.com2" };
 
             var users = new List<ApplicationUser>
             {
-                new ApplicationUser { Id = "id1", Email = "email1" },
+                new ApplicationUser { Id = "id1", Email = "email@email.com1" },
                 user,
-                new ApplicationUser { Id = "id3", Email = "email3" },
-                new ApplicationUser { Id = "id4", Email = "email4" },
-                new ApplicationUser { Id = "id5", Email = "email5" }
+                new ApplicationUser { Id = "id3", Email = "email@email.com3" },
+                new ApplicationUser { Id = "id4", Email = "email@email.com4" },
+                new ApplicationUser { Id = "id5", Email = "email@email.com5" }
             };
 
             _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))

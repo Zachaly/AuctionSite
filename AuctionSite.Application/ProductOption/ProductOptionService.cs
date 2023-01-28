@@ -2,7 +2,9 @@
 using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Util;
 using AuctionSite.Models.ProductOption.Request;
+using AuctionSite.Models.ProductOption.Validator;
 using AuctionSite.Models.Response;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace AuctionSite.Application
 {
@@ -23,6 +25,13 @@ namespace AuctionSite.Application
 
         public async Task<ResponseModel> AddProductOptionAsync(AddProductOptionRequest request)
         {
+            var validation = new AddProductOptionRequestValidator().Validate(request);
+
+            if (!validation.IsValid)
+            {
+                return _responseFactory.CreateValidationError(validation);
+            }
+
             try
             {
                 var option = _productOptionFactory.Create(request);

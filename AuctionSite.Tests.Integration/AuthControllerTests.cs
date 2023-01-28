@@ -66,19 +66,25 @@ namespace AuctionSite.Tests.Integration
         {
             var request = new RegisterRequest
             {
+                Email = "email@email.com",
+                Password = "zaq1@WSX",
+                Username = "username",
+                FirstName = new string('a', 200)
             };
 
             var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            var error = await response.Content.ReadFromJsonAsync<ResponseModel>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.DoesNotContain(GetFromDatabase<ApplicationUser>(), user =>
                 user.UserName == request.Username &&
                 user.Email == request.Email);
             Assert.Empty(GetFromDatabase<UserInfo>());
+            Assert.Contains(error.ValidationErrors.Keys, x => x == "FirstName");
         }
 
         [Fact]
-        public async Task RegisterAsync_UserExists_Success()
+        public async Task RegisterAsync_UserExists_Fail()
         {
             var request = new RegisterRequest
             {

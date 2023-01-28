@@ -3,6 +3,7 @@ using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.ProductOption.Request;
 using AuctionSite.Models.Response;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AuctionSite.Tests.Integration
 {
@@ -262,13 +263,21 @@ namespace AuctionSite.Tests.Integration
 
             var request = new AddProductRequest
             {
-                Name = "name"
+                OptionName = "option",
+                Price = 123,
+                UserId = user.Id,
+                Name = "name",
+                Description = "desc",
+                Options = new List<AddProductOptionRequest> { }
             };
 
             var response = await _httpClient.PostAsJsonAsync(ApiPath, request);
+            var error = await response.Content.ReadFromJsonAsync<ResponseModel>();
+            var t = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.DoesNotContain(GetFromDatabase<Product>(), x => x.Name == request.Name);
+            Assert.Contains(error.ValidationErrors.Keys, x => x == "Options");
         }
 
         [Fact]

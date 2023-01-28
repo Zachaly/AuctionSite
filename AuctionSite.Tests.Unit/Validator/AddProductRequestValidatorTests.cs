@@ -11,7 +11,7 @@ namespace AuctionSite.Tests.Unit.Validator
 
         public AddProductRequestValidatorTests()
         {
-            _validator = new AddProductRequestValidator(new AddProductOptionValidator());
+            _validator = new AddProductRequestValidator(new AddProductOptionRequestValidator());
         }
 
         [Fact]

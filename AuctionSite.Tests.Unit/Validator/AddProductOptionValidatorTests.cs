@@ -5,11 +5,11 @@ namespace AuctionSite.Tests.Unit.Validator
 {
     public class AddProductOptionValidatorTests
     {
-        private readonly AddProductOptionValidator _validator;
+        private readonly AddProductOptionRequestValidator _validator;
 
         public AddProductOptionValidatorTests()
         {
-            _validator = new AddProductOptionValidator();
+            _validator = new AddProductOptionRequestValidator();
         }
 
         [Fact]

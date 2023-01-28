@@ -126,5 +126,37 @@ namespace AuctionSite.Tests.Integration
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.Equal(user.UserName, testUser.UserName);
         }
+
+        [Fact]
+        public async Task UpdateUser_InvalidData_Fail()
+        {
+            await Authenticate();
+
+            var user = GetAuthenticatedUser();
+
+            var request = new UpdateUserRequest
+            {
+                UserName = "username",
+                Address = "addr",
+                City = "city",
+                Country = "ctr",
+                FirstName = "fname",
+                Gender = Domain.Enum.Gender.Male,
+                Id = user.Id,
+                LastName = "lname",
+                PhoneNumber = new string('a', 21),
+                PostalCode = "321321"
+            };
+
+            var response = await _httpClient.PutAsJsonAsync("/api/user", request);
+            var error = await response.Content.ReadFromJsonAsync<ResponseModel>();
+
+            var testUser = GetFromDatabase<ApplicationUser>().FirstOrDefault(x => x.Id == user.Id);
+            testUser.Info = GetFromDatabase<UserInfo>().FirstOrDefault(x => x.UserId == user.Id);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(user.PhoneNumber, testUser.PhoneNumber);
+            Assert.Contains(error.ValidationErrors.Keys, x => x == "PhoneNumber");
+        }
     }
 }
