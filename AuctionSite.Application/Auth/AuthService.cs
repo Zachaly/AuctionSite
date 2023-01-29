@@ -47,9 +47,19 @@ namespace AuctionSite.Application
             _secretKey = config["Auth:SecretKey"];
         }
 
-        public Task<DataResponseModel<LoginResponse>> GetCurrentUserDataAsync()
+        public async Task<DataResponseModel<LoginResponse>> GetCurrentUserDataAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+                var token = _httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+                return _responseFactory.CreateSuccess(_userFactory.CreateLoginResponse(user, token));
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure<LoginResponse>(ex.Message);
+            }
         }
 
         public async Task<DataResponseModel<LoginResponse>> Login(LoginRequest request)

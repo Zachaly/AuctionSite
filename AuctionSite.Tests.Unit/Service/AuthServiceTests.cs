@@ -427,12 +427,51 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Returns((ApplicationUser user, string token) => new LoginResponse { AuthToken = token, UserId = user.Id, UserName = user.UserName });
 
+            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<LoginResponse>()))
+                .Returns((LoginResponse data) => new DataResponseModel<LoginResponse> { Success = true, Data = data });
+
             var result = await _authService.GetCurrentUserDataAsync();
 
             Assert.True(result.Success);
             Assert.Equal(Token, result.Data.AuthToken);
             Assert.Equal(user.UserName, result.Data.UserName);
             Assert.Equal(user.Id, result.Data.UserId);
+        }
+
+        [Fact]
+        public async Task GetUserDataAsync_ExceptionThrown_Fail()
+        {
+            _httpContextAccessor.Setup(x => x.HttpContext.User)
+                .Returns(new ClaimsPrincipal());
+
+            const string Token = "aasdasdasdasdasd";
+            var headersMock = new Mock<IHeaderDictionary>();
+            headersMock.SetupGet(x => x[It.Is<string>(s => s == HeaderNames.Authorization)]).Returns($"Bearer {Token}");
+
+            _httpContextAccessor.Setup(x => x.HttpContext.Request.Headers)
+                .Returns(headersMock.Object);
+
+            var user = new ApplicationUser { Id = "id", UserName = "username" };
+
+
+            const string Error = "error";
+            _userManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                .Callback(() =>
+                {
+                    throw new Exception(Error);
+                });
+
+            _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .Returns((ApplicationUser user, string token) => new LoginResponse { AuthToken = token, UserId = user.Id, UserName = user.UserName });
+
+            _responseFactory.Setup(x => x.CreateFailure<LoginResponse>(It.IsAny<string>()))
+                .Returns((string msg) => new DataResponseModel<LoginResponse> { Success = true, Data = null, Error = msg });
+
+            var result = await _authService.GetCurrentUserDataAsync();
+
+            Assert.True(result.Success);
+            Assert.Null(result.Data);
+            Assert.Equal(Error, result.Error);
         }
     }
 }

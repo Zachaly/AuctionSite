@@ -155,5 +155,30 @@ namespace AuctionSite.Tests.Integration
             Assert.Null(content.Data);
             Assert.False(content.Success);
         }
+
+        [Fact]
+        public async Task GetCurrentUserData_Success()
+        {
+            await Authenticate();
+
+            var user = GetAuthenticatedUser();
+
+            var response = await _httpClient.GetAsync("/api/auth/user");
+            var content = await response.Content.ReadFromJsonAsync<DataResponseModel<LoginResponse>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(content.Success);
+            Assert.Equal(content.Data.UserName, user.UserName);
+            Assert.Equal(content.Data.UserId, user.Id);
+            Assert.NotEmpty(content.Data.AuthToken);
+        }
+
+        [Fact]
+        public async Task GetCurrentUserData_Unauthorized_Fail()
+        {
+            var response = await _httpClient.GetAsync("/api/auth/user");
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }
