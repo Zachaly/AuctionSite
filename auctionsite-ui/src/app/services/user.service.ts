@@ -30,4 +30,19 @@ export class UserService {
   updateProfile(model: UserProfileModel): Observable<any> {
     return this.http.put(this.apiUrl, model, this.httpOptions())
   }
+
+  updateProfilePicture(userId: string, file?: File): Observable<any> {
+    const form = new FormData()
+    form.append('UserId', userId)
+    form.append('File', file!)
+    console.log(form.get('UserId'))
+    const option = this.httpOptions()
+    option.headers.set('Content-Type', 'multipart/form-data')
+
+    return this.http.put(`${this.apiUrl}/profile-picture`, form, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.authService.userData.authToken}`
+      })
+    })
+  }
 }

@@ -1,5 +1,7 @@
 using AuctionSite.Api.Infrastructure;
+using AuctionSite.Application.Command;
 using AuctionSite.Database;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 [assembly: ApiController]
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -46,6 +46,8 @@ builder.Services.AddAuthentication(config => {
 });
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddMediatR(typeof(UpdateProfilePictureCommand));
 
 var app = builder.Build();
 
