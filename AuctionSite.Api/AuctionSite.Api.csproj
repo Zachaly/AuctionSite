@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
@@ -23,6 +25,10 @@
     <ProjectReference Include="..\AuctionSite.Database\AuctionSite.Database.csproj" />
     <ProjectReference Include="..\AuctionSite.Domain\AuctionSite.Domain.csproj" />
     <ProjectReference Include="..\AuctionSite.Models\AuctionSite.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\image\profile-picture\" />
   </ItemGroup>
 
 </Project>
