@@ -39,9 +39,12 @@ export class UpdateProfilePageComponent implements OnInit {
 
   submit() {
     this.userService.updateProfile(this.user).subscribe({
-      next: res => this.router.navigateByUrl('/profile/' + this.authService.userData.userId),
+      next: res => {
+        this.router.navigateByUrl('/profile/' + this.authService.userData.userId)
+        this.authService.loadUserDataFromApi()
+      },
       error: (err: HttpErrorResponse) => {
-        if (err.error.validationErrors){
+        if (err.error.validationErrors) {
           this.validationErrors = err.error.validationErrors
         }
       }

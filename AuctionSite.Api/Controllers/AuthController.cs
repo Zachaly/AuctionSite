@@ -3,6 +3,7 @@ using AuctionSite.Application.Abstraction;
 using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionSite.Api.Controllers
@@ -44,6 +45,22 @@ namespace AuctionSite.Api.Controllers
         public async Task<ActionResult<DataResponseModel<LoginResponse>>> Login([FromBody] LoginRequest request)
         {
             var res = await _authService.Login(request);
+
+            return res.ReturnOkOrBadRequest();
+        }
+
+        /// <summary>
+        /// Returns current user authorization info
+        /// </summary>
+        /// <response code="200">Login model</response>
+        /// <response code="401">User is not authorized</response>
+        [HttpGet("user")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [Authorize]
+        public async Task<ActionResult<DataResponseModel<LoginResponse>>> GetUserDataAsync()
+        {
+            var res = await _authService.GetCurrentUserDataAsync();
 
             return res.ReturnOkOrBadRequest();
         }

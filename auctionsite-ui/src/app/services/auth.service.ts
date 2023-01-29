@@ -12,6 +12,8 @@ const httpOptions = {
   })
 }
 
+const authTokenKey = 'auth-token'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +30,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  register(model: RegisterModel, onSuccess: Function, onError: Function){
+  register(model: RegisterModel, onSuccess: Function, onError: Function) {
     this.http.post(`${this.apiUrl}/register`, model, httpOptions).subscribe({
       next: res => onSuccess(res),
       error: err => onError(err)
@@ -57,6 +59,7 @@ export class AuthService {
       authToken: ''
     }
     this.userSubject.next(this.userData)
+    localStorage.setItem(authTokenKey, '')
     this.toggleAuth()
   }
 
@@ -65,11 +68,44 @@ export class AuthService {
     this.authSubject.next(this.authorized)
   }
 
-  onToggleAuth(): Observable<any>{
+  onToggleAuth(): Observable<any> {
     return this.authSubject.asObservable()
   }
 
   onToggleUser(): Observable<UserModel> {
     return this.userSubject.asObservable()
+  }
+
+  readUserData() {
+    if (localStorage.getItem(authTokenKey)) {
+      this.http.get<DataResponseModel<UserModel>>(`${this.apiUrl}/user`, {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${localStorage.getItem(authTokenKey)}`
+        })
+      }).subscribe(res => {
+        if (res.success) {
+          this.userData = res.data ?? this.userData
+          this.userSubject.next(this.userData)
+          this.toggleAuth()
+        }
+      })
+    }
+  }
+
+  loadUserDataFromApi(){
+    this.http.get<DataResponseModel<UserModel>>(`${this.apiUrl}/user`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.userData.authToken}`
+      })
+    }).subscribe(res => {
+      if (res.success) {
+        this.userData = res.data ?? this.userData
+        this.userSubject.next(this.userData)
+      }
+    })
+  }
+
+  saveAuthToken() {
+    localStorage.setItem(authTokenKey, this.userData.authToken)
   }
 }

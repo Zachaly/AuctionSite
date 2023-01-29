@@ -7,6 +7,7 @@ namespace AuctionSite.Application.Abstraction
     public interface IAuthService
     {
         Task<DataResponseModel<LoginResponse>> Login(LoginRequest request);
-        Task<ResponseModel> Register(RegisterRequest request); 
+        Task<ResponseModel> Register(RegisterRequest request);
+        Task<DataResponseModel<LoginResponse>> GetCurrentUserDataAsync();
     }
 }

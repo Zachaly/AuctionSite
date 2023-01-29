@@ -5,6 +5,9 @@
         <p class="fs-3">
             {{product.description}}
         </p>
+        <p class="fs-4">
+            Price: ${{product.price}}
+        </p>
         <p class="fs-5 nav-link">
             Offer created by: <a class="link-info" [routerLink]="['/profile', product.userId]" >{{ product.userName }}</a>
         </p>
