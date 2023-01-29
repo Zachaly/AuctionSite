@@ -9,12 +9,19 @@ namespace AuctionSite.Application
     public class FileService : IFileService
     {
         private readonly string _profilePicturePath;
+        private readonly string _productPicturePath;
         private readonly string _defaultPicture;
 
         public FileService(IConfiguration configuration)
         {
             _profilePicturePath = configuration["Image:ProfilePath"];
+            _productPicturePath = configuration["Image:ProductPath"];
             _defaultPicture = configuration["Image:Default"];
+        }
+
+        public FileStream GetProductPicture(string fileName)
+        {
+            throw new NotImplementedException();
         }
 
         public FileStream GetProfilePicture(string fileName)
@@ -38,6 +45,11 @@ namespace AuctionSite.Application
             {
                 File.Delete(path);
             }
+        }
+
+        public Task<IEnumerable<string>> SaveProductImages(IEnumerable<IFormFile> files)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<string> SaveProfilePicture(IFormFile file)
@@ -65,5 +77,6 @@ namespace AuctionSite.Application
                 return _defaultPicture;
             }
         }
+
     }
 }

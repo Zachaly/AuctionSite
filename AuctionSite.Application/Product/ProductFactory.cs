@@ -27,6 +27,11 @@ namespace AuctionSite.Application
                 Price = request.Price,
             };
 
+        public ProductImage CreateImage(int productId, string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public ProductListItemModel CreateListItem(Product product)
             => new ProductListItemModel
             {
@@ -44,7 +49,8 @@ namespace AuctionSite.Application
                 Options = product.Options.Select(opt => _productOptionFactory.CreateModel(opt)),
                 Price = product.Price.ToString(),
                 UserId = product.OwnerId,
-                UserName = product.Owner.UserName
+                UserName = product.Owner.UserName,
+                ImageIds = product.Images.Select(x => x.Id)
             };
     }
 }

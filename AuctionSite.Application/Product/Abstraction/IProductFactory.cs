@@ -9,5 +9,6 @@ namespace AuctionSite.Application.Abstraction
         Product Create(AddProductRequest request);
         ProductListItemModel CreateListItem(Product product);
         ProductModel CreateModel(Product product);
+        ProductImage CreateImage(int productId, string name);
     }
 }
