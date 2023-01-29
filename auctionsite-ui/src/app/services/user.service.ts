@@ -28,7 +28,6 @@ export class UserService {
   })
 
   updateProfile(model: UserProfileModel): Observable<any> {
-
     return this.http.put(this.apiUrl, model, this.httpOptions())
   }
 }

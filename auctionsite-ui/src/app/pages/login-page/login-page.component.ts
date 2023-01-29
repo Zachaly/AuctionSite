@@ -15,11 +15,18 @@ export class LoginPageComponent {
     password: ''
   }
 
-  constructor(private authService: AuthService, private router: Router){
+  rememberMe: boolean = false
+
+  constructor(private authService: AuthService, private router: Router) {
 
   }
 
-  submit(){
-    this.authService.login(this.model, () => this.router.navigateByUrl('/'), (err: HttpErrorResponse) => alert(err.error.error))
+  submit() {
+    this.authService.login(this.model, () => {
+      this.router.navigateByUrl('/')
+      if (this.rememberMe) {
+        this.authService.saveAuthToken()
+      }
+    }, (err: HttpErrorResponse) => alert(err.error.error))
   }
 }

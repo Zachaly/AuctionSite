@@ -11,21 +11,22 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit {
-  profile: UserProfileModel = { id: '', userName: ''}
+  profile: UserProfileModel = { id: '', userName: '' }
   genderToString = genderToString
   userId: string = ''
 
   constructor(private route: ActivatedRoute, private userService: UserService, private router: Router, private authService: AuthService) {
-    this.userId = authService.userData.userId
-   }
+    authService.onToggleUser().subscribe(value => this.userId = value.userId)
+  }
 
   ngOnInit(): void {
+    this.userId = this.authService.userData.userId
     this.route.params.subscribe(params => {
       this.userService.getUser(params['userId']).subscribe(user => this.profile = user.data ?? this.profile)
     })
   }
 
-  goToUpdate(){
+  goToUpdate() {
     this.router.navigateByUrl('/update-profile')
   }
 }
