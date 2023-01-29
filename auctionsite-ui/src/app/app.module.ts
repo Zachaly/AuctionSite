@@ -17,6 +17,7 @@ import { AddedProductOptionComponent } from './components/added-product-option/a
 import { ProductListItemComponent } from './components/product-list-item/product-list-item.component';
 import { ProductPageComponent } from './pages/product-page/product-page.component';
 import { ErrorListComponent } from './components/error-list/error-list.component';
+import { ImageComponent } from './components/image/image.component';
 
 const routes: Routes = [
   {
@@ -64,6 +65,7 @@ const routes: Routes = [
     ProductListItemComponent,
     ProductPageComponent,
     ErrorListComponent,
+    ImageComponent,
   ],
   imports: [
     BrowserModule,

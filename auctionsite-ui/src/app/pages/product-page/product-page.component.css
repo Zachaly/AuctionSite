@@ -6,3 +6,8 @@
 a {
     text-decoration: none;
 }
+
+span {
+    width: 40px;
+    height: 40px;
+}

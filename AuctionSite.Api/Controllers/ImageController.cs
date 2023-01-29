@@ -14,7 +14,7 @@ namespace AuctionSite.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("profile/{id}")]
         public async Task<ActionResult> GetProfilePictureByIdAsync(string id)
         {
             var stream = await _mediator.Send(new GetProfilePictureQuery { UserId = id });
