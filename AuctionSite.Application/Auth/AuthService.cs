@@ -6,9 +6,11 @@ using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
 using AuctionSite.Models.User.Validator;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -22,6 +24,7 @@ namespace AuctionSite.Application
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IResponseFactory _responseFactory;
         private readonly IUserInfoRepository _userInfoRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string? _authAudience;
         private readonly string? _authIssuer;
         private readonly string? _secretKey;
@@ -30,16 +33,23 @@ namespace AuctionSite.Application
             UserManager<ApplicationUser> userManager,
             IResponseFactory responseFactory,
             IUserInfoRepository userInfoRepository,
-            IConfiguration config)
+            IConfiguration config,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userFactory = userFactory;
             _userManager = userManager;
             _responseFactory = responseFactory;
             _userInfoRepository = userInfoRepository;
+            _httpContextAccessor = httpContextAccessor;
 
             _authAudience = config["Auth:Audience"];
             _authIssuer = config["Auth:Issuer"];
             _secretKey = config["Auth:SecretKey"];
+        }
+
+        public Task<DataResponseModel<LoginResponse>> GetCurrentUserDataAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<DataResponseModel<LoginResponse>> Login(LoginRequest request)

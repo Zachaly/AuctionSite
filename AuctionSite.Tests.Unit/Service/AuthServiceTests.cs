@@ -5,11 +5,12 @@ using AuctionSite.Domain.Entity;
 using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Moq;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -23,6 +24,7 @@ namespace AuctionSite.Tests.Unit.Service
         private Mock<IResponseFactory> _responseFactory;
         private Mock<IUserFactory> _userFactory;
         private Mock<IUserInfoRepository> _userInfoRepository;
+        private Mock<IHttpContextAccessor> _httpContextAccessor;
         private Mock<IConfiguration> _configuration;
 
         public AuthServiceTests()
@@ -35,6 +37,7 @@ namespace AuctionSite.Tests.Unit.Service
             _responseFactory = new Mock<IResponseFactory>();
             _userFactory = new Mock<IUserFactory>();
             _userInfoRepository = new Mock<IUserInfoRepository>();
+            _httpContextAccessor = new Mock<IHttpContextAccessor>();
 
             _configuration = new Mock<IConfiguration>();
             _configuration.SetupGet(x => x[It.Is<string>(s => s == "Auth:Audience")]).Returns("https://localhost");
@@ -42,7 +45,7 @@ namespace AuctionSite.Tests.Unit.Service
             _configuration.SetupGet(x => x[It.Is<string>(s => s == "Auth:SecretKey")]).Returns("supersecretkeyloooooooooooooooooooooooooooooooong");
 
             _authService = new AuthService(_userFactory.Object, _userManager.Object, _responseFactory.Object,
-                _userInfoRepository.Object, _configuration.Object);
+                _userInfoRepository.Object, _configuration.Object, _httpContextAccessor.Object);
         }
 
         [Fact]
@@ -401,6 +404,35 @@ namespace AuctionSite.Tests.Unit.Service
 
             Assert.False(response.Success);
             Assert.NotNull(response.Error);
+        }
+
+        [Fact]
+        public async Task GetUserDataAsync_Success()
+        {
+            _httpContextAccessor.Setup(x => x.HttpContext.User)
+                .Returns(new ClaimsPrincipal());
+
+            const string Token = "aasdasdasdasdasd";
+            var headersMock = new Mock<IHeaderDictionary>();
+            headersMock.SetupGet(x => x[It.Is<string>(s => s == HeaderNames.Authorization)]).Returns($"Bearer {Token}");
+
+            _httpContextAccessor.Setup(x => x.HttpContext.Request.Headers)
+                .Returns(headersMock.Object);
+
+            var user = new ApplicationUser { Id = "id", UserName = "username" };
+
+            _userManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                .ReturnsAsync(user);
+
+            _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .Returns((ApplicationUser user, string token) => new LoginResponse { AuthToken = token, UserId = user.Id, UserName = user.UserName });
+
+            var result = await _authService.GetCurrentUserDataAsync();
+
+            Assert.True(result.Success);
+            Assert.Equal(Token, result.Data.AuthToken);
+            Assert.Equal(user.UserName, result.Data.UserName);
+            Assert.Equal(user.Id, result.Data.UserId);
         }
     }
 }
