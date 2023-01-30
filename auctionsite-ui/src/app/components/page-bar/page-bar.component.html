@@ -1,0 +1,9 @@
+<nav class="mt-2">
+    <ul class="pagination">
+        <li *ngIf="currentIndex !== 0" class="page-item"><a class="page-link" (click)="changeIndex(currentIndex - 1)">Prev</a></li>
+        <li class="page-item" *ngFor="let item of [].constructor(count); index as i">
+            <a [ngClass]="{'page-link': true, 'active': currentIndex === i}" (click)="changeIndex(i)">{{i + 1}}</a>
+        </li>
+        <li *ngIf="currentIndex !== count - 1" class="page-item"><a class="page-link" (click)="changeIndex(currentIndex + 1)">Next</a></li>
+    </ul>
+</nav>
