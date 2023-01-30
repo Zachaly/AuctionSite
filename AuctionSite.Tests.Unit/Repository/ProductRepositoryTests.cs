@@ -103,5 +103,26 @@ namespace AuctionSite.Tests.Unit.Repository
             Assert.NotNull(res.Owner);
             Assert.NotNull(res.Images);
         }
+
+        [Fact]
+        public void GetPageCount()
+        {
+            AddContent(new List<Product>
+            {
+                new Product { Id = 1, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 2, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 3, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 4, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 5, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 6, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 7, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 8, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 9, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+            });
+
+            var count = _repository.GetPageCount(4);
+
+            Assert.Equal(3, count);
+        }
     }
 }

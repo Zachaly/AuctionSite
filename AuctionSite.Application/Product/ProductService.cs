@@ -61,6 +61,13 @@ namespace AuctionSite.Application
             }
         }
 
+        public DataResponseModel<int> GetPageCount(GetPageCountRequest request)
+        {
+            var count = _productRepository.GetPageCount(request.PageSize ?? 10);
+
+            return _responseFactory.CreateSuccess(count);
+        }
+
         public DataResponseModel<ProductModel> GetProductById(int id)
         {
             try

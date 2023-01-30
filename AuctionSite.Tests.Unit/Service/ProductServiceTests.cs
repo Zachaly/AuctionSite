@@ -326,5 +326,40 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.False(res.Success);
             Assert.Null(res.Data);
         }
+
+        [Fact]
+        public void GetPageCount_RequestWithSize()
+        {
+            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<int>()))
+                .Returns((int data) => new DataResponseModel<int> { Data = data, Success = true });
+
+            const int Count = 20;
+            _productRepository.Setup(x => x.GetPageCount(It.IsAny<int>()))
+                .Returns(Count);
+
+            var request = new GetPageCountRequest { PageSize = 2 };
+
+            var res = _service.GetPageCount(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(Count, res.Data);
+        }
+
+        [Fact]
+        public void GetPageCount_RequestWithoutSize()
+        {
+            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<int>()))
+                .Returns((int data) => new DataResponseModel<int> { Data = data, Success = true });
+
+            _productRepository.Setup(x => x.GetPageCount(It.IsAny<int>()))
+                .Returns((int size) => size);
+
+            var request = new GetPageCountRequest { };
+
+            var res = _service.GetPageCount(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(10, res.Data);
+        }
     }
 }

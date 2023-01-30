@@ -8,5 +8,6 @@ namespace AuctionSite.Database.Repository.Abstraction
         T GetProductById<T>(int id, Func<Product, T> selector);
         Task AddProductAsync(Product product);
         Task DeleteProductByIdAsync(int id);
+        int GetPageCount(int pageSize);
     }
 }

@@ -29,6 +29,13 @@ namespace AuctionSite.Database.Repository
             return _dbContext.SaveChangesAsync();
         }
 
+        public int GetPageCount(int pageSize)
+        {
+            var count = (decimal)_dbContext.Product.Count();
+
+            return (int)Math.Ceiling(count / pageSize);
+        }
+
         public T GetProductById<T>(int id, Func<Product, T> selector)
             => _dbContext.Product.Include(product => product.Owner)
                 .Include(product => product.Options)
