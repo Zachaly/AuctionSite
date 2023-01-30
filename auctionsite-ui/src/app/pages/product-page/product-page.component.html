@@ -1,5 +1,14 @@
-<div class="row">
-    <div class="col col-6">Placeholder for image gallery</div>
+<div class="row mt-2">
+    <div class="col col-6 text-center">
+        <div class="current-image">
+            <app-image type="product" [id]="currentImage ?? 0" class="mw-100 mh-100"/>
+        </div>
+        <div class="d-flex">
+            <div *ngFor="let id of product.imageIds" class="image-item">
+                <app-image type="product" [id]="id" class="mw-100 mh-100" (onClick)="setImage(id)"/>
+            </div>
+        </div>
+    </div>
     <div class="col col-6">
         <h1 class="text-center">{{product.name}}</h1>
         <p class="fs-3">

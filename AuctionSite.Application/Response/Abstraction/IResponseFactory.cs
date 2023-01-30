@@ -12,5 +12,7 @@ namespace AuctionSite.Application.Abstraction
         ResponseModel CreateSuccess();
         ResponseModel CreateFailure(string errorMessage);
         ResponseModel CreateValidationError(ValidationResult validationResult);
+
+        ResponseModel CreateSuccessWithCreatedId(int newId);
     }
 }

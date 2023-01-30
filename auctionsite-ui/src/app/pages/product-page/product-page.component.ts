@@ -18,16 +18,21 @@ export class ProductPageComponent implements OnInit {
     price: '',
     userName: '',
     description: '',
-    options: []
+    options: [],
+    imageIds: []
   }
 
   @Input() currentOption: ProductOption = { id: 0, value: '', quantity: 0 }
+  currentImage?: number = 0
 
   constructor(private route: ActivatedRoute, private productService: ProductService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.productService.getProduct(params['id']).subscribe(res => this.product = res.data ?? this.product)
+      this.productService.getProduct(params['id']).subscribe(res => { 
+        this.product = res.data ?? this.product
+        this.currentImage = this.product.imageIds[0]
+       })
     })
   }
 
@@ -35,4 +40,8 @@ export class ProductPageComponent implements OnInit {
     return optOne == optTwo
   }
 
+  setImage(id: number){
+    this.currentImage = id
+    console.log(this.currentImage)
+  }
 }

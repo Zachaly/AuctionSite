@@ -2,4 +2,7 @@
     <div class="card-header text-center fs-5">
         <span [routerLink]="['/product', product.id]">{{ product.name }}</span>
     </div>
+    <div class="text-center prod-image">
+        <app-image type="product" [id]="product.imageId" class="mw-100 mh-100"/>
+    </div>
 </div>

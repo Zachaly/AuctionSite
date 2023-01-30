@@ -8,5 +8,6 @@ export default interface ProductModel {
     description: string,
     price: string,
     optionName: string,
-    options: ProductOption[]
+    options: ProductOption[],
+    imageIds: number[]
 }

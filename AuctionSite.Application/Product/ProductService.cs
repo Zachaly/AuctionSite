@@ -39,7 +39,7 @@ namespace AuctionSite.Application
 
                 await _productRepository.AddProductAsync(product);
 
-                return _responseFactory.CreateSuccess();
+                return _responseFactory.CreateSuccessWithCreatedId(product.Id);
             }
             catch (Exception ex)
             {

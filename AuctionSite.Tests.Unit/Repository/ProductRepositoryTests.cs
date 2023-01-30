@@ -101,6 +101,7 @@ namespace AuctionSite.Tests.Unit.Repository
             Assert.Equal(_dbContext.Product.Find(Id).Name, res.Name);
             Assert.NotEmpty(res.Options);
             Assert.NotNull(res.Owner);
+            Assert.NotNull(res.Images);
         }
     }
 }

@@ -12,5 +12,6 @@ namespace AuctionSite.Models.Product
         public string Price { get; set; }
         public string OptionName { get; set; }
         public IEnumerable<ProductOptionModel> Options { get; set; }
+        public IEnumerable<int> ImageIds { get; set; }
     }
 }

@@ -9,22 +9,30 @@ namespace AuctionSite.Application
     public class FileService : IFileService
     {
         private readonly string _profilePicturePath;
+        private readonly string _productPicturePath;
         private readonly string _defaultPicture;
 
         public FileService(IConfiguration configuration)
         {
             _profilePicturePath = configuration["Image:ProfilePath"];
+            _productPicturePath = configuration["Image:ProductPath"];
             _defaultPicture = configuration["Image:Default"];
         }
 
-        public FileStream GetProfilePicture(string fileName)
+        private FileStream GetFile(string filePath, string fileName)
         {
             var name = string.IsNullOrEmpty(fileName) ? _defaultPicture : fileName;
 
-            var path = Path.Combine(_profilePicturePath, name);
-            
+            var path = Path.Combine(filePath, name);
+
             return File.OpenRead(path);
         }
+
+        public FileStream GetProductPicture(string fileName)
+            => GetFile(_productPicturePath, fileName);
+
+        public FileStream GetProfilePicture(string fileName)
+            => GetFile(_profilePicturePath, fileName);
 
         public void RemoveProfilePicture(string fileName)
         {
@@ -38,6 +46,30 @@ namespace AuctionSite.Application
             {
                 File.Delete(path);
             }
+        }
+
+        public async Task<IEnumerable<string>> SaveProductImages(IEnumerable<IFormFile> files)
+        {
+            if(files.Count() < 0)
+            {
+                return new string[] { _defaultPicture };
+            }
+
+            var names = new List<string>();
+            foreach(var file in files)
+            {
+                Directory.CreateDirectory(_productPicturePath);
+                var fileName = $"{Guid.NewGuid()}.png";
+
+                using (var stream = File.Create(Path.Combine(_productPicturePath, fileName)))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                names.Add(fileName);
+            }
+
+            return names;
         }
 
         public async Task<string> SaveProfilePicture(IFormFile file)
@@ -65,5 +97,6 @@ namespace AuctionSite.Application
                 return _defaultPicture;
             }
         }
+
     }
 }

@@ -1,4 +1,5 @@
 export default interface ProductListItem {
     name: string,
-    id: number
+    id: number,
+    imageId: number
 }

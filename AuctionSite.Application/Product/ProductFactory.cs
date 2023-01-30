@@ -27,11 +27,19 @@ namespace AuctionSite.Application
                 Price = request.Price,
             };
 
+        public ProductImage CreateImage(int productId, string name)
+            => new ProductImage
+            {
+                ProductId = productId,
+                FileName = name,
+            };
+
         public ProductListItemModel CreateListItem(Product product)
             => new ProductListItemModel
             {
                 Id = product.Id,
                 Name = product.Name,
+                ImageId = product.Images?.FirstOrDefault()?.Id ?? 0,
             };
 
         public ProductModel CreateModel(Product product)
@@ -44,7 +52,8 @@ namespace AuctionSite.Application
                 Options = product.Options.Select(opt => _productOptionFactory.CreateModel(opt)),
                 Price = product.Price.ToString(),
                 UserId = product.OwnerId,
-                UserName = product.Owner.UserName
+                UserName = product.Owner.UserName,
+                ImageIds = product.Images.Select(x => x.Id)
             };
     }
 }

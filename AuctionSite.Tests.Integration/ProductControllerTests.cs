@@ -244,6 +244,7 @@ namespace AuctionSite.Tests.Integration
             };
 
             var response = await _httpClient.PostAsJsonAsync(ApiPath, request);
+            var content = await response.Content.ReadFromJsonAsync<ResponseModel>();
 
             var testProduct = GetFromDatabase<Product>().First();
             var testOptions = GetFromDatabase<ProductOption>().Where(x => x.ProductId == testProduct.Id);
@@ -252,6 +253,7 @@ namespace AuctionSite.Tests.Integration
             Assert.Equal(request.Name, testProduct.Name);
             Assert.Equivalent(request.Options.Select(x => x.Value), testOptions.Select(x => x.Value));
             Assert.Equal(request.Options.Count(), testOptions.Count());
+            Assert.NotNull(content.NewEntityId);
         }
 
         [Fact]

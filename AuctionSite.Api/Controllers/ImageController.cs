@@ -21,5 +21,13 @@ namespace AuctionSite.Api.Controllers
 
             return new FileStreamResult(stream, "image/png");
         }
+
+        [HttpGet("product/{imageId}")]
+        public async Task<ActionResult> GetProductImageAsync(int imageId)
+        {
+            var stream = await _mediator.Send(new GetProductImageQuery { ImageId = imageId });
+
+            return new FileStreamResult(stream, "image/png");
+        }
     }
 }
