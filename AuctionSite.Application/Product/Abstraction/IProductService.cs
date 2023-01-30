@@ -11,5 +11,6 @@ namespace AuctionSite.Application.Abstraction
         Task<ResponseModel> DeleteProductByIdAsync(int id);
         DataResponseModel<ProductModel> GetProductById(int id);
         DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(PagedRequest request);
+        DataResponseModel<int> GetPageCount(GetPageCountRequest request);
     }
 }

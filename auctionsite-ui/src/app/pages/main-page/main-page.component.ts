@@ -9,9 +9,26 @@ import ProductListItem from 'src/models/ProductListItem';
 })
 export class MainPageComponent implements OnInit {
   products: ProductListItem[] = []
+  pageCount: number = 0
+  private pageSize = 15
 
   constructor(private productService: ProductService) { }
   ngOnInit(): void {
-    this.productService.getProducts({}).subscribe(res => this.products = res.data ?? [])
+    this.productService.getPageCount(this.pageSize)
+      .subscribe(res => {
+        this.pageCount = res.data!
+        this.getProducts(0)
+      })
+  }
+
+  private getProducts(pageIndex: number) {
+    this.productService.getProducts({ pageIndex, pageSize: this.pageSize })
+      .subscribe(res => {
+        this.products = res.data ?? []
+      })
+  }
+
+  changePage(pageIndex: number) {
+    this.getProducts(pageIndex)
   }
 }

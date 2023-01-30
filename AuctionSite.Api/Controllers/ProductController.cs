@@ -100,5 +100,14 @@ namespace AuctionSite.Api.Controllers
 
             return res.ReturnNoContentOrBadRequest();
         }
+
+        [HttpGet("page-count")]
+        [ProducesResponseType(200)]
+        public ActionResult<DataResponseModel<int>> GetPageCount([FromQuery] GetPageCountRequest request)
+        {
+            var res = _productService.GetPageCount(request);
+
+            return res.ReturnOkOrBadRequest();
+        }
     }
 }

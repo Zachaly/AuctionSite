@@ -326,5 +326,75 @@ namespace AuctionSite.Tests.Integration
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Fact]
+        public async Task GetPageCount_SizeNotSpecified()
+        {
+            await Authenticate();
+
+            var user = GetAuthenticatedUser();
+
+            await AddToDatabase(new List<Product>
+            {
+                CreateTestProduct(1, user.Id),
+                CreateTestProduct(2, user.Id),
+                CreateTestProduct(3, user.Id),
+                CreateTestProduct(4, user.Id),
+                CreateTestProduct(5, user.Id),
+                CreateTestProduct(6, user.Id),
+                CreateTestProduct(7, user.Id),
+                CreateTestProduct(8, user.Id),
+                CreateTestProduct(9, user.Id),
+                CreateTestProduct(10, user.Id),
+                CreateTestProduct(11, user.Id),
+                CreateTestProduct(12, user.Id),
+                CreateTestProduct(13, user.Id),
+                CreateTestProduct(14, user.Id),
+                CreateTestProduct(15, user.Id),
+                CreateTestProduct(16, user.Id),
+            });
+
+            var response = await _httpClient.GetAsync($"{ApiPath}/page-count");
+            var content = await response.Content.ReadFromJsonAsync<DataResponseModel<int>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(content.Success);
+            Assert.Equal(2, content.Data);
+        }
+
+        [Fact]
+        public async Task GetPageCount_SizeSpecified()
+        {
+            await Authenticate();
+
+            var user = GetAuthenticatedUser();
+
+            await AddToDatabase(new List<Product>
+            {
+                CreateTestProduct(1, user.Id),
+                CreateTestProduct(2, user.Id),
+                CreateTestProduct(3, user.Id),
+                CreateTestProduct(4, user.Id),
+                CreateTestProduct(5, user.Id),
+                CreateTestProduct(6, user.Id),
+                CreateTestProduct(7, user.Id),
+                CreateTestProduct(8, user.Id),
+                CreateTestProduct(9, user.Id),
+                CreateTestProduct(10, user.Id),
+                CreateTestProduct(11, user.Id),
+                CreateTestProduct(12, user.Id),
+                CreateTestProduct(13, user.Id),
+                CreateTestProduct(14, user.Id),
+                CreateTestProduct(15, user.Id),
+                CreateTestProduct(16, user.Id),
+            });
+
+            var response = await _httpClient.GetAsync($"{ApiPath}/page-count?pageSize=5");
+            var content = await response.Content.ReadFromJsonAsync<DataResponseModel<int>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(content.Success);
+            Assert.Equal(4, content.Data);
+        }
     }
 }

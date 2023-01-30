@@ -31,13 +31,13 @@ export class ProductService {
   }
 
   getProducts(request: PagedRequest) : Observable<DataResponseModel<ProductListItem[]>>{
-    const params = new HttpParams()
+    let params = new HttpParams()
     if(request.pageIndex){
-      params.append('pageIndex', request.pageIndex)
+      params = params.append('PageIndex', request.pageIndex)
     }
 
     if(request.pageSize){
-      params.append('pageSize', request.pageSize)
+      params = params.append('PageSize', request.pageSize)
     }
 
     return this.http.get<DataResponseModel<ProductListItem[]>>(this.apiUrl, {
@@ -61,6 +61,14 @@ export class ProductService {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.authService.userData.authToken}`
       })
+    })
+  }
+
+  getPageCount(pageSize: number) : Observable<DataResponseModel<number>>{
+    let params = new HttpParams()
+    params = params.append('pageSize', pageSize)
+    return this.http.get<DataResponseModel<number>>(`${this.apiUrl}/page-count`, {
+      params
     })
   }
 }
