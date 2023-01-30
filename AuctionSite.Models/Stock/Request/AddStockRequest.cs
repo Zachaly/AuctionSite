@@ -1,6 +1,6 @@
-﻿namespace AuctionSite.Models.ProductOption.Request
+﻿namespace AuctionSite.Models.Stock.Request
 {
-    public class AddProductOptionRequest
+    public class AddStockRequest
     {
         public int? ProductId { get; set; }
         public string Value { get; set; }

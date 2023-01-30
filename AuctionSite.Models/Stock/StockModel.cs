@@ -1,6 +1,6 @@
-﻿namespace AuctionSite.Models.ProductOption
+﻿namespace AuctionSite.Models.Stock
 {
-    public class ProductOptionModel
+    public class StockModel
     {
         public int Id { get; set; }
         public string Value { get; set; }

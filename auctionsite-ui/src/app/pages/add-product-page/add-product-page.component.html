@@ -17,9 +17,9 @@
             <app-error-list [errors]="validationErrors.Price"/>
         </div>
         <div class="mt-2">
-            <label for="price">Option name</label>
-            <input type="text" name="price" class="form-control" [(ngModel)]="product.optionName">
-            <app-error-list [errors]="validationErrors.OptionName"/>
+            <label for="price">Stock name</label>
+            <input type="text" name="price" class="form-control" [(ngModel)]="product.stockName">
+            <app-error-list [errors]="validationErrors.StockName"/>
         </div>
         <div class="mt-2">
             <label for="images">Images</label>
@@ -28,20 +28,20 @@
         <button class="btn btn-success mt-2 form-control">Add product</button>
     </form>
     <div class="col mt-2">
-        <h2>Product options</h2>
+        <h2>Stocks</h2>
         <div class="mt-2">
-            <label for="opt-value">Option value</label>
-            <input type="text" name="opt-value" class="form-control" [(ngModel)]="currentOption.value">
+            <label for="opt-value">Stock value</label>
+            <input type="text" name="opt-value" class="form-control" [(ngModel)]="currentStock.value">
         </div>
         <div class="mt-2">
             <label for="pot-quantity">Quantity</label>
-            <input type="number" name="opt-quantity" class="form-control" value="0" [(ngModel)]="currentOption.quantity">
+            <input type="number" name="opt-quantity" class="form-control" value="0" [(ngModel)]="currentStock.quantity">
         </div>
         <div class="mt-2">
-            <button class="btn btn-success mt-2" (click)="addOption()">Add option</button>
+            <button class="btn btn-success mt-2" (click)="addStock()">Add stock</button>
         </div>
         <div class="mt-2">
-            <app-added-product-option *ngFor="let option of product.options" [option]="option"/>
+            <app-added-stock *ngFor="let stock of product.stocks" [stock]="stock"/>
         </div>
     </div>
 </div>

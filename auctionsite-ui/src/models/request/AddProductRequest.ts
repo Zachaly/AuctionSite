@@ -1,10 +1,10 @@
-import AddProductOptionRequest from "./AddOptionRequest";
+import AddStockRequest from "./AddStockRequest";
 
 export default interface AddProductRequest {
     userId: string,
     name: string,
     description: string,
-    optionName: string,
+    stockName: string,
     price: number,
-    options: AddProductOptionRequest[]
+    stocks: AddStockRequest[]
 }

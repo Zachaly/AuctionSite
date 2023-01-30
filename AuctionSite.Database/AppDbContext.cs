@@ -8,7 +8,7 @@ namespace AuctionSite.Database
     {
         public DbSet<UserInfo> UserInfo { get; set; }
         public DbSet<Product> Product { get; set; }
-        public DbSet<ProductOption> ProductOption { get; set; }
+        public DbSet<Stock> Stock { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)

@@ -38,7 +38,7 @@ namespace AuctionSite.Database.Repository
 
         public T GetProductById<T>(int id, Func<Product, T> selector)
             => _dbContext.Product.Include(product => product.Owner)
-                .Include(product => product.Options)
+                .Include(product => product.Stocks)
                 .Include(product => product.Images)
                 .Where(product => product.Id == id)
                 .Select(selector)

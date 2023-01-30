@@ -1,4 +1,4 @@
-﻿using AuctionSite.Models.ProductOption;
+﻿using AuctionSite.Models.Stock;
 
 namespace AuctionSite.Models.Product
 {
@@ -10,8 +10,8 @@ namespace AuctionSite.Models.Product
         public string Name { get; set; }
         public string Description { get; set; }
         public string Price { get; set; }
-        public string OptionName { get; set; }
-        public IEnumerable<ProductOptionModel> Options { get; set; }
+        public string StockName { get; set; }
+        public IEnumerable<StockModel> Stocks { get; set; }
         public IEnumerable<int> ImageIds { get; set; }
     }
 }

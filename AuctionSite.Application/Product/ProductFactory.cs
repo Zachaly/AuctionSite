@@ -9,11 +9,11 @@ namespace AuctionSite.Application
     [Implementation(typeof(IProductFactory))]
     public class ProductFactory : IProductFactory
     {
-        private readonly IProductOptionFactory _productOptionFactory;
+        private readonly IStockFactory _stockFactory;
 
-        public ProductFactory(IProductOptionFactory productOptionFactory)
+        public ProductFactory(IStockFactory stockFactory)
         {
-            _productOptionFactory = productOptionFactory;
+            _stockFactory = stockFactory;
         }
 
         public Product Create(AddProductRequest request)
@@ -21,8 +21,8 @@ namespace AuctionSite.Application
             {
                 Description = request.Description,
                 Name = request.Name,
-                OptionName = request.OptionName,
-                Options = request.Options.Select(opt => _productOptionFactory.Create(opt)).ToArray(),
+                StockName = request.StockName,
+                Stocks = request.Stocks.Select(opt => _stockFactory.Create(opt)).ToArray(),
                 OwnerId = request.UserId,
                 Price = request.Price,
             };
@@ -48,8 +48,8 @@ namespace AuctionSite.Application
                 Id = product.Id,
                 Description = product.Description,
                 Name = product.Name,
-                OptionName = product.OptionName,
-                Options = product.Options.Select(opt => _productOptionFactory.CreateModel(opt)),
+                StockName = product.StockName,
+                Stocks = product.Stocks.Select(opt => _stockFactory.CreateModel(opt)),
                 Price = product.Price.ToString(),
                 UserId = product.OwnerId,
                 UserName = product.Owner.UserName,

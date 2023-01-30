@@ -19,19 +19,19 @@ namespace AuctionSite.Tests.Unit.Repository
             {
                 Description = "desc",
                 Name = "name",
-                OptionName = "optname",
+                StockName = "optname",
                 OwnerId = "id",
                 Price = 123,
-                Options = new List<ProductOption>
+                Stocks = new List<Stock>
                 {
-                    new ProductOption { Quantity = 2, Value = "val" }
+                    new Stock { Quantity = 2, Value = "val" }
                 },
             };
 
             await _repository.AddProductAsync(product);
 
             Assert.Contains(_dbContext.Product, x => x.Description == product.Description);
-            Assert.Contains(_dbContext.ProductOption, x => x.Quantity == product.Options.First().Quantity);
+            Assert.Contains(_dbContext.Stock, x => x.Quantity == product.Stocks.First().Quantity);
         }
 
         [Fact]
@@ -39,10 +39,10 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             AddContent(new List<Product> 
             {
-                new Product { Id = 1, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 2, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 3, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 4, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 2, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 4, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
             });
 
             const int Id = 3;
@@ -57,14 +57,14 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             AddContent(new List<Product>
             {
-                new Product { Id = 1, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 2, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 3, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 4, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 5, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 6, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 7, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 8, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 2, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 4, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 5, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 6, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 7, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 8, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
             });
 
             var res = _repository.GetProducts(1, 4, x => x);
@@ -77,29 +77,29 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             AddContent(new List<Product>
             {
-                new Product { Id = 1, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
                 new Product 
                 { 
                     Id = 2,
                     Description = "desc test",
                     Name = "name test",
-                    OptionName = "optname test",
+                    StockName = "optname test",
                     OwnerId = "id", 
                     Price = 123,
-                    Options = new List<ProductOption>
+                    Stocks = new List<Stock>
                     {
-                        new ProductOption { Quantity = 5, Value = "val" }
+                        new Stock { Quantity = 5, Value = "val" }
                     },
                     Owner = new ApplicationUser { Id = "id", UserName = "usrname" }
                 },
-                new Product { Id = 3, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
             });
 
             const int Id = 2;
             var res = _repository.GetProductById(Id, x => x);
 
             Assert.Equal(_dbContext.Product.Find(Id).Name, res.Name);
-            Assert.NotEmpty(res.Options);
+            Assert.NotEmpty(res.Stocks);
             Assert.NotNull(res.Owner);
             Assert.NotNull(res.Images);
         }
@@ -109,15 +109,15 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             AddContent(new List<Product>
             {
-                new Product { Id = 1, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 2, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 3, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 4, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 5, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 6, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 7, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 8, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
-                new Product { Id = 9, Description = "desc", Name = "name", OptionName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 2, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 4, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 5, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 6, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 7, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 8, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
+                new Product { Id = 9, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123 },
             });
 
             var count = _repository.GetPageCount(4);

@@ -1,7 +1,7 @@
 ﻿using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Product.Validator;
-using AuctionSite.Models.ProductOption.Request;
-using AuctionSite.Models.ProductOption.Validator;
+using AuctionSite.Models.Stock.Request;
+using AuctionSite.Models.Stock.Validator;
 
 namespace AuctionSite.Tests.Unit.Validator
 {
@@ -11,7 +11,7 @@ namespace AuctionSite.Tests.Unit.Validator
 
         public AddProductRequestValidatorTests()
         {
-            _validator = new AddProductRequestValidator(new AddProductOptionRequestValidator());
+            _validator = new AddProductRequestValidator(new AddStockRequestValidator());
         }
 
         [Fact]
@@ -21,8 +21,8 @@ namespace AuctionSite.Tests.Unit.Validator
             {
                 Description = "description",
                 Name = "name",
-                OptionName = "opt name",
-                Options = new AddProductOptionRequest[] { new AddProductOptionRequest() { Quantity = 1, Value = "val" } },
+                StockName = "opt name",
+                Stocks = new AddStockRequest[] { new AddStockRequest() { Quantity = 1, Value = "val" } },
                 Price = 123,
                 UserId = "id"
             };
@@ -37,7 +37,7 @@ namespace AuctionSite.Tests.Unit.Validator
         {
             var request = new AddProductRequest
             {
-                Options = new AddProductOptionRequest[] { new AddProductOptionRequest() { Quantity = 1, Value = "val" } },
+                Stocks = new AddStockRequest[] { new AddStockRequest() { Quantity = 1, Value = "val" } },
                 Price = 123,
                 UserId = "id"
             };
@@ -54,8 +54,8 @@ namespace AuctionSite.Tests.Unit.Validator
             {
                 Description = new string('a', 201),
                 Name = "name",
-                OptionName = "opt name",
-                Options = new AddProductOptionRequest[] { new AddProductOptionRequest() { Quantity = 1, Value = "val" } },
+                StockName = "opt name",
+                Stocks = new AddStockRequest[] { new AddStockRequest() { Quantity = 1, Value = "val" } },
                 Price = 123,
                 UserId = "id"
             };
@@ -72,8 +72,8 @@ namespace AuctionSite.Tests.Unit.Validator
             {
                 Description = "description",
                 Name = new string('a', 51),
-                OptionName = "opt name",
-                Options = new AddProductOptionRequest[] { new AddProductOptionRequest() { Quantity = 1, Value = "val" } },
+                StockName = "opt name",
+                Stocks = new AddStockRequest[] { new AddStockRequest() { Quantity = 1, Value = "val" } },
                 Price = 123,
                 UserId = "id"
             };
@@ -84,14 +84,14 @@ namespace AuctionSite.Tests.Unit.Validator
         }
 
         [Fact]
-        public void OptionNameExceedsMaxLength_FailsValidation()
+        public void StockNameExceedsMaxLength_FailsValidation()
         {
             var request = new AddProductRequest
             {
                 Description = "description",
                 Name = "name",
-                OptionName = new string('a', 26),
-                Options = new AddProductOptionRequest[] { new AddProductOptionRequest() { Quantity = 1, Value = "val" } },
+                StockName = new string('a', 26),
+                Stocks = new AddStockRequest[] { new AddStockRequest() { Quantity = 1, Value = "val" } },
                 Price = 123,
                 UserId = "id"
             };
@@ -102,14 +102,14 @@ namespace AuctionSite.Tests.Unit.Validator
         }
 
         [Fact]
-        public void NoOptions_FailsValidation()
+        public void NoStocks_FailsValidation()
         {
             var request = new AddProductRequest
             {
                 Description = "description",
                 Name = new string('a', 51),
-                OptionName = "opt name",
-                Options = new AddProductOptionRequest[] { },
+                StockName = "opt name",
+                Stocks = new AddStockRequest[] { },
                 Price = 123,
                 UserId = "id"
             };
@@ -128,8 +128,8 @@ namespace AuctionSite.Tests.Unit.Validator
             {
                 Description = "description",
                 Name = new string('a', 51),
-                OptionName = "opt name",
-                Options = new AddProductOptionRequest[] { new AddProductOptionRequest() { Quantity = 1, Value = "val" } },
+                StockName = "opt name",
+                Stocks = new AddStockRequest[] { new AddStockRequest() { Quantity = 1, Value = "val" } },
                 Price = price,
                 UserId = "id"
             };

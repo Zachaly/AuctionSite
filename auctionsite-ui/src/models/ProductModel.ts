@@ -1,4 +1,4 @@
-import ProductOption from "./ProductOption";
+import Stock from "./Stock";
 
 export default interface ProductModel {
     id: number,
@@ -7,7 +7,7 @@ export default interface ProductModel {
     name: string,
     description: string,
     price: string,
-    optionName: string,
-    options: ProductOption[],
+    stockName: string,
+    stocks: Stock[],
     imageIds: number[]
 }

@@ -1,47 +1,47 @@
 ﻿using AuctionSite.Api.Infrastructure;
 using AuctionSite.Application.Abstraction;
-using AuctionSite.Models.ProductOption.Request;
+using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionSite.Api.Controllers
 {
-    [Route("/api/product-option")]
-    public class ProductOptionController : ControllerBase
+    [Route("/api/stock")]
+    public class StockController : ControllerBase
     {
-        private readonly IProductOptionService _productOptionService;
+        private readonly IStockService _stockService;
 
-        public ProductOptionController(IProductOptionService productOptionService)
+        public StockController(IStockService stockService)
         {
-            _productOptionService = productOptionService;
+            _stockService = stockService;
         }
 
         /// <summary>
-        /// Creates new product option with data given in request
+        /// Creates new product stock with data given in request
         /// </summary>
-        /// <response code="201">Option created successfully</response>
-        /// <response code="400">Failed to add option</response>
+        /// <response code="201">stock created successfully</response>
+        /// <response code="400">Failed to add stock</response>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ResponseModel>> PostAsync(AddProductOptionRequest request)
+        public async Task<ActionResult<ResponseModel>> PostAsync(AddStockRequest request)
         {
-            var res = await _productOptionService.AddProductOptionAsync(request);
+            var res = await _stockService.AddStockAsync(request);
 
             return res.ReturnCreatedOrBadRequest("");
         }
 
         /// <summary>
-        /// Removes option with given id from database
+        /// Removes stock with given id from database
         /// </summary>
-        /// <response code="204">Option removed successfully</response>
-        /// <response code="400">Failed to remove option</response>
+        /// <response code="204">stock removed successfully</response>
+        /// <response code="400">Failed to remove stock</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<ResponseModel>> DeleteAsync(int id)
         {
-            var res = await _productOptionService.DeleteProductOptionByIdAsync(id);
+            var res = await _stockService.DeleteStockByIdAsync(id);
 
             return res.ReturnNoContentOrBadRequest();
         }

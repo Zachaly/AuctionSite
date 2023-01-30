@@ -1,6 +1,6 @@
 ﻿namespace AuctionSite.Domain.Entity
 {
-    public class ProductOption
+    public class Stock
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

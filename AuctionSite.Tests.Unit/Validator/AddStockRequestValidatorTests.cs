@@ -1,21 +1,21 @@
-﻿using AuctionSite.Models.ProductOption.Request;
-using AuctionSite.Models.ProductOption.Validator;
+﻿using AuctionSite.Models.Stock.Request;
+using AuctionSite.Models.Stock.Validator;
 
 namespace AuctionSite.Tests.Unit.Validator
 {
-    public class AddProductOptionValidatorTests
+    public class AddStockRequestValidatorTests
     {
-        private readonly AddProductOptionRequestValidator _validator;
+        private readonly AddStockRequestValidator _validator;
 
-        public AddProductOptionValidatorTests()
+        public AddStockRequestValidatorTests()
         {
-            _validator = new AddProductOptionRequestValidator();
+            _validator = new AddStockRequestValidator();
         }
 
         [Fact]
         public void CorrectData_PassesValidation()
         {
-            var request = new AddProductOptionRequest
+            var request = new AddStockRequest
             {
                 ProductId = 1,
                 Quantity = 2,
@@ -30,7 +30,7 @@ namespace AuctionSite.Tests.Unit.Validator
         [Fact]
         public void OnlyRequiredFields_PassesValidation()
         {
-            var request = new AddProductOptionRequest
+            var request = new AddStockRequest
             {
                 Quantity = 2,
                 Value = "val"
@@ -44,7 +44,7 @@ namespace AuctionSite.Tests.Unit.Validator
         [Fact]
         public void QuantityBelowZero_FailsValidation()
         {
-            var request = new AddProductOptionRequest
+            var request = new AddStockRequest
             {
                 Quantity = -1,
                 Value = "val"
@@ -58,7 +58,7 @@ namespace AuctionSite.Tests.Unit.Validator
         [Fact]
         public void ValueExceedsMaxLength_FailsValidation()
         {
-            var request = new AddProductOptionRequest
+            var request = new AddStockRequest
             {
                 Quantity = 1,
                 Value = new string('a', 21)

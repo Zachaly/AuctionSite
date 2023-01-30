@@ -5,7 +5,7 @@ using AuctionSite.Domain.Entity;
 using AuctionSite.Models;
 using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
-using AuctionSite.Models.ProductOption.Request;
+using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Moq;
 using System.Collections.Immutable;
@@ -49,10 +49,10 @@ namespace AuctionSite.Tests.Unit.Service
             {
                 Description = "description",
                 Name = "name",
-                OptionName = "name",
+                StockName = "name",
                 UserId = "id",
                 Price = 123,
-                Options = new List<AddProductOptionRequest> { new AddProductOptionRequest { Quantity = 1, Value = "val" } }
+                Stocks = new List<AddStockRequest> { new AddStockRequest { Quantity = 1, Value = "val" } }
             };
 
             var res = await _service.AddProductAsync(request);
@@ -84,10 +84,10 @@ namespace AuctionSite.Tests.Unit.Service
             {
                 Description = "description",
                 Name = "name",
-                OptionName = "name",
+                StockName = "name",
                 UserId = "id",
                 Price = 123,
-                Options = new List<AddProductOptionRequest> { new AddProductOptionRequest { Value = "val", Quantity = 1 } }
+                Stocks = new List<AddStockRequest> { new AddStockRequest { Value = "val", Quantity = 1 } }
             };
 
             var res = await _service.AddProductAsync(request);

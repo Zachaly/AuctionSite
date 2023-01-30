@@ -1,7 +1,7 @@
 ﻿using AuctionSite.Domain.Entity;
 using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
-using AuctionSite.Models.ProductOption.Request;
+using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,8 +17,8 @@ namespace AuctionSite.Tests.Integration
                 Id = id,
                 Description = $"desc {id}",
                 Name = $"Name {id}",
-                OptionName = $"opt {id}",
-                Options = new List<ProductOption>() { new ProductOption() { Value = $"value {id}", Quantity = 1, ProductId = id } },
+                StockName = $"opt {id}",
+                Stocks = new List<Stock>() { new Stock() { Value = $"value {id}", Quantity = 1, ProductId = id } },
                 OwnerId = userId,
                 Price = id * 10
             };
@@ -171,10 +171,10 @@ namespace AuctionSite.Tests.Integration
                 Id = 1,
                 Description = "Test",
                 Name = "name",
-                OptionName = "option",
-                Options = new ProductOption[]
+                StockName = "option",
+                Stocks = new Stock[]
                 {
-                    new ProductOption { ProductId = 1, Value = "val", Quantity = 1 }
+                    new Stock { ProductId = 1, Value = "val", Quantity = 1 }
                 },
                 OwnerId = user.Id,
                 Price = 123
@@ -188,7 +188,7 @@ namespace AuctionSite.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(product.Name, content.Data.Name);
             Assert.True(content.Success);
-            Assert.Single(content.Data.Options);
+            Assert.Single(content.Data.Stocks);
         }
 
         [Fact]
@@ -203,10 +203,10 @@ namespace AuctionSite.Tests.Integration
                 Id = 1,
                 Description = "Test",
                 Name = "name",
-                OptionName = "option",
-                Options = new ProductOption[]
+                StockName = "option",
+                Stocks = new Stock[]
                 {
-                    new ProductOption { ProductId = 1, Value = "val", Quantity = 1 }
+                    new Stock { ProductId = 1, Value = "val", Quantity = 1 }
                 },
                 OwnerId = user.Id,
                 Price = 123
@@ -233,11 +233,11 @@ namespace AuctionSite.Tests.Integration
             {
                 Name = "name",
                 Description = "Test",
-                OptionName = "option",
-                Options = new List<AddProductOptionRequest>
+                StockName = "option",
+                Stocks = new List<AddStockRequest>
                 {
-                    new AddProductOptionRequest { Quantity = 2, Value = "val" },
-                    new AddProductOptionRequest { Quantity = 2, Value = "val2" },
+                    new AddStockRequest { Quantity = 2, Value = "val" },
+                    new AddStockRequest { Quantity = 2, Value = "val2" },
                 },
                 Price = 123,
                 UserId = user.Id,
@@ -247,12 +247,12 @@ namespace AuctionSite.Tests.Integration
             var content = await response.Content.ReadFromJsonAsync<ResponseModel>();
 
             var testProduct = GetFromDatabase<Product>().First();
-            var testOptions = GetFromDatabase<ProductOption>().Where(x => x.ProductId == testProduct.Id);
+            var testStocks = GetFromDatabase<Stock>().Where(x => x.ProductId == testProduct.Id);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             Assert.Equal(request.Name, testProduct.Name);
-            Assert.Equivalent(request.Options.Select(x => x.Value), testOptions.Select(x => x.Value));
-            Assert.Equal(request.Options.Count(), testOptions.Count());
+            Assert.Equivalent(request.Stocks.Select(x => x.Value), testStocks.Select(x => x.Value));
+            Assert.Equal(request.Stocks.Count(), testStocks.Count());
             Assert.NotNull(content.NewEntityId);
         }
 
@@ -265,12 +265,12 @@ namespace AuctionSite.Tests.Integration
 
             var request = new AddProductRequest
             {
-                OptionName = "option",
+                StockName = "option",
                 Price = 123,
                 UserId = user.Id,
                 Name = "name",
                 Description = "desc",
-                Options = new List<AddProductOptionRequest> { }
+                Stocks = new List<AddStockRequest> { }
             };
 
             var response = await _httpClient.PostAsJsonAsync(ApiPath, request);
@@ -279,7 +279,7 @@ namespace AuctionSite.Tests.Integration
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.DoesNotContain(GetFromDatabase<Product>(), x => x.Name == request.Name);
-            Assert.Contains(error.ValidationErrors.Keys, x => x == "Options");
+            Assert.Contains(error.ValidationErrors.Keys, x => x == "Stocks");
         }
 
         [Fact]

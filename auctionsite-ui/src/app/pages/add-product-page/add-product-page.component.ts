@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProductService } from 'src/app/services/product.service';
-import AddProductOptionRequest from 'src/models/request/AddOptionRequest';
+import AddStockRequest from 'src/models/request/AddStockRequest';
 import AddProductRequest from 'src/models/request/AddProductRequest';
 import UploadProductImagesRequest from 'src/models/request/UploadProductImagesRequest';
 
@@ -17,12 +17,12 @@ export class AddProductPageComponent implements OnInit {
     userId: '',
     name: '',
     description: '',
-    optionName: '',
+    stockName: '',
     price: 0,
-    options: []
+    stocks: []
   }
 
-  currentOption: AddProductOptionRequest = {
+  currentStock: AddStockRequest = {
     value: '',
     quantity: 0
   }
@@ -30,9 +30,9 @@ export class AddProductPageComponent implements OnInit {
   validationErrors = {
     Name: [],
     Description: [],
-    OptionName: [],
+    StockName: [],
     Price: [],
-    Options: []
+    Stocks: []
   }
 
   images: FileList | null = null
@@ -48,13 +48,17 @@ export class AddProductPageComponent implements OnInit {
   }
 
   submit() {
-    if (this.product.options.length < 1) {
-      alert('Product needs at least one option!')
+    if (this.product.stocks.length < 1) {
+      alert('Product needs at least one stock!')
       return
     }
 
     this.productService.addProduct(this.product).subscribe({
       next: res => {
+        if(!this.images){
+          alert('Product added')
+          this.router.navigateByUrl('/')
+        }
         const imageRequest: UploadProductImagesRequest = {
           productId: res.newEntityId!,
           images: this.images!
@@ -73,9 +77,9 @@ export class AddProductPageComponent implements OnInit {
     })
   }
 
-  addOption() {
-    this.product.options.push(this.currentOption)
-    this.currentOption = {
+  addStock() {
+    this.product.stocks.push(this.currentStock)
+    this.currentStock = {
       value: '',
       quantity: 0
     }
