@@ -113,5 +113,18 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(validation.ToDictionary().Count, response.ValidationErrors.Count);
             Assert.Equal(default(int), response.Data);
         }
+
+        [Fact]
+        public void CreateSuccessWithCreatedId()
+        {
+            var factory = new ResponseFactory();
+
+            const int Id = 1;
+
+            var response = factory.CreateSuccessWithCreatedId(Id);
+
+            Assert.Equal(Id, response.NewEntityId);
+            Assert.True(response.Success);
+        }
     }
 }

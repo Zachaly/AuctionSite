@@ -25,8 +25,6 @@ namespace AuctionSite.Application.Command
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
 
-
-
             return _fileService.GetProfilePicture(user?.ProfilePicture ?? "");
         }
     }

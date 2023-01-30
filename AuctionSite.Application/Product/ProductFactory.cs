@@ -37,6 +37,7 @@ namespace AuctionSite.Application
             {
                 Id = product.Id,
                 Name = product.Name,
+                ImageId = product.Images?.FirstOrDefault()?.Id ?? 0,
             };
 
         public ProductModel CreateModel(Product product)

@@ -14,7 +14,7 @@ namespace AuctionSite.Database.Repository
             _dbContext = appDbContext;
         }
 
-        public Task AddProductImagesAsync(List<ProductImage> images)
+        public Task AddProductImagesAsync(IEnumerable<ProductImage> images)
         {
             throw new NotImplementedException();
         }

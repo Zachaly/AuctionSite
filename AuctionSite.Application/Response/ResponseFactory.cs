@@ -36,7 +36,7 @@ namespace AuctionSite.Application
                 Success = true
             };
 
-        public ResponseModel CreateSuccess(int newId)
+        public ResponseModel CreateSuccessWithCreatedId(int newId)
         {
             throw new NotImplementedException();
         }

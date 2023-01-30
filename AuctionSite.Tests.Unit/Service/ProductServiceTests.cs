@@ -42,8 +42,8 @@ namespace AuctionSite.Tests.Unit.Service
                     Name = request.Name
                 });
 
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
+            _responseFactory.Setup(x => x.CreateSuccessWithCreatedId(It.IsAny<int>()))
+                .Returns((int id) => new ResponseModel { Success = true, NewEntityId = id });
 
             var request = new AddProductRequest
             {

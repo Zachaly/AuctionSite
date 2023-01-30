@@ -14,9 +14,18 @@ namespace AuctionSite.Application.Command
 
     public class SaveProductImagesHandler : IRequestHandler<SaveProductImagesCommand, ResponseModel>
     {
-        public SaveProductImagesHandler(IProductImageRepository productImageRepository, IResponseFactory responseFactory)
-        {
+        private readonly IProductImageRepository _productImageRepository;
+        private readonly IResponseFactory _responseFactory;
+        private readonly IProductFactory _productFactory;
+        private readonly IFileService _fileService;
 
+        public SaveProductImagesHandler(IProductImageRepository productImageRepository, IResponseFactory responseFactory,
+            IProductFactory productFactory, IFileService fileService)
+        {
+            _productImageRepository = productImageRepository;
+            _responseFactory = responseFactory;
+            _productFactory = productFactory;
+            _fileService = fileService;
         }
 
         public Task<ResponseModel> Handle(SaveProductImagesCommand request, CancellationToken cancellationToken)

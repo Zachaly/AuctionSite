@@ -70,6 +70,12 @@ namespace AuctionSite.Tests.Unit.Factory
                 Owner = new ApplicationUser { UserName = "usrname" },
                 OwnerId = "userId",
                 Price = 200,
+                Images = new List<ProductImage> 
+                { 
+                    new ProductImage() { Id = 10, },
+                    new ProductImage() { Id = 11, },
+                    new ProductImage() { Id = 12, }
+                }
             };
 
             var model = _productFactory.CreateModel(product);
@@ -82,17 +88,30 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(product.OwnerId, model.UserId);
             Assert.Equal(product.Price.ToString(), model.Price.ToString());
             Assert.Single(product.Options);
+            Assert.Equivalent(product.Images.Select(x => x.Id), model.ImageIds);
         }
 
         [Fact]
         public void CreateListItem()
         {
-            var product = new Product { Id = 1, Name = "name" };
+            var product = new Product { Id = 1, Name = "name", Images = new List<ProductImage> { new ProductImage { Id = 2 } } };
 
             var item = _productFactory.CreateListItem(product);
 
             Assert.Equal(product.Id, item.Id);
             Assert.Equal(product.Name, item.Name);
+            Assert.Equal(product.Images.First().Id, item.ImageId);
+        }
+
+        [Fact]
+        public void CreateImage()
+        {
+            const int Id = 1;
+            const string File = "file";
+            var image = _productFactory.CreateImage(Id, File);
+
+            Assert.Equal(Id, image.ProductId);
+            Assert.Equal(File, image.FileName);
         }
     }
 }
