@@ -53,7 +53,7 @@ namespace AuctionSite.Tests.Unit.Handler
 
             const string FileName = "fname";
             var fileMock = new Mock<IFormFile>();
-            fileMock.Setup(x => x.FileName).Returns(FileName);
+            fileMock.Setup(x => x.Name).Returns(FileName);
 
             var command = new UpdateProfilePictureCommand
             {

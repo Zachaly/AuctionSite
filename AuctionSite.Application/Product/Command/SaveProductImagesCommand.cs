@@ -28,9 +28,22 @@ namespace AuctionSite.Application.Command
             _fileService = fileService;
         }
 
-        public Task<ResponseModel> Handle(SaveProductImagesCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseModel> Handle(SaveProductImagesCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var fileNames = await _fileService.SaveProductImages(request.Images);
+
+                var images = fileNames.Select(name => _productFactory.CreateImage(request.ProductId, name));
+
+                await _productImageRepository.AddProductImagesAsync(images);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

@@ -16,17 +16,15 @@ namespace AuctionSite.Database.Repository
 
         public Task AddProductImagesAsync(IEnumerable<ProductImage> images)
         {
-            throw new NotImplementedException();
+            _dbContext.ProductImage.AddRangeAsync(images);
+
+            return _dbContext.SaveChangesAsync();
         }
 
-        public Task<T> GetProductImageById<T>(int id, Func<ProductImage, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<T> GetProductImageById<T>(int id, Func<ProductImage, T> selector)
+            => _dbContext.ProductImage.Where(image => image.Id == id).Select(selector).FirstOrDefault();
 
         public IEnumerable<T> GetProductImagesByProductId<T>(int productId, Func<ProductImage, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.ProductImage.Where(image => image.ProductId == productId).Select(selector);
     }
 }

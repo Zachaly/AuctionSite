@@ -37,9 +37,11 @@ namespace AuctionSite.Application
             };
 
         public ResponseModel CreateSuccessWithCreatedId(int newId)
-        {
-            throw new NotImplementedException();
-        }
+            => new ResponseModel
+            {
+                Success = true,
+                NewEntityId = newId
+            };
 
         public DataResponseModel<T> CreateValidationError<T>(ValidationResult validationResult)
             => new DataResponseModel<T>

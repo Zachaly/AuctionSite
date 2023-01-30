@@ -28,9 +28,11 @@ namespace AuctionSite.Application
             };
 
         public ProductImage CreateImage(int productId, string name)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductImage
+            {
+                ProductId = productId,
+                FileName = name,
+            };
 
         public ProductListItemModel CreateListItem(Product product)
             => new ProductListItemModel

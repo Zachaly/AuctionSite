@@ -43,7 +43,7 @@ namespace AuctionSite.Application.Command
 
                 await _userManager.UpdateAsync(user);
 
-                return _responseFactory.CreateSuccess(pictureName);
+                return _responseFactory.CreateSuccess();
             }
             catch(Exception ex) 
             {
