@@ -35,9 +35,6 @@ export class UserService {
     const form = new FormData()
     form.append('UserId', userId)
     form.append('File', file!)
-    console.log(form.get('UserId'))
-    const option = this.httpOptions()
-    option.headers.set('Content-Type', 'multipart/form-data')
 
     return this.http.put(`${this.apiUrl}/profile-picture`, form, {
       headers: new HttpHeaders({

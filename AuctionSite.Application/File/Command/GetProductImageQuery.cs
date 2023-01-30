@@ -20,9 +20,11 @@ namespace AuctionSite.Application.Command
             _productImageRepository = productImageRepository;
         }
 
-        public Task<FileStream> Handle(GetProductImageQuery request, CancellationToken cancellationToken)
+        public async Task<FileStream> Handle(GetProductImageQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var file = await _productImageRepository.GetProductImageById(request.ImageId, img => img.FileName);
+
+            return _fileService.GetProductPicture(file);
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using AuctionSite.Api.Infrastructure;
 using AuctionSite.Application.Abstraction;
+using AuctionSite.Application.Command;
 using AuctionSite.Models;
 using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,12 @@ namespace AuctionSite.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IMediator _mediator;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IMediator mediator)
         {
             _productService = productService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -77,6 +81,22 @@ namespace AuctionSite.Api.Controllers
         public async Task<ActionResult<ResponseModel>> DeleteAsync(int id)
         {
             var res = await _productService.DeleteProductByIdAsync(id);
+
+            return res.ReturnNoContentOrBadRequest();
+        }
+
+        /// <summary>
+        /// Uploads given images as product images
+        /// </summary>
+        /// <response code="204">Images uploaded successfully</response>
+        /// <response code="400">Invalid request</response>
+        [HttpPost("image")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [Authorize]
+        public async Task<ActionResult<ResponseModel>> UploadProductImagesAsync([FromForm] SaveProductImagesCommand command)
+        {
+            var res = await _mediator.Send(command);
 
             return res.ReturnNoContentOrBadRequest();
         }

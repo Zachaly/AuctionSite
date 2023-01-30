@@ -21,6 +21,10 @@
             <input type="text" name="price" class="form-control" [(ngModel)]="product.optionName">
             <app-error-list [errors]="validationErrors.OptionName"/>
         </div>
+        <div class="mt-2">
+            <label for="images">Images</label>
+            <input type="file" name="images" class="form-control" multiple (change)="selectImages($event)">
+        </div>
         <button class="btn btn-success mt-2 form-control">Add product</button>
     </form>
     <div class="col mt-2">

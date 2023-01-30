@@ -6,6 +6,8 @@ import ProductListItem from 'src/models/ProductListItem';
 import ProductModel from 'src/models/ProductModel';
 import AddProductRequest from 'src/models/request/AddProductRequest';
 import PagedRequest from 'src/models/request/PagedRequest';
+import UploadProductImagesRequest from 'src/models/request/UploadProductImagesRequest';
+import ResponseModel from 'src/models/ResponseModel';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -24,8 +26,8 @@ export class ProductService {
     })
   })
 
-  addProduct(product: AddProductRequest) : Observable<any> {
-    return this.http.post(this.apiUrl, product, this.httpOptions())
+  addProduct(product: AddProductRequest) : Observable<ResponseModel> {
+    return this.http.post<ResponseModel>(this.apiUrl, product, this.httpOptions())
   }
 
   getProducts(request: PagedRequest) : Observable<DataResponseModel<ProductListItem[]>>{
@@ -45,5 +47,20 @@ export class ProductService {
 
   getProduct(id: number) : Observable<DataResponseModel<ProductModel>> {
     return this.http.get<DataResponseModel<ProductModel>>(`${this.apiUrl}/${id}`)
+  }
+
+  uploadImages(request: UploadProductImagesRequest) : Observable<any> {
+    const form = new FormData()
+    form.append('ProductId', request.productId.toString())
+
+    for(let i = 0; i < request.images.length; i++){
+      form.append('Images', request.images.item(i)!)
+    }
+
+    return this.http.post(`${this.apiUrl}/image`, form, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.authService.userData.authToken}`
+      })
+    })
   }
 }

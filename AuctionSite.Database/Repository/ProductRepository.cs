@@ -38,6 +38,9 @@ namespace AuctionSite.Database.Repository
                 .FirstOrDefault();
 
         public IEnumerable<T> GetProducts<T>(int pageIndex, int pageSize, Func<Product, T> selector)
-            => _dbContext.Product.Skip(pageIndex * pageSize).Take(pageSize).Select(selector);
+            => _dbContext.Product
+                .Include(product => product.Images)
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize).Select(selector);
     }
 }

@@ -40,6 +40,5 @@ export class ProfilePageComponent implements OnInit {
 
   selectPicture(e: Event): void {
     this.selectedPicture = (e.target as HTMLInputElement).files![0]
-    console.log(this.selectedPicture)
   }
 }
