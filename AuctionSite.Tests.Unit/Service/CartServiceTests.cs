@@ -108,7 +108,7 @@ namespace AuctionSite.Tests.Unit.Service
                 .Callback((StockOnHold stock) => cart.StocksOnHold.Add(stock));
 
             _stockOnHoldFactory.Setup(x => x.Create(It.IsAny<AddToCartRequest>(), It.IsAny<int>()))
-                .Returns((AddToCartRequest request, int id) => new StockOnHold { CartId = id, StockId = request.StockId });
+                .Returns((AddToCartRequest request, int id) => new StockOnHold { Id = 1, CartId = id, StockId = request.StockId });
 
             var request = new AddToCartRequest
             {

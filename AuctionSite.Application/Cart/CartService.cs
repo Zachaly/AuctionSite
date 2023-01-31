@@ -66,6 +66,11 @@ namespace AuctionSite.Application
 
                 await _stockOnHoldRepository.AddStockOnHoldAsync(stock);
 
+                if (stock.Id <= 0)
+                {
+                    return _responseFactory.CreateFailure("Quantity exceeds max value");
+                }
+
                 return _responseFactory.CreateSuccess();
             }
             catch(Exception ex)

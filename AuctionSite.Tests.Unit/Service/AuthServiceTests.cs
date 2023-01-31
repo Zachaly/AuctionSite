@@ -116,17 +116,7 @@ namespace AuctionSite.Tests.Unit.Service
                 .ReturnsAsync((string email) => users.FirstOrDefault(x => x.Email == email));
 
             _userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
-                .Callback((ApplicationUser user, string _) =>
-                {
-                    user.Id = Guid.NewGuid().ToString();
-                    users.Add(user);
-                }).ReturnsAsync(IdentityResult.Success);
-
-            _userInfoRepository.Setup(x => x.AddUserInfoAsync(It.IsAny<UserInfo>()))
-                .Callback((UserInfo info) =>
-                {
-                    infos.Add(info);
-                });
+                .ReturnsAsync(IdentityResult.Success);
 
             _userFactory.Setup(x => x.Create(It.IsAny<RegisterRequest>()))
                 .Returns((RegisterRequest registerRequest) => new ApplicationUser
