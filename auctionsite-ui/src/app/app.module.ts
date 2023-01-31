@@ -19,6 +19,8 @@ import { ProductPageComponent } from './pages/product-page/product-page.componen
 import { ErrorListComponent } from './components/error-list/error-list.component';
 import { ImageComponent } from './components/image/image.component';
 import { PageBarComponent } from './components/page-bar/page-bar.component';
+import { CartPageComponent } from './pages/cart-page/cart-page.component';
+import { CartItemComponent } from './components/cart-item/cart-item.component';
 
 const routes: Routes = [
   {
@@ -48,6 +50,10 @@ const routes: Routes = [
   {
     path: 'product/:id',
     component: ProductPageComponent
+  },
+  {
+    path: 'cart',
+    component: CartPageComponent
   }
 ]
 
@@ -68,6 +74,8 @@ const routes: Routes = [
     ErrorListComponent,
     ImageComponent,
     PageBarComponent,
+    CartPageComponent,
+    CartItemComponent,
   ],
   imports: [
     BrowserModule,
