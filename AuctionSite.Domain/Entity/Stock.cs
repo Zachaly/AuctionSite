@@ -7,5 +7,6 @@
         public Product Product { get; set; }
         public string Value { get; set; }
         public int Quantity { get; set; }
+        public ICollection<StockOnHold> StocksOnHold { get; set; }
     }
 }

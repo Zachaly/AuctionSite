@@ -10,6 +10,7 @@ namespace AuctionSite.Database
         public DbSet<Product> Product { get; set; }
         public DbSet<Stock> Stock { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }
+        public DbSet<StockOnHold> StockOnHold { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {

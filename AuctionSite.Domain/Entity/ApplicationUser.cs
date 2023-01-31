@@ -7,5 +7,7 @@ namespace AuctionSite.Domain.Entity
         public string? ProfilePicture { get; set; }
         public UserInfo? Info { get; set; }
         public ICollection<Product> Products { get; set; }
+        public int? CartId { get; set; }
+        public Cart? Cart { get; set; }
     }
 }
