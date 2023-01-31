@@ -10,13 +10,21 @@ namespace AuctionSite.Application
     public class StockOnHoldFactory : IStockOnHoldFactory
     {
         public StockOnHold Create(AddToCartRequest request, int cartId)
-        {
-            throw new NotImplementedException();
-        }
+            => new StockOnHold
+            {
+                CartId = cartId,
+                Quantity = request.Quantity,
+                StockId = request.StockId,
+            };
 
         public CartItem CreateCartItem(StockOnHold stock)
-        {
-            throw new NotImplementedException();
-        }
+            => new CartItem
+            {
+                Quantity = stock.Quantity,
+                StockOnHoldId = stock.Id,
+                Value = stock.Stock.Value,
+                ProductId = stock.Stock.ProductId,
+                ProductName = stock.Stock.Product.Name
+            };
     }
 }

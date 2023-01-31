@@ -97,7 +97,8 @@ namespace AuctionSite.Tests.Unit.Repository
             {
                 Id = 1,
                 Quantity = OriginalQuantity,
-                Value = "val"
+                Value = "val",
+                Product = new Product { Description = "desc", Name = "name", OwnerId = "id", StockName = "name" },
             };
 
             AddContent(new List<Stock> { stock });
@@ -131,7 +132,8 @@ namespace AuctionSite.Tests.Unit.Repository
             {
                 Id = 1,
                 Quantity = OriginalQuantity,
-                Value = "val"
+                Value = "val",
+                Product = new Product { Description = "desc", Name = "name", OwnerId = "id", StockName = "name" },
             };
 
             var cart = new Cart

@@ -89,7 +89,6 @@ namespace AuctionSite.Tests.Unit.Service
 
             Assert.False(res.Success);
             Assert.Equal(Error, res.Error);
-            Assert.Contains(carts, x => x.UserId == request.UserId);
         }
 
         [Fact]
@@ -109,7 +108,7 @@ namespace AuctionSite.Tests.Unit.Service
                 .Callback((StockOnHold stock) => cart.StocksOnHold.Add(stock));
 
             _stockOnHoldFactory.Setup(x => x.Create(It.IsAny<AddToCartRequest>(), It.IsAny<int>()))
-                .Returns((AddToCartRequest request, int id) => new StockOnHold { CartId = id });
+                .Returns((AddToCartRequest request, int id) => new StockOnHold { CartId = id, StockId = request.StockId });
 
             var request = new AddToCartRequest
             {

@@ -27,29 +27,84 @@ namespace AuctionSite.Application
             _responseFactory = responseFactory;
         }
 
-        public Task<ResponseModel> AddCartAsync(AddCartRequest request)
+        public async Task<ResponseModel> AddCartAsync(AddCartRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cart = _cartRepository.GetCartByUserId(request.UserId, x => x);
+
+                if(cart is not null)
+                {
+                    return _responseFactory.CreateSuccess();
+                }
+
+                cart = _cartFactory.Create(request);
+
+                await _cartRepository.AddCartAsync(cart);
+
+                return _responseFactory.CreateSuccess();
+
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<ResponseModel> AddToCartAsync(AddToCartRequest request)
+        public async Task<ResponseModel> AddToCartAsync(AddToCartRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cart = _cartRepository.GetCartByUserId(request.UserId, x => x);
+
+                if(cart is null)
+                {
+                    return _responseFactory.CreateFailure("Cart not found");
+                }
+
+                var stock = _stockOnHoldFactory.Create(request, cart.Id);
+
+                await _stockOnHoldRepository.AddStockOnHoldAsync(stock);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
         public DataResponseModel<CartModel> GetCartByUserId(string userId)
         {
-            throw new NotImplementedException();
+            var cart = _cartRepository.GetCartByUserId(userId, x => _cartFactory.CreateModel(x));
+
+            if(cart is null)
+            {
+                return _responseFactory.CreateFailure<CartModel>("Cart not found");
+            }
+
+            return _responseFactory.CreateSuccess(cart);
         }
 
         public DataResponseModel<int> GetCartItemsCount(string userId)
         {
-            throw new NotImplementedException();
+            var count = _cartRepository.GetCartItemsCountByUserId(userId);
+
+            return _responseFactory.CreateSuccess(count);
         }
 
-        public Task<ResponseModel> RemoveFromCartAsync(int stockId)
+        public async Task<ResponseModel> RemoveFromCartAsync(int stockId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _stockOnHoldRepository.DeleteStockOnHoldByIdAsync(stockId);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

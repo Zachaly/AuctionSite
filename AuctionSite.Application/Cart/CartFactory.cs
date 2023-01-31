@@ -17,13 +17,16 @@ namespace AuctionSite.Application
         }
 
         public Cart Create(AddCartRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new Cart 
+            { 
+                UserId = request.UserId 
+            };
 
         public CartModel CreateModel(Cart cart)
+        => new CartModel
         {
-            throw new NotImplementedException();
-        }
+            Id = cart.Id,
+            Items = cart.StocksOnHold.Select(x => _stockOnHoldFactory.CreateCartItem(x))
+        };
     }
 }
