@@ -76,7 +76,7 @@ namespace AuctionSite.Application
 
                 if(product is null)
                 {
-                    return _responseFactory.CreateFailure<ProductModel>("Product nor found");
+                    return _responseFactory.CreateFailure<ProductModel>("Product not found");
                 }
 
                 return _responseFactory.CreateSuccess(product);

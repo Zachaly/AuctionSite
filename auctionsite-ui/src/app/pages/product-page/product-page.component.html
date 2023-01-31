@@ -31,8 +31,8 @@
         <p class="fs-3">Available: {{currentStock.quantity}}</p>
         <div class="label-flex">
             <label for="quantity" class="fs-3">Quantity:</label>
-            <input name="quantity" class="form-control m-lg-4" type="number" min="0" [max]="currentStock.quantity">
+            <input name="quantity" [(ngModel)]="selectedQuantity" class="form-control m-lg-4" type="number" min="0" [max]="currentStock.quantity">
         </div>
-        <button class="btn btn-success form-control mt-1">Order</button>
+        <button type="button" *ngIf="isAuthorized()" class="btn btn-success form-control mt-1" (click)="addToCart()">Add to cart</button>
     </div>
 </div>
