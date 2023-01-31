@@ -9,7 +9,7 @@ namespace AuctionSite.Application
     [Implementation(typeof(IStockOnHoldFactory))]
     public class StockOnHoldFactory : IStockOnHoldFactory
     {
-        public StockOnHold Create(AddToCartRequest request)
+        public StockOnHold Create(AddToCartRequest request, int cartId)
         {
             throw new NotImplementedException();
         }

@@ -6,7 +6,7 @@ namespace AuctionSite.Application.Abstraction
 {
     public interface IStockOnHoldFactory
     {
-        StockOnHold Create(AddToCartRequest request);
+        StockOnHold Create(AddToCartRequest request, int cartId);
         CartItem CreateCartItem(StockOnHold stock);
     }
 }
