@@ -9,5 +9,6 @@ export default interface ProductModel {
     price: string,
     stockName: string,
     stocks: Stock[],
-    imageIds: number[]
+    imageIds: number[],
+    created: string
 }
