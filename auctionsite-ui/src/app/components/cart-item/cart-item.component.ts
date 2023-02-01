@@ -7,7 +7,7 @@ import CartItem from 'src/models/CartItem';
   styleUrls: ['./cart-item.component.css']
 })
 export class CartItemComponent {
-  @Input() item: CartItem = { productId: 0, stockOnHoldId: 0, value: '', quantity: 0, productName: '' }
+  @Input() item: CartItem = { productId: 0, stockOnHoldId: 0, value: '', quantity: 0, productName: '', price: 0 }
   @Output() remove: EventEmitter<any> = new EventEmitter()
 
   buttonClick(){
