@@ -43,7 +43,7 @@ namespace AuctionSite.Tests.Unit.Factory
                 {
                     Value = "val",
                     ProductId = 1,
-                    Product = new Product { Name = "name" }
+                    Product = new Product { Name = "name", Price = 123 }
                 }
             };
 
@@ -54,6 +54,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(stock.Stock.Value, item.Value);
             Assert.Equal(stock.Stock.ProductId, item.ProductId);
             Assert.Equal(stock.Stock.Product.Name, item.ProductName);
+            Assert.Equal(stock.Quantity * stock.Stock.Product.Price, item.Price);
         }
     }
 }
