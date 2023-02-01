@@ -1,6 +1,7 @@
 <div class="row justify-content-center mt-3">
     <div class="col col-6">
         <h2 class="title text-center">Cart ({{cart.items.length}})</h2>
+        <h2 class="title text-center">Price: ${{ countPrice() }}</h2>
         <app-cart-item *ngFor="let item of cart.items" [item]="item" (remove)="removeFromCart(item.stockOnHoldId)"/>
         <div class="d-flex">
             <button class="btn btn-success m-1 w-100">Order</button>

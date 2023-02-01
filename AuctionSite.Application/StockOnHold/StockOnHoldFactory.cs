@@ -24,7 +24,8 @@ namespace AuctionSite.Application
                 StockOnHoldId = stock.Id,
                 Value = stock.Stock.Value,
                 ProductId = stock.Stock.ProductId,
-                ProductName = stock.Stock.Product.Name
+                ProductName = stock.Stock.Product.Name,
+                Price = stock.Quantity * stock.Stock.Product.Price
             };
     }
 }

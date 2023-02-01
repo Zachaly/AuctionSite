@@ -44,4 +44,10 @@ export class CartPageComponent implements OnInit {
     })
     this.cart.items = []
   }
+
+  countPrice() : number{
+    let price = 0
+    this.cart.items.forEach(item => price += item.price * item.quantity)
+    return price
+  }
 }

@@ -3,5 +3,6 @@ export default interface CartItem {
     value: string,
     quantity: number,
     productId: number,
-    productName: string
+    productName: string,
+    price: number
 }
