@@ -25,6 +25,7 @@ namespace AuctionSite.Application
                 Stocks = request.Stocks.Select(opt => _stockFactory.Create(opt)).ToArray(),
                 OwnerId = request.UserId,
                 Price = request.Price,
+                Created = DateTime.Now,
             };
 
         public ProductImage CreateImage(int productId, string name)
@@ -53,7 +54,8 @@ namespace AuctionSite.Application
                 Price = product.Price.ToString(),
                 UserId = product.OwnerId,
                 UserName = product.Owner.UserName,
-                ImageIds = product.Images.Select(x => x.Id)
+                ImageIds = product.Images.Select(x => x.Id),
+                Created = product.Created.ToString("dd.MM.yyyy")
             };
     }
 }
