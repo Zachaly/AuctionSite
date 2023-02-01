@@ -1,16 +1,19 @@
 <div class="row mt-2">
     <div class="col col-6 text-center">
         <div class="current-image">
-            <app-image type="product" [id]="currentImage ?? 0" class="w-100 h-100 mw-100 mh-100"/>
+            <app-image type="product" [id]="currentImage ?? 0" class="w-100 h-100 mw-100 mh-100" />
         </div>
         <div class="d-flex">
             <div *ngFor="let id of product.imageIds" class="image-item">
-                <app-image type="product" [id]="id" class="mw-100 mh-100" (onClick)="setImage(id)"/>
+                <app-image type="product" [id]="id" class="mw-100 mh-100" (onClick)="setImage(id)" />
             </div>
         </div>
     </div>
     <div class="col col-6">
-        <h1 class="text-center">{{product.name}}</h1>
+        <h1 class="text-center">{{ product.name }}</h1>
+        <p class="fs-4">
+            Offer created on: {{ product.created }}
+        </p>
         <p class="fs-3">
             {{product.description}}
         </p>
@@ -18,7 +21,7 @@
             Price: ${{product.price}}
         </p>
         <p class="fs-5 nav-link">
-            Offer created by: <a class="link-info" [routerLink]="['/profile', product.userId]" >{{ product.userName }}</a>
+            Offer created by: <a class="link-info" [routerLink]="['/profile', product.userId]">{{ product.userName }}</a>
         </p>
         <div class="label-flex">
             <label class="fs-3" for="currentStock">{{product.stockName}}:</label>
@@ -31,8 +34,10 @@
         <p class="fs-3">Available: {{currentStock.quantity}}</p>
         <div class="label-flex">
             <label for="quantity" class="fs-3">Quantity:</label>
-            <input name="quantity" [(ngModel)]="selectedQuantity" class="form-control m-lg-4" type="number" min="0" [max]="currentStock.quantity">
+            <input name="quantity" [(ngModel)]="selectedQuantity" class="form-control m-lg-4" type="number" min="0"
+                [max]="currentStock.quantity">
         </div>
-        <button type="button" *ngIf="isAuthorized()" class="btn btn-success form-control mt-1" (click)="addToCart()">Add to cart</button>
+        <button type="button" *ngIf="isAuthorized()" class="btn btn-success form-control mt-1" (click)="addToCart()">Add
+            to cart</button>
     </div>
 </div>

@@ -47,6 +47,7 @@ namespace AuctionSite.Database.Repository
         public IEnumerable<T> GetProducts<T>(int pageIndex, int pageSize, Func<Product, T> selector)
             => _dbContext.Product
                 .Include(product => product.Images)
+                .OrderByDescending(product => product.Created)
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize).Select(selector);
     }

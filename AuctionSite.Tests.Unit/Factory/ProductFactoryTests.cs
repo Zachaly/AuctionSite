@@ -5,11 +5,6 @@ using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Stock;
 using AuctionSite.Models.Stock.Request;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Factory
 {
@@ -49,6 +44,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(request.Price, product.Price);
             Assert.Equal(request.UserId, product.OwnerId);
             Assert.Single(product.Stocks);
+            Assert.NotEqual(default, product.Created);
         }
 
         [Fact]
@@ -75,7 +71,8 @@ namespace AuctionSite.Tests.Unit.Factory
                     new ProductImage() { Id = 10, },
                     new ProductImage() { Id = 11, },
                     new ProductImage() { Id = 12, }
-                }
+                },
+                Created = DateTime.Now
             };
 
             var model = _productFactory.CreateModel(product);
@@ -89,6 +86,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(product.Price.ToString(), model.Price.ToString());
             Assert.Single(product.Stocks);
             Assert.Equivalent(product.Images.Select(x => x.Id), model.ImageIds);
+            Assert.NotEmpty(model.Created);
         }
 
         [Fact]

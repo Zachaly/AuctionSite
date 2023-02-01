@@ -21,7 +21,8 @@ export class ProductPageComponent implements OnInit {
     userName: '',
     description: '',
     stocks: [],
-    imageIds: []
+    imageIds: [],
+    created: ''
   }
 
   @Input() currentStock: Stock = { id: 0, value: '', quantity: 0 }

@@ -177,7 +177,8 @@ namespace AuctionSite.Tests.Integration
                     new Stock { ProductId = 1, Value = "val", Quantity = 1 }
                 },
                 OwnerId = user.Id,
-                Price = 123
+                Price = 123,
+                Created = new DateTime(2021, 3, 7)
             };
 
             await AddToDatabase(new List<Product> { product });
@@ -189,6 +190,7 @@ namespace AuctionSite.Tests.Integration
             Assert.Equal(product.Name, content.Data.Name);
             Assert.True(content.Success);
             Assert.Single(content.Data.Stocks);
+            Assert.Equal(product.Created.ToString("dd.MM.yyyy"), content.Data.Created);
         }
 
         [Fact]
