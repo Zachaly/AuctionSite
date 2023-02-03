@@ -10,6 +10,6 @@
         public string Email { get; set; }
         public string PaymentId { get; set; }
         public string UserId { get; set; }
-        public IEnumerable<int> StockIds { get; set; }
+        public int CartId { get; set; }
     }
 }

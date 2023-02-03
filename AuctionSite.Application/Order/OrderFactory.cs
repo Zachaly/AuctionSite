@@ -24,7 +24,7 @@ namespace AuctionSite.Application
             throw new NotImplementedException();
         }
 
-        public OrderStock CreateStock(StockOnHold stockOnHold)
+        public OrderStock CreateStock(StockOnHold stockOnHold, int orderId)
         {
             throw new NotImplementedException();
         }
