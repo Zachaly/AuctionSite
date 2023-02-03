@@ -121,7 +121,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             var res = _repository.GetOrdersByUserId(Id, x => x);
 
-            Assert.Equivalent(orders.Select(x => x.Id), res.Select(x => x.Id));
+            Assert.Equivalent(orders.Where(x => x.UserId == Id).Select(x => x.Id), res.Select(x => x.Id));
         }
     }
 }

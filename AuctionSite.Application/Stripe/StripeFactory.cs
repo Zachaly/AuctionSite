@@ -9,18 +9,32 @@ namespace AuctionSite.Application
     public class StripeFactory : IStripeFactory
     {
         public ChargeCreateOptions CreateChargeOptions(AddPaymentRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new ChargeCreateOptions
+            {
+                Amount = request.Amount,
+                Customer = request.CustomerId,
+                ReceiptEmail = request.Email
+            };
 
         public CustomerCreateOptions CreateCustomerOptions(AddStripeCustomerRequest request, string tokenId)
-        {
-            throw new NotImplementedException();
-        }
+            => new CustomerCreateOptions
+            {
+                Email = request.Email,
+                Name = $"{request.FirstName} {request.LastName}",
+                Source = tokenId
+            };
 
         public TokenCreateOptions CreateTokenOptions(AddStripeCustomerRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new TokenCreateOptions
+            {
+                Card = new TokenCardOptions
+                {
+                    Number = request.CardNumber,
+                    Cvc = request.Cvc,
+                    ExpMonth = request.ExpirationMonth,
+                    ExpYear = request.ExpirationYear,
+                    Name = request.CardName
+                }
+            };
     }
 }

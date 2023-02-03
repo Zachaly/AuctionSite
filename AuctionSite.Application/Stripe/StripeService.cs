@@ -26,14 +26,40 @@ namespace AuctionSite.Application
             _responseFactory = responseFactory;
         }
 
-        public Task<DataResponseModel<string>> AddStripeCustomer(AddStripeCustomerRequest request)
+        public async Task<DataResponseModel<string>> AddStripeCustomer(AddStripeCustomerRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var tokenOptions = _stripeFactory.CreateTokenOptions(request);
+
+                var token = await _tokenService.CreateAsync(tokenOptions);
+
+                var customerOptions = _stripeFactory.CreateCustomerOptions(request, token.Id);
+
+                var customer = await _customerService.CreateAsync(customerOptions);
+
+                return _responseFactory.CreateSuccess(customer.Id);
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure<string>(ex.Message);
+            }
         }
 
-        public Task<DataResponseModel<string>> AddStripePayment(AddPaymentRequest request)
+        public async Task<DataResponseModel<string>> AddStripePayment(AddPaymentRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var chargeOptions = _stripeFactory.CreateChargeOptions(request);
+
+                var charge = await _chargeService.CreateAsync(chargeOptions);
+
+                return _responseFactory.CreateSuccess(charge.Id);
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure<string>(ex.Message);
+            }
         }
     }
 }

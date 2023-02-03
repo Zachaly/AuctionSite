@@ -1,6 +1,7 @@
 ﻿using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionSite.Database.Repository
 {
@@ -15,22 +16,33 @@ namespace AuctionSite.Database.Repository
         }
         public Task AddOrderAsync(Order order)
         {
-            throw new NotImplementedException();
+            _dbContext.Order.Add(order);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public Task AddOrderStocksAsync(IEnumerable<OrderStock> orderStocks, IEnumerable<int> stocksOnHoldIds)
         {
-            throw new NotImplementedException();
+            _dbContext.OrderStock.AddRange(orderStocks);
+
+            var onHold = _dbContext.StockOnHold.Where(x => stocksOnHoldIds.Contains(x.Id));
+
+            _dbContext.StockOnHold.RemoveRange(onHold);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public T GetOrderById<T>(int id, Func<Order, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.Order
+                .Include(order => order.Stocks)
+                .ThenInclude(stock => stock.Stock)
+                .ThenInclude(stock => stock.Product)
+                .Where(order => order.Id == id)
+                .Select(selector)
+                .FirstOrDefault();
+
 
         public IEnumerable<T> GetOrdersByUserId<T>(string userId, Func<Order, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.Order.Where(order => order.UserId == userId).Select(selector);
     }
 }

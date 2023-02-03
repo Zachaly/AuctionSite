@@ -24,19 +24,44 @@ namespace AuctionSite.Application
             _stockOnHoldRepository = stockOnHoldRepository;
         }
 
-        public Task<ResponseModel> AddOrderAsync(AddOrderRequest request)
+        public async Task<ResponseModel> AddOrderAsync(AddOrderRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var order = _orderFactory.Create(request);
+                var stocks = _stockOnHoldRepository.GetStocksOnHoldByCartId(request.CartId, x => x);
+
+                await _orderRepository.AddOrderAsync(order);
+
+                await _orderRepository.AddOrderStocksAsync(
+                    stocks.Select(stock => _orderFactory.CreateStock(stock, order.Id)),
+                    stocks.Select(stock => stock.Id));
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
         public Task<DataResponseModel<OrderModel>> GetOrderByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var order = _orderRepository.GetOrderById(id, order => _orderFactory.CreateModel(order));
+
+            if(order is null)
+            {
+                return Task.FromResult(_responseFactory.CreateFailure<OrderModel>("Order not found"));
+            }
+
+            return Task.FromResult(_responseFactory.CreateSuccess(order));
         }
 
         public Task<DataResponseModel<IEnumerable<OrderListItem>>> GetOrdersByUserIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            var orders = _orderRepository.GetOrdersByUserId(userId, order => _orderFactory.CreateListItem(order));
+
+            return Task.FromResult(_responseFactory.CreateSuccess(orders));
         }
     }
 }
