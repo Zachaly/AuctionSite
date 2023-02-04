@@ -4,6 +4,7 @@ using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System.Reflection;
 
 namespace AuctionSite.Api.Infrastructure
@@ -14,6 +15,14 @@ namespace AuctionSite.Api.Infrastructure
         {
             typeof(AppDbContext).Assembly.RegisterImplementations(@this);
             typeof(AuthService).Assembly.RegisterImplementations(@this);
+        }
+
+        public static void AddStripe(this IServiceCollection @this, IConfiguration config)
+        {
+            StripeConfiguration.ApiKey = config["StripeKey"];
+            @this.AddScoped<ChargeService>();
+            @this.AddScoped<CustomerService>();
+            @this.AddScoped<TokenService>();
         }
 
         private static void RegisterImplementations(this Assembly @this, IServiceCollection services)
@@ -37,8 +46,8 @@ namespace AuctionSite.Api.Infrastructure
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v2",
-                    Title = "Vikop API",
-                    Description = "API trying to mirror wykop.pl"
+                    Title = "Auction site",
+                    Description = ""
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

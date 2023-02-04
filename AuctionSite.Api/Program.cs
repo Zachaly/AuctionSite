@@ -23,6 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddStripe(builder.Configuration);
 builder.Services.RegisterServices();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureIdentity();

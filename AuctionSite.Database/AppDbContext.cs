@@ -12,6 +12,8 @@ namespace AuctionSite.Database
         public DbSet<ProductImage> ProductImage { get; set; }
         public DbSet<StockOnHold> StockOnHold { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderStock> OrderStock { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -36,6 +38,12 @@ namespace AuctionSite.Database
 
             builder.Entity<Stock>()
                 .HasMany(stock => stock.StocksOnHold)
+                .WithOne(stock => stock.Stock)
+                .HasForeignKey(stock => stock.StockId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Stock>()
+                .HasMany(stock => stock.OrderStocks)
                 .WithOne(stock => stock.Stock)
                 .HasForeignKey(stock => stock.StockId)
                 .OnDelete(DeleteBehavior.NoAction);

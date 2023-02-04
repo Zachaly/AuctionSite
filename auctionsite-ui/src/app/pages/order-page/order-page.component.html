@@ -1,0 +1,31 @@
+<div class="row justify-content-md-center">
+    <div class="col-6 mt-2">
+        <app-profile-list-item name="Created" [value]="order.created" />
+        <app-profile-list-item name="Name" [value]="order.name" />
+        <app-profile-list-item name="Phone Number" [value]="order.phoneNumber" />
+        <app-profile-list-item name="Address" [value]="order.address" />
+        <app-profile-list-item name="Postal Code" [value]="order.postalCode" />
+        <app-profile-list-item name="City" [value]="order.city" />
+        <app-profile-list-item name="Payment Id" [value]="order.paymentId" />
+        <div>
+            <div class="card" *ngFor="let item of order.items">
+                <div class="cart-header text-center fs-5">
+                    <a class="nav-link" [routerLink]="['/product', item.productId]">
+                        {{ item.productName}} - {{ item.stockName }}
+                    </a>
+                </div>
+                <div class="fs-5 p-2">
+                    <div>
+                        Quantity: {{item.quantity}}
+                    </div>
+                    <div>
+                        Price per unit: ${{ item.price }}
+                    </div>
+                    <div>
+                        Price: ${{countPrice(item)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

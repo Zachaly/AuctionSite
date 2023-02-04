@@ -401,3 +401,4 @@ migrations/
 
 *.png
 !default.png
+AuctionSite.Api/appsettings.json
