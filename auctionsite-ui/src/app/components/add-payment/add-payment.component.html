@@ -1,0 +1,30 @@
+<form class="mt-2" (submit)="submit()">
+    <h2 class="text-center">Price: ${{payment.amount / 100}}</h2>
+    <div class="row mt-2">
+        <div class="col-11 p-0">
+            <input placeholder="1234 1234 1234 1234" maxlength="16" type="text" class="form-control" name="card-number"
+                [(ngModel)]="customer.cardNumber">
+        </div>
+        <div class="col-1 p-0">
+            <input placeholder="123" type="text" maxlength="3" class="form-control" name="card-cvc"
+                [(ngModel)]="customer.cvc">
+        </div>
+    </div>
+    <div class="row justify-content-lg-start mt-2">
+        <div class="col-3 p-0">
+            <input class="form-control" placeholder="Month" maxlength="2" minlength="1" type="text" name="month"
+                [(ngModel)]="customer.expirationMonth">
+        </div>
+        <div class="col-3 p-0">
+            <input class="form-control" placeholder="Year" type="text" maxlength="2" minlength="2" name="year"
+                [(ngModel)]="customer.expirationYear">
+        </div>
+    </div>
+    <div class="row mt-2 justify-content-lg-start">
+        <div class="col-5 p-0">
+            <input placeholder="Card owner name" class="form-control" type="text" name="name"
+                [(ngModel)]="customer.cardName">
+        </div>
+    </div>
+    <button class="btn btn-success w-100 mt-2">Submit</button>
+</form>

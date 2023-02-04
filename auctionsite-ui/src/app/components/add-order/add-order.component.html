@@ -1,0 +1,28 @@
+<form (submit)="submit()">
+    <div class="mt-2">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" [(ngModel)]="order.name">
+    </div>
+    <div class="mt-2">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" name="email" [(ngModel)]="order.email">
+    </div>
+    <div class="mt-2">
+        <label for="phone">Phone number</label>
+        <input type="text" class="form-control" name="phone" [(ngModel)]="order.phoneNumber">
+    </div>
+    <div class="mt-2">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" name="address" [(ngModel)]="order.address">
+    </div>
+    <div class="mt-2">
+        <label for="postal-code">Postal code</label>
+        <input type="text" class="form-control" name="postal-code" [(ngModel)]="order.postalCode">
+    </div>
+    <div class="mt-2">
+        <label for="city">City</label>
+        <input type="text" class="form-control" name="city" [(ngModel)]="order.city">
+    </div>
+    <button class="btn btn-success w-100 mt-2">Submit</button>
+</form>
+

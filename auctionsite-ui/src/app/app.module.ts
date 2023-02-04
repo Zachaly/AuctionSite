@@ -21,6 +21,18 @@ import { ImageComponent } from './components/image/image.component';
 import { PageBarComponent } from './components/page-bar/page-bar.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
+import { AddOrderPageComponent } from './pages/add-order-page/add-order-page.component';
+import { OrderPageComponent } from './pages/order-page/order-page.component';
+import { OrderListPageComponent } from './pages/order-list-page/order-list-page.component';
+import { AddOrderComponent } from './components/add-order/add-order.component';
+import { AddPaymentComponent } from './components/add-payment/add-payment.component';
+
+const route = (path: string, component: any) => (
+  {
+    path,
+    component
+  }
+)
 
 const routes: Routes = [
   {
@@ -54,7 +66,10 @@ const routes: Routes = [
   {
     path: 'cart',
     component: CartPageComponent
-  }
+  },
+  route('add-order/:cartId', AddOrderPageComponent),
+  route('orders', OrderListPageComponent),
+  route('order/:id', OrderPageComponent)
 ]
 
 @NgModule({
@@ -76,6 +91,11 @@ const routes: Routes = [
     PageBarComponent,
     CartPageComponent,
     CartItemComponent,
+    AddOrderPageComponent,
+    OrderPageComponent,
+    OrderListPageComponent,
+    AddOrderComponent,
+    AddPaymentComponent,
   ],
   imports: [
     BrowserModule,

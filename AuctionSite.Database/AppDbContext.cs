@@ -41,6 +41,12 @@ namespace AuctionSite.Database
                 .WithOne(stock => stock.Stock)
                 .HasForeignKey(stock => stock.StockId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Stock>()
+                .HasMany(stock => stock.OrderStocks)
+                .WithOne(stock => stock.Stock)
+                .HasForeignKey(stock => stock.StockId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -4,7 +4,7 @@
         <h2 class="title text-center">Price: ${{ countPrice() }}</h2>
         <app-cart-item *ngFor="let item of cart.items" [item]="item" (remove)="removeFromCart(item.stockOnHoldId)"/>
         <div class="d-flex">
-            <button class="btn btn-success m-1 w-100">Order</button>
+            <button class="btn btn-success m-1 w-100" (click)="makeOrder()">Order</button>
             <button class="btn btn-warning m-1 w-100" (click)="clearCart()" >Clear</button>
         </div>
     </div>

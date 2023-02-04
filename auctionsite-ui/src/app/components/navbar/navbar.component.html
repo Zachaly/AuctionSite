@@ -19,6 +19,9 @@
                 <li class="nav-item">
                     <a routerLink="/cart" class="nav-link text-light">Cart ({{cartCount}})</a>
                 </li>
+                <li>
+                    <a routerLink="/orders" class="nav-link text-light">Orders</a>
+                </li>
                 <li class="nav-item">
                     <a [routerLink]="['/profile', user.userId]" class="nav-link text-light">{{ user.userName }} </a>
                 </li>
