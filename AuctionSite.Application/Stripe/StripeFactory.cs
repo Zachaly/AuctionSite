@@ -13,7 +13,8 @@ namespace AuctionSite.Application
             {
                 Amount = request.Amount,
                 Customer = request.CustomerId,
-                ReceiptEmail = request.Email
+                ReceiptEmail = request.Email,
+                Currency = "usd"
             };
 
         public CustomerCreateOptions CreateCustomerOptions(AddStripeCustomerRequest request, string tokenId)
