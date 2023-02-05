@@ -2,7 +2,6 @@
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AuctionSite.Database.Repository
 {

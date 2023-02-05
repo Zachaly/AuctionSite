@@ -10,10 +10,9 @@ using Moq;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class UserServiceTests
+    public class UserServiceTests : ServiceTest
     {
         private readonly Mock<UserManager<ApplicationUser>> _userManager;
-        private readonly Mock<IResponseFactory> _responseFactory;
         private readonly Mock<IUserFactory> _userFactory;
         private readonly Mock<IUserInfoRepository> _userInfoRepository;
         private readonly UserService _userService;
@@ -25,7 +24,6 @@ namespace AuctionSite.Tests.Unit.Service
             _userManager.Object.UserValidators.Add(new UserValidator<ApplicationUser>());
             _userManager.Object.PasswordValidators.Add(new PasswordValidator<ApplicationUser>());
 
-            _responseFactory = new Mock<IResponseFactory>();
             _userFactory = new Mock<IUserFactory>();
             _userInfoRepository = new Mock<IUserInfoRepository>();
 
@@ -49,12 +47,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateProfileModel(It.IsAny<ApplicationUser>()))
                 .Returns((ApplicationUser user) => new UserProfileModel { Id = user.Id, FirstName = user.Info.FirstName });
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<UserProfileModel>()))
-                .Returns((UserProfileModel result) => new DataResponseModel<UserProfileModel>
-                {
-                    Success = true,
-                    Data = result,
-                });
+            MockDataResponse<UserProfileModel>();
 
             _userInfoRepository.Setup(x => x.GetUserInfoByIdAsync(It.IsAny<string>(), It.IsAny<Func<UserInfo, UserInfo>>()))
                 .ReturnsAsync(testUser.Info);
@@ -80,16 +73,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync((string id) => users.FirstOrDefault(x => x.Id == id));
 
-            _userFactory.Setup(x => x.CreateProfileModel(It.IsAny<ApplicationUser>()))
-                .Returns((ApplicationUser user) => new UserProfileModel { Id = user.Id, FirstName = user.Info.FirstName });
-
-            _responseFactory.Setup(x => x.CreateFailure<UserProfileModel>(It.IsAny<string>()))
-                .Returns((string message) => new DataResponseModel<UserProfileModel>
-                {
-                    Success = false,
-                    Data = null,
-                    Error = message
-                });
+            MockDataResponse<UserProfileModel>();
 
             var res = await _userService.GetUserByIdAsync("iddd");
 
@@ -101,28 +85,13 @@ namespace AuctionSite.Tests.Unit.Service
         public async Task GetUserByIdAsync_Error_Fail()
         {
             var testUser = new ApplicationUser { Id = "id2", Info = new UserInfo { FirstName = "name2" } };
-            var users = new List<ApplicationUser>
-            {
-                new ApplicationUser { Id = "id", Info = new UserInfo { FirstName = "name" }},
-                testUser,
-                new ApplicationUser { Id = "id3", Info = new UserInfo { FirstName = "name3" }}
-            };
-
+            
             const string ErrorMessage = "error";
 
             _userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .Callback(() => throw new Exception(ErrorMessage));
 
-            _userFactory.Setup(x => x.CreateProfileModel(It.IsAny<ApplicationUser>()))
-                .Returns((ApplicationUser user) => new UserProfileModel { Id = user.Id, FirstName = user.Info.FirstName });
-
-            _responseFactory.Setup(x => x.CreateFailure<UserProfileModel>(It.IsAny<string>()))
-                .Returns((string message) => new DataResponseModel<UserProfileModel>
-                {
-                    Success = false,
-                    Data = null,
-                    Error = message
-                });
+            MockDataResponse<UserProfileModel>();
 
             var res = await _userService.GetUserByIdAsync("iddd");
 
@@ -135,9 +104,6 @@ namespace AuctionSite.Tests.Unit.Service
         public async Task UpdateUserAsync_NullRequest_NoChange_Success()
         {
             var testUser = new ApplicationUser { Id = "id", Info = new UserInfo { FirstName = "name" } };
-
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
 
             _userManager.Setup(x => x.UpdateAsync(It.IsAny<ApplicationUser>()))
                 .ReturnsAsync(IdentityResult.Success);
@@ -163,9 +129,6 @@ namespace AuctionSite.Tests.Unit.Service
         public async Task UpdateUserAsync_FullRequest_Change_Success()
         {
             var testUser = new ApplicationUser { Id = "id", Info = new UserInfo { FirstName = "name" } };
-
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
 
             _userManager.Setup(x => x.UpdateAsync(It.IsAny<ApplicationUser>()))
                 .ReturnsAsync(IdentityResult.Success);
@@ -211,15 +174,11 @@ namespace AuctionSite.Tests.Unit.Service
 
             const string ErrorMessage = "error";
 
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string error) => new ResponseModel { Success = false, Error = error });
-
             _userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(testUser);
 
             _userManager.Setup(x => x.UpdateAsync(It.IsAny<ApplicationUser>()))
-                .Callback(() => throw new Exception(ErrorMessage))
-                .ReturnsAsync(IdentityResult.Success);
+                .Callback(() => throw new Exception(ErrorMessage));
 
             _userInfoRepository.Setup(x => x.GetUserInfoByIdAsync(It.IsAny<string>(), It.IsAny<Func<UserInfo, UserInfo>>()))
                 .ReturnsAsync(testUser.Info);
@@ -239,9 +198,6 @@ namespace AuctionSite.Tests.Unit.Service
         public async Task UpdateUserAsync_UserNotFound_Fail()
         {
             var testUser = new ApplicationUser { Id = "id", Info = new UserInfo { FirstName = "name" } };
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string error) => new ResponseModel { Success = false, Error = error });
 
             _userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync((string id) => null);
@@ -263,9 +219,6 @@ namespace AuctionSite.Tests.Unit.Service
         public async Task UpdateUserAsync_IdentityResultFail_Fail()
         {
             var testUser = new ApplicationUser { Id = "id", Info = new UserInfo { FirstName = "name" } };
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string error) => new ResponseModel { Success = false, Error = error });
 
             _userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync((string id) => testUser);

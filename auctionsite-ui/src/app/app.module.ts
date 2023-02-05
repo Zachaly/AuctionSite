@@ -26,6 +26,7 @@ import { OrderPageComponent } from './pages/order-page/order-page.component';
 import { OrderListPageComponent } from './pages/order-list-page/order-list-page.component';
 import { AddOrderComponent } from './components/add-order/add-order.component';
 import { AddPaymentComponent } from './components/add-payment/add-payment.component';
+import { OrderItemComponent } from './components/order-item/order-item.component';
 
 const route = (path: string, component: any) => (
   {
@@ -96,6 +97,7 @@ const routes: Routes = [
     OrderListPageComponent,
     AddOrderComponent,
     AddPaymentComponent,
+    OrderItemComponent,
   ],
   imports: [
     BrowserModule,

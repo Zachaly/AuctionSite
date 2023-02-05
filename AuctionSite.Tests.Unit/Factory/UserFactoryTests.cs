@@ -6,11 +6,16 @@ namespace AuctionSite.Tests.Unit.Factory
 {
     public class UserFactoryTests
     {
+        private readonly UserFactory _factory;
+
+        public UserFactoryTests()
+        {
+            _factory = new UserFactory();
+        }
+
         [Fact]
         public void CreateInfo()
         {
-            var factory = new UserFactory();
-
             var request = new RegisterRequest
             {
                 Address = "addr",
@@ -25,7 +30,7 @@ namespace AuctionSite.Tests.Unit.Factory
 
             const string UserId = "id";
 
-            var info = factory.CreateInfo(request, UserId);
+            var info = _factory.CreateInfo(request, UserId);
 
             Assert.Equal(UserId, info.UserId);
             Assert.Equal(request.Address, info.Address);
@@ -41,15 +46,13 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void Create()
         {
-            var factory = new UserFactory();
-
             var request = new RegisterRequest
             {
                 Email = "email",
                 Username = "username",
             };
 
-            var user = factory.Create(request);
+            var user = _factory.Create(request);
 
             Assert.Equal(request.Email, user.Email);
             Assert.Equal(request.Username, user.UserName);
@@ -58,8 +61,6 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateLoginResponse()
         {
-            var factory = new UserFactory();
-
             var user = new ApplicationUser
             {
                 UserName = "username",
@@ -67,7 +68,7 @@ namespace AuctionSite.Tests.Unit.Factory
 
             const string Token = "token";
 
-            var response = factory.CreateLoginResponse(user, Token);
+            var response = _factory.CreateLoginResponse(user, Token);
 
             Assert.Equal(user.UserName, response.UserName);
             Assert.Equal(Token, response.AuthToken);
@@ -76,8 +77,6 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateProfileModel()
         {
-            var factory = new UserFactory();
-
             var user = new ApplicationUser
             {
                 UserName = "username",
@@ -96,7 +95,7 @@ namespace AuctionSite.Tests.Unit.Factory
                 },
             };
 
-            var model = factory.CreateProfileModel(user);
+            var model = _factory.CreateProfileModel(user);
 
             Assert.Equal(user.UserName, model.UserName);
             Assert.Equal(user.Id, model.Id);

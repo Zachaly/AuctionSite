@@ -18,5 +18,11 @@ namespace AuctionSite.Tests.Unit.Repository
             _dbContext.Set<T>().AddRange(content);
             _dbContext.SaveChanges();
         }
+
+        protected void AddContent<T>(T content) where T : class
+        {
+            _dbContext.Set<T>().Add(content);
+            _dbContext.SaveChanges();
+        }
     }
 }

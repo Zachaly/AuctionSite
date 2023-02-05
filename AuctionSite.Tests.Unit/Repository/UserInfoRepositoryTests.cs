@@ -1,27 +1,27 @@
 ﻿using AuctionSite.Database.Repository;
 using AuctionSite.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Repository
 {
     public class UserInfoRepositoryTests : DatabaseTest
     {
+        private readonly UserInfoRepository _repository;
+
+        public UserInfoRepositoryTests() : base()
+        {
+            _repository = new UserInfoRepository(_dbContext);
+        }
+
         [Fact]
         public async Task AddUserInfoAsync()
         {
-            var repository = new UserInfoRepository(_dbContext);
-
             var info = new UserInfo
             {
                 UserId = "id",
                 FirstName = "name",
             };
 
-            await repository.AddUserInfoAsync(info);
+            await _repository.AddUserInfoAsync(info);
 
             Assert.Contains(info, _dbContext.UserInfo);
         }
@@ -39,11 +39,9 @@ namespace AuctionSite.Tests.Unit.Repository
 
             AddContent(infos);
 
-            var repository = new UserInfoRepository(_dbContext);
-
             const string Id = "id3";
 
-            await repository.DeleteUserInfoAsync(Id);
+            await _repository.DeleteUserInfoAsync(Id);
 
             Assert.DoesNotContain(infos.FirstOrDefault(x => x.UserId == Id), _dbContext.UserInfo);
         }
@@ -61,11 +59,9 @@ namespace AuctionSite.Tests.Unit.Repository
 
             AddContent(infos);
 
-            var repository = new UserInfoRepository(_dbContext);
-
             const string Id = "id2";
 
-            var info = await repository.GetUserInfoByIdAsync(Id, x => x);
+            var info = await _repository.GetUserInfoByIdAsync(Id, x => x);
 
             Assert.Equal(Id, info.UserId);
             Assert.Equal(infos.FirstOrDefault(x => x.UserId == Id).FirstName, info.FirstName);
@@ -84,8 +80,6 @@ namespace AuctionSite.Tests.Unit.Repository
 
             AddContent(infos);
 
-            var repository = new UserInfoRepository(_dbContext);
-
             const string Id = "id2";
             const string NewName = "new fname";
 
@@ -93,7 +87,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             info.FirstName = NewName;
 
-            await repository.UpdateUserInfoAsync(info);
+            await _repository.UpdateUserInfoAsync(info);
 
             info = _dbContext.UserInfo.Find(Id);
 

@@ -1,10 +1,5 @@
 ﻿using AuctionSite.Database.Repository;
 using AuctionSite.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Repository
 {
@@ -92,7 +87,7 @@ namespace AuctionSite.Tests.Unit.Repository
                 }
             };
 
-            AddContent(new List<Order> { order });
+            AddContent(order);
 
             const int Id = 1;
 

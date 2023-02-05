@@ -7,6 +7,8 @@ namespace AuctionSite.Tests.Integration
 {
     public class UserControllerTests : IntegrationTest
     {
+        private const string ApiUrl = "/api/user";
+
         [Fact]
         public async Task GetUserByIdAsync_Success()
         {
@@ -22,9 +24,9 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<ApplicationUser> { user });
+            await AddToDatabase(user);
 
-            var response = await _httpClient.GetAsync($"/api/user/{user.Id}");
+            var response = await _httpClient.GetAsync($"{ApiUrl}/{user.Id}");
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<UserProfileModel>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -48,9 +50,9 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<ApplicationUser> { user });
+            await AddToDatabase(user);
 
-            var response = await _httpClient.GetAsync($"/api/user/aaaa");
+            var response = await _httpClient.GetAsync($"{ApiUrl}/aaaa");
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<UserProfileModel>>();
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -79,7 +81,7 @@ namespace AuctionSite.Tests.Integration
                 PostalCode = "321321"
             };
 
-            var response = await _httpClient.PutAsJsonAsync("/api/user", request);
+            var response = await _httpClient.PutAsJsonAsync(ApiUrl, request);
 
             var testUser = GetFromDatabase<ApplicationUser>().FirstOrDefault(x => x.Id == user.Id);
             testUser.Info = GetFromDatabase<UserInfo>().FirstOrDefault(x => x.UserId == user.Id);
@@ -118,7 +120,7 @@ namespace AuctionSite.Tests.Integration
                 PostalCode = "321321"
             };
 
-            var response = await _httpClient.PutAsJsonAsync("/api/user", request);
+            var response = await _httpClient.PutAsJsonAsync(ApiUrl, request);
 
             var testUser = GetFromDatabase<ApplicationUser>().FirstOrDefault(x => x.Id == user.Id);
             testUser.Info = GetFromDatabase<UserInfo>().FirstOrDefault(x => x.UserId == user.Id);

@@ -5,14 +5,19 @@ namespace AuctionSite.Tests.Unit.Factory
 {
     public class ResponseFactoryTests
     {
+        private readonly ResponseFactory _factory;
+
+        public ResponseFactoryTests()
+        {
+            _factory = new ResponseFactory();
+        }
+
         [Fact]
         public void CreateFail()
         {
-            var factory = new ResponseFactory();
-
             const string ErrorMessage = "Error";
 
-            var response = factory.CreateFailure(ErrorMessage);
+            var response = _factory.CreateFailure(ErrorMessage);
 
             Assert.Equal(ErrorMessage, response.Error);
             Assert.False(response.Success);
@@ -21,9 +26,7 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateSuccess()
         {
-            var factory = new ResponseFactory();
-
-            var response = factory.CreateSuccess();
+            var response = _factory.CreateSuccess();
 
             Assert.True(response.Success);
         }
@@ -31,8 +34,6 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateValidationError()
         {
-            var factory = new ResponseFactory();
-
             var validation = new ValidationResult
             {
                 Errors = new List<ValidationFailure>
@@ -50,7 +51,7 @@ namespace AuctionSite.Tests.Unit.Factory
                 }
             };
 
-            var response = factory.CreateValidationError(validation);
+            var response = _factory.CreateValidationError(validation);
 
             Assert.False(response.Success);
             Assert.All(response.ValidationErrors.Keys, x => validation.ToDictionary().Keys.Contains(x));
@@ -60,11 +61,9 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateFail_Data()
         {
-            var factory = new ResponseFactory();
-
             const string ErrorMessage = "Error";
 
-            var response = factory.CreateFailure<int>(ErrorMessage);
+            var response = _factory.CreateFailure<int>(ErrorMessage);
 
             Assert.Equal(ErrorMessage, response.Error);
             Assert.False(response.Success);
@@ -74,11 +73,9 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateSuccess_Data()
         {
-            var factory = new ResponseFactory();
-
             const int Data = 1;
 
-            var response = factory.CreateSuccess(Data);
+            var response = _factory.CreateSuccess(Data);
 
             Assert.True(response.Success);
             Assert.Equal(Data, response.Data);
@@ -87,8 +84,6 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateValidationError_Data()
         {
-            var factory = new ResponseFactory();
-
             var validation = new ValidationResult
             {
                 Errors = new List<ValidationFailure>
@@ -106,7 +101,7 @@ namespace AuctionSite.Tests.Unit.Factory
                 }
             };
 
-            var response = factory.CreateValidationError<int>(validation);
+            var response = _factory.CreateValidationError<int>(validation);
 
             Assert.False(response.Success);
             Assert.All(response.ValidationErrors.Keys, x => validation.ToDictionary().Keys.Contains(x));
@@ -117,11 +112,9 @@ namespace AuctionSite.Tests.Unit.Factory
         [Fact]
         public void CreateSuccessWithCreatedId()
         {
-            var factory = new ResponseFactory();
-
             const int Id = 1;
 
-            var response = factory.CreateSuccessWithCreatedId(Id);
+            var response = _factory.CreateSuccessWithCreatedId(Id);
 
             Assert.Equal(Id, response.NewEntityId);
             Assert.True(response.Success);

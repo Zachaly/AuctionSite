@@ -5,19 +5,17 @@ import { Observable } from 'rxjs';
 import UserProfileModel from 'src/models/UserProfileModel';
 import DataResponseModel from 'src/models/DataResponseModel';
 
-
+const API_URL = 'https://localhost:5001/api/user'
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  apiUrl: string = 'https://localhost:5001/api/user'
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-  }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   getUser(id: string): Observable<DataResponseModel<UserProfileModel>> {
-    return this.http.get<DataResponseModel<UserProfileModel>>(`${this.apiUrl}/${id}`)
+    return this.http.get<DataResponseModel<UserProfileModel>>(`${API_URL}/${id}`)
   }
 
   httpOptions = () => ({
@@ -28,7 +26,7 @@ export class UserService {
   })
 
   updateProfile(model: UserProfileModel): Observable<any> {
-    return this.http.put(this.apiUrl, model, this.httpOptions())
+    return this.http.put(API_URL, model, this.httpOptions())
   }
 
   updateProfilePicture(userId: string, file?: File): Observable<any> {
@@ -36,7 +34,7 @@ export class UserService {
     form.append('UserId', userId)
     form.append('File', file!)
 
-    return this.http.put(`${this.apiUrl}/profile-picture`, form, {
+    return this.http.put(`${API_URL}/profile-picture`, form, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.authService.userData.authToken}`
       })

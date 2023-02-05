@@ -7,6 +7,8 @@ namespace AuctionSite.Tests.Integration
 {
     public class AuthControllerTests : IntegrationTest
     {
+        private const string ApiUrl = "/api/auth";
+
         [Fact]
         public async Task RegisterAsync_FullData_Success()
         {
@@ -25,7 +27,7 @@ namespace AuctionSite.Tests.Integration
                 Username = "username"
             };
 
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", request);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             Assert.Contains(GetFromDatabase<ApplicationUser>(), user =>
@@ -52,7 +54,7 @@ namespace AuctionSite.Tests.Integration
                 Username = "username"
             };
 
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", request);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             Assert.Contains(GetFromDatabase<ApplicationUser>(), user =>
@@ -72,7 +74,7 @@ namespace AuctionSite.Tests.Integration
                 FirstName = new string('a', 200)
             };
 
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", request);
             var error = await response.Content.ReadFromJsonAsync<ResponseModel>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -93,8 +95,8 @@ namespace AuctionSite.Tests.Integration
                 Username = "username"
             };
 
-            await _httpClient.PostAsJsonAsync("/api/auth/register", request);
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", request);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", request);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.Contains(GetFromDatabase<ApplicationUser>(), user =>
@@ -113,7 +115,7 @@ namespace AuctionSite.Tests.Integration
                 Username = "username"
             };
 
-            await _httpClient.PostAsJsonAsync("/api/auth/register", registerRequest);
+            await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", registerRequest);
 
             var loginRequest = new LoginRequest
             {
@@ -121,7 +123,7 @@ namespace AuctionSite.Tests.Integration
                 Password = registerRequest.Password,
             };
 
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/login", loginRequest);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/login", loginRequest);
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<LoginResponse>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -140,7 +142,7 @@ namespace AuctionSite.Tests.Integration
                 Username = "username"
             };
 
-            await _httpClient.PostAsJsonAsync("/api/auth/register", registerRequest);
+            await _httpClient.PostAsJsonAsync($"{ApiUrl}/register", registerRequest);
 
             var loginRequest = new LoginRequest
             {
@@ -148,7 +150,7 @@ namespace AuctionSite.Tests.Integration
                 Password = "2137",
             };
 
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/login", loginRequest);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/login", loginRequest);
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<LoginResponse>>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -163,7 +165,7 @@ namespace AuctionSite.Tests.Integration
 
             var user = GetAuthenticatedUser();
 
-            var response = await _httpClient.GetAsync("/api/auth/user");
+            var response = await _httpClient.GetAsync($"{ApiUrl}/user");
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<LoginResponse>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -176,7 +178,7 @@ namespace AuctionSite.Tests.Integration
         [Fact]
         public async Task GetCurrentUserData_Unauthorized_Fail()
         {
-            var response = await _httpClient.GetAsync("/api/auth/user");
+            var response = await _httpClient.GetAsync($"{ApiUrl}/user");
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }

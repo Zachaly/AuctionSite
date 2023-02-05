@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from 'src/app/services/order.service';
-import OrderItem from 'src/models/OrderItem';
 import OrderModel from 'src/models/OrderModel';
 
 @Component({
@@ -28,6 +27,4 @@ export class OrderPageComponent implements OnInit {
         .subscribe(res => this.order = res.data!)
     })
   }
-
-  countPrice = (item: OrderItem) => item.quantity * item.price
 }

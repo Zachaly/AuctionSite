@@ -82,6 +82,18 @@ namespace AuctionSite.Tests.Integration
             }
         }
 
+        protected async Task AddToDatabase<T>(T item) where T : class
+        {
+            var scope = _webFactory.Services.CreateScope();
+
+            using (scope)
+            {
+                var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
+                await dbContext.Set<T>().AddAsync(item);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
         protected IEnumerable<T> GetFromDatabase<T>() where T : class
         {
             var scope = _webFactory.Services.CreateScope();

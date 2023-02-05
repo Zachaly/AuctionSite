@@ -24,7 +24,7 @@ namespace AuctionSite.Tests.Unit.Repository
                 Value = "val"
             };
 
-            AddContent(new List<Stock> { stock });
+            AddContent(stock);
 
             var stockOnHold = new StockOnHold { Quantity = 6, CartId = 1, StockId = stock.Id };
 
@@ -46,7 +46,7 @@ namespace AuctionSite.Tests.Unit.Repository
                 Value = "val"
             };
 
-            AddContent(new List<Stock> { stock });
+            AddContent(stock);
 
             var stockOnHold = new StockOnHold { Quantity = 11, CartId = 1, StockId = stock.Id };
 
@@ -68,7 +68,7 @@ namespace AuctionSite.Tests.Unit.Repository
                 Value = "val"
             };
 
-            AddContent(new List<Stock> { stock });
+            AddContent(stock);
 
             var stocksOnHold = new List<StockOnHold>
             {
@@ -101,7 +101,7 @@ namespace AuctionSite.Tests.Unit.Repository
                 Product = new Product { Description = "desc", Name = "name", OwnerId = "id", StockName = "name" },
             };
 
-            AddContent(new List<Stock> { stock });
+            AddContent(stock);
 
             var stocksOnHold = new List<StockOnHold>
             {
@@ -142,8 +142,8 @@ namespace AuctionSite.Tests.Unit.Repository
                 UserId = "usr"
             };
 
-            AddContent(new List<Stock> { stock });
-            AddContent(new List<Cart> { cart });
+            AddContent(stock);
+            AddContent(cart);
 
             var stocksOnHold = new List<StockOnHold>
             {

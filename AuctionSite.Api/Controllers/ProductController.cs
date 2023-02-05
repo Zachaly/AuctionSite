@@ -101,6 +101,10 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnNoContentOrBadRequest();
         }
 
+        /// <summary>
+        /// Returns page count for given or default page size
+        /// </summary>
+        /// <response code="200">Number of pages</response>
         [HttpGet("page-count")]
         [ProducesResponseType(200)]
         public ActionResult<DataResponseModel<int>> GetPageCount([FromQuery] GetPageCountRequest request)
