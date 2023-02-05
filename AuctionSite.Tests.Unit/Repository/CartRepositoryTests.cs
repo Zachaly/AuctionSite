@@ -1,10 +1,5 @@
 ﻿using AuctionSite.Database.Repository;
 using AuctionSite.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Repository
 {
@@ -73,22 +68,19 @@ namespace AuctionSite.Tests.Unit.Repository
         {
             const string Id = "user";
 
-            AddContent(new List<Stock>
+            AddContent(new Stock
             {
-                new Stock
+                Id = 1,
+                Value = "val",
+                Product = new Product
                 {
-                    Id = 1,
-                    Value = "val",
-                    Product = new Product
-                    {
-                        OwnerId = "id",
-                        StockName = "stock",
-                        Price = 123,
-                        Name = "prod",
-                        Description = "desc"
-                    },
-                    Quantity = 10
-                }
+                    OwnerId = "id",
+                    StockName = "stock",
+                    Price = 123,
+                    Name = "prod",
+                    Description = "desc"
+                },
+                Quantity = 10
             });
 
             AddContent(new List<Cart>

@@ -4,33 +4,24 @@ using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
 using AuctionSite.Models.Cart;
 using AuctionSite.Models.Cart.Request;
-using AuctionSite.Models.Response;
 using Moq;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class CartServiceTests
+    public class CartServiceTests : ServiceTest
     {
-        private readonly Mock<IResponseFactory> _responseFactory;
         private readonly Mock<ICartFactory> _cartFactory;
         private readonly Mock<IStockOnHoldFactory> _stockOnHoldFactory;
         private readonly Mock<ICartRepository> _cartRepository;
         private readonly Mock<IStockOnHoldRepository> _stockOnHoldRepository;
         private readonly CartService _service;
 
-        public CartServiceTests()
+        public CartServiceTests() : base()
         {
-            _responseFactory = new Mock<IResponseFactory>();
             _cartFactory = new Mock<ICartFactory>();
             _stockOnHoldFactory = new Mock<IStockOnHoldFactory>();
             _cartRepository = new Mock<ICartRepository>();
             _stockOnHoldRepository = new Mock<IStockOnHoldRepository>();
-
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string msg) => new ResponseModel { Success = false, Error = msg });
 
             _service = new CartService(_cartRepository.Object, _cartFactory.Object, _stockOnHoldFactory.Object, _stockOnHoldRepository.Object, _responseFactory.Object);
         }
@@ -62,9 +53,6 @@ namespace AuctionSite.Tests.Unit.Service
         {
             _cartRepository.Setup(x => x.GetCartByUserId(It.IsAny<string>(), It.IsAny<Func<Cart, Cart>>()))
                 .Returns(() => new Cart());
-
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
 
             var request = new AddCartRequest { UserId = "id" };
 
@@ -192,8 +180,7 @@ namespace AuctionSite.Tests.Unit.Service
             _cartFactory.Setup(x => x.CreateModel(It.IsAny<Cart>()))
                 .Returns((Cart cart) => new CartModel { Id = cart.Id });
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<CartModel>()))
-                .Returns((CartModel data) => new DataResponseModel<CartModel> { Success = true, Data = data });
+            MockDataResponse<CartModel>();
 
             var res = _service.GetCartByUserId("id");
 
@@ -209,8 +196,7 @@ namespace AuctionSite.Tests.Unit.Service
             _cartRepository.Setup(x => x.GetCartByUserId(It.IsAny<string>(), It.IsAny<Func<Cart, CartModel>>()))
                 .Returns(() => null);
 
-            _responseFactory.Setup(x => x.CreateFailure<CartModel>(It.IsAny<string>()))
-                .Returns((string msg) => new DataResponseModel<CartModel> { Success = false, Error = msg, Data = null });
+            MockDataResponse<CartModel>();
 
             _cartFactory.Setup(x => x.CreateModel(It.IsAny<Cart>()))
                 .Returns((Cart cart) => new CartModel { Id = cart.Id });
@@ -229,8 +215,7 @@ namespace AuctionSite.Tests.Unit.Service
             _cartRepository.Setup(x => x.GetCartItemsCountByUserId(It.IsAny<string>()))
                 .Returns(Count);
 
-            _responseFactory.Setup(x => x.CreateSuccess<int>(It.IsAny<int>()))
-                .Returns((int count) => new DataResponseModel<int> { Success = true, Data = count });
+            MockDataResponse<int>();
 
             var res = _service.GetCartItemsCount("id");
 

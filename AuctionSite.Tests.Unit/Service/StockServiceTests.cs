@@ -8,16 +8,14 @@ using Moq;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class StockServiceTests
+    public class StockServiceTests : ServiceTest
     {
-        private readonly Mock<IResponseFactory> _responseFactory;
         private readonly Mock<IStockFactory> _stockFactory;
         private readonly Mock<IStockRepository> _stockRepository;
         private readonly StockService _service;
 
-        public StockServiceTests()
+        public StockServiceTests() : base()
         {
-            _responseFactory = new Mock<IResponseFactory>();
             _stockFactory = new Mock<IStockFactory>();
             _stockRepository = new Mock<IStockRepository>();
 
@@ -40,9 +38,6 @@ namespace AuctionSite.Tests.Unit.Service
                     Value = request.Value
                 });
 
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
-
             var request = new AddStockRequest
             {
                 ProductId = 1,
@@ -59,8 +54,6 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public async Task AddStockAsync_ErrorThrown_Fail()
         {
-            var stocks = new List<Stock>();
-
             const string ErrorMessage = "Error";
 
             _stockRepository.Setup(x => x.AddStockAsync(It.IsAny<Stock>()))
@@ -73,9 +66,6 @@ namespace AuctionSite.Tests.Unit.Service
                     Quantity = request.Quantity,
                     Value = request.Value
                 });
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string msg) => new ResponseModel { Success = false, Error = msg });
 
             var request = new AddStockRequest
             {
@@ -104,9 +94,6 @@ namespace AuctionSite.Tests.Unit.Service
             _stockRepository.Setup(x => x.DeleteStockByIdAsync(It.IsAny<int>()))
                 .Callback((int id) => stocks.Remove(stocks.Find(x => x.Id == id)));
 
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
-
             const int Id = 3;
 
             var res = await _service.DeleteStockByIdAsync(Id);
@@ -118,20 +105,9 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public async Task DeleteStockByIdAsync_ErrorThrown_Fail()
         {
-            var stocks = new List<Stock>
-            {
-                new Stock { Id = 1 },
-                new Stock { Id = 2 },
-                new Stock { Id = 3 },
-                new Stock { Id = 4 },
-            };
-
             const string ErrorMessage = "Error";
             _stockRepository.Setup(x => x.DeleteStockByIdAsync(It.IsAny<int>()))
                 .Callback((int id) => throw new Exception(ErrorMessage));
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string msg) => new ResponseModel { Success = false, Error = msg });
 
             const int Id = 3;
 

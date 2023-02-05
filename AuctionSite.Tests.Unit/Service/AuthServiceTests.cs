@@ -2,7 +2,6 @@
 using AuctionSite.Application.Abstraction;
 using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
-using AuctionSite.Models.Response;
 using AuctionSite.Models.User.Request;
 using AuctionSite.Models.User.Response;
 using Microsoft.AspNetCore.Http;
@@ -17,24 +16,22 @@ using System.Text;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class AuthServiceTests
+    public class AuthServiceTests : ServiceTest
     {
-        private AuthService _authService;
-        private Mock<UserManager<ApplicationUser>> _userManager;
-        private Mock<IResponseFactory> _responseFactory;
-        private Mock<IUserFactory> _userFactory;
-        private Mock<IUserInfoRepository> _userInfoRepository;
-        private Mock<IHttpContextAccessor> _httpContextAccessor;
-        private Mock<IConfiguration> _configuration;
+        private readonly AuthService _authService;
+        private readonly Mock<UserManager<ApplicationUser>> _userManager;
+        private readonly Mock<IUserFactory> _userFactory;
+        private readonly Mock<IUserInfoRepository> _userInfoRepository;
+        private readonly Mock<IHttpContextAccessor> _httpContextAccessor;
+        private readonly Mock<IConfiguration> _configuration;
 
-        public AuthServiceTests()
+        public AuthServiceTests() : base()
         {
             var store = new Mock<IUserStore<ApplicationUser>>();
             _userManager = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
             _userManager.Object.UserValidators.Add(new UserValidator<ApplicationUser>());
             _userManager.Object.PasswordValidators.Add(new PasswordValidator<ApplicationUser>());
 
-            _responseFactory = new Mock<IResponseFactory>();
             _userFactory = new Mock<IUserFactory>();
             _userInfoRepository = new Mock<IUserInfoRepository>();
             _httpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -84,9 +81,6 @@ namespace AuctionSite.Tests.Unit.Service
                     FirstName = request.FirstName,
                 });
 
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
-
             var request = new RegisterRequest
             {
                 Username = "username",
@@ -132,9 +126,6 @@ namespace AuctionSite.Tests.Unit.Service
                     FirstName = request.FirstName,
                 });
 
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string message) => new ResponseModel { Success = false, Error = message });
-
             var request = new RegisterRequest
             {
                 Username = "username",
@@ -179,9 +170,6 @@ namespace AuctionSite.Tests.Unit.Service
                     FirstName = request.FirstName,
                 });
 
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string message) => new ResponseModel { Success = false, Error = message });
-
             var request = new RegisterRequest
             {
                 Username = "username",
@@ -224,9 +212,6 @@ namespace AuctionSite.Tests.Unit.Service
                     UserId = id,
                     FirstName = request.FirstName,
                 });
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string message) => new ResponseModel { Success = false, Error = message });
 
             var request = new RegisterRequest
             {
@@ -275,8 +260,7 @@ namespace AuctionSite.Tests.Unit.Service
                     UserName = user.UserName
                 });
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<LoginResponse>()))
-                .Returns((LoginResponse data) => new DataResponseModel<LoginResponse> { Success = true, Data = data });
+            MockDataResponse<LoginResponse>();
 
             var request = new LoginRequest
             {
@@ -292,11 +276,10 @@ namespace AuctionSite.Tests.Unit.Service
                 ValidIssuer = _configuration.Object["Auth:Issuer"],
                 ValidAudience = _configuration.Object["Auth:Audience"]
             };
+
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var validationResult = tokenHandler.ValidateToken(response.Data.AuthToken, tokenValidation, out SecurityToken validToken);
-
-            var c = validationResult.Identities.First().Claims.ToList();
 
             Assert.True(response.Success);
             Assert.Equal(user.Id, response.Data.UserId);
@@ -335,8 +318,7 @@ namespace AuctionSite.Tests.Unit.Service
                     UserName = user.UserName
                 });
 
-            _responseFactory.Setup(x => x.CreateFailure<LoginResponse>(It.IsAny<string>()))
-                .Returns((string message) => new DataResponseModel<LoginResponse> { Error = message, Success = false });
+            MockDataResponse<LoginResponse>();
 
             var request = new LoginRequest
             {
@@ -381,8 +363,7 @@ namespace AuctionSite.Tests.Unit.Service
                     UserName = user.UserName
                 });
 
-            _responseFactory.Setup(x => x.CreateFailure<LoginResponse>(It.IsAny<string>()))
-                .Returns((string message) => new DataResponseModel<LoginResponse> { Error = message, Success = false });
+            MockDataResponse<LoginResponse>();
 
             var request = new LoginRequest
             {
@@ -417,8 +398,7 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Returns((ApplicationUser user, string token) => new LoginResponse { AuthToken = token, UserId = user.Id, UserName = user.UserName });
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<LoginResponse>()))
-                .Returns((LoginResponse data) => new DataResponseModel<LoginResponse> { Success = true, Data = data });
+            MockDataResponse<LoginResponse>();
 
             var result = await _authService.GetCurrentUserDataAsync();
 
@@ -443,7 +423,6 @@ namespace AuctionSite.Tests.Unit.Service
 
             var user = new ApplicationUser { Id = "id", UserName = "username" };
 
-
             const string Error = "error";
             _userManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
                 .Callback(() =>
@@ -454,12 +433,11 @@ namespace AuctionSite.Tests.Unit.Service
             _userFactory.Setup(x => x.CreateLoginResponse(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .Returns((ApplicationUser user, string token) => new LoginResponse { AuthToken = token, UserId = user.Id, UserName = user.UserName });
 
-            _responseFactory.Setup(x => x.CreateFailure<LoginResponse>(It.IsAny<string>()))
-                .Returns((string msg) => new DataResponseModel<LoginResponse> { Success = true, Data = null, Error = msg });
+            MockDataResponse<LoginResponse>();
 
             var result = await _authService.GetCurrentUserDataAsync();
 
-            Assert.True(result.Success);
+            Assert.False(result.Success);
             Assert.Null(result.Data);
             Assert.Equal(Error, result.Error);
         }

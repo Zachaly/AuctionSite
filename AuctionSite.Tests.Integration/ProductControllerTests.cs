@@ -3,7 +3,6 @@ using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AuctionSite.Tests.Integration
 {
@@ -45,7 +44,6 @@ namespace AuctionSite.Tests.Integration
             };
 
             await AddToDatabase(products);
-
 
             var response = await _httpClient.GetAsync(ApiPath);
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<IEnumerable<ProductListItemModel>>>();
@@ -181,7 +179,7 @@ namespace AuctionSite.Tests.Integration
                 Created = new DateTime(2021, 3, 7)
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var response = await _httpClient.GetAsync($"{ApiPath}/{product.Id}");
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<ProductModel>>();
@@ -214,7 +212,7 @@ namespace AuctionSite.Tests.Integration
                 Price = 123
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var response = await _httpClient.GetAsync($"{ApiPath}/{2137}");
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<ProductModel>>();
@@ -277,7 +275,6 @@ namespace AuctionSite.Tests.Integration
 
             var response = await _httpClient.PostAsJsonAsync(ApiPath, request);
             var error = await response.Content.ReadFromJsonAsync<ResponseModel>();
-            var t = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.DoesNotContain(GetFromDatabase<Product>(), x => x.Name == request.Name);

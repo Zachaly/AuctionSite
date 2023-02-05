@@ -6,27 +6,19 @@ using AuctionSite.Models.Order;
 using AuctionSite.Models.Order.Request;
 using AuctionSite.Models.Response;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class OrderServiceTests
+    public class OrderServiceTests : ServiceTest
     {
         private readonly Mock<IOrderFactory> _orderFactory;
-        private readonly Mock<IResponseFactory> _responseFactory;
         private readonly Mock<IOrderRepository> _orderRepository;
         private readonly Mock<IStockOnHoldRepository> _stockOnHoldRepository;
         private readonly OrderService _service;
 
-        public OrderServiceTests() 
+        public OrderServiceTests() : base()
         {
             _orderFactory = new Mock<IOrderFactory>();
-            _responseFactory = new Mock<IResponseFactory>();
             _orderRepository = new Mock<IOrderRepository>();
             _stockOnHoldRepository = new Mock<IStockOnHoldRepository>();
 
@@ -98,6 +90,7 @@ namespace AuctionSite.Tests.Unit.Service
 
             _orderFactory.Setup(x => x.Create(It.IsAny<AddOrderRequest>()))
                 .Callback(() => throw new Exception(Error));
+
             var res = await _service.AddOrderAsync(request);
 
             Assert.False(res.Success);
@@ -115,8 +108,7 @@ namespace AuctionSite.Tests.Unit.Service
             _orderRepository.Setup(x => x.GetOrderById(It.IsAny<int>(), It.IsAny<Func<Order, OrderModel>>()))
                 .Returns((int _, Func<Order, OrderModel> selector) => selector(order));
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<OrderModel>()))
-                .Returns((OrderModel data) => new DataResponseModel<OrderModel> { Success = true, Data = data });
+            MockDataResponse<OrderModel>();
 
             var res = await _service.GetOrderByIdAsync(order.Id);
 
@@ -135,8 +127,7 @@ namespace AuctionSite.Tests.Unit.Service
             _orderRepository.Setup(x => x.GetOrderById(It.IsAny<int>(), It.IsAny<Func<Order, OrderModel>>()))
                 .Returns(() => null);
 
-            _responseFactory.Setup(x => x.CreateFailure<OrderModel>(It.IsAny<string>()))
-                .Returns(new DataResponseModel<OrderModel> { Success = false, Data = null });
+            MockDataResponse<OrderModel>();
 
             var res = await _service.GetOrderByIdAsync(order.Id);
 
@@ -162,8 +153,7 @@ namespace AuctionSite.Tests.Unit.Service
             _orderRepository.Setup(x => x.GetOrdersByUserId(It.IsAny<string>(), It.IsAny<Func<Order, OrderListItem>>()))
                 .Returns((string _, Func<Order, OrderListItem> selector) => orders.Select(selector));
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<IEnumerable<OrderListItem>>()))
-                .Returns((IEnumerable<OrderListItem> data) => new DataResponseModel<IEnumerable<OrderListItem>> { Success = true, Data = data });
+            MockDataResponse<IEnumerable<OrderListItem>>();
 
             var res = await _service.GetOrdersByUserIdAsync("id");
 

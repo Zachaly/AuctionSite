@@ -7,27 +7,22 @@ using Stripe;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class StripeServiceTests
+    public class StripeServiceTests : ServiceTest
     {
-        private readonly Mock<IResponseFactory> _responseFactory;
         private readonly Mock<ChargeService> _chargeService;
         private readonly Mock<TokenService> _tokenService;
         private readonly Mock<CustomerService> _customerService;
         private readonly Mock<IStripeFactory> _stripeFactory;
         private readonly StripeService _service;
 
-        public StripeServiceTests()
+        public StripeServiceTests() : base()
         {
             _chargeService = new Mock<ChargeService>();
             _tokenService = new Mock<TokenService>();
             _customerService = new Mock<CustomerService>();
             _stripeFactory = new Mock<IStripeFactory>();
-            _responseFactory = new Mock<IResponseFactory>();
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<string>()))
-                .Returns((string id) => new DataResponseModel<string> { Data = id, Success = true });
 
-            _responseFactory.Setup(x => x.CreateFailure<string>(It.IsAny<string>()))
-                .Returns((string msg) => new DataResponseModel<string> { Success = false, Error = msg, Data = null });
+            MockDataResponse<string>();
 
             _service = new StripeService(_chargeService.Object, _customerService.Object, _tokenService.Object,
                 _stripeFactory.Object, _responseFactory.Object);
@@ -86,9 +81,6 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public async Task AddCustomerAsync_ExceptionThrown_Fail()
         {
-            var customers = new List<Customer>();
-            var tokens = new List<Token>();
-
             const string Error = "err";
 
             _stripeFactory.Setup(x => x.CreateTokenOptions(It.IsAny<AddStripeCustomerRequest>()))

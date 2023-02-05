@@ -8,20 +8,17 @@ using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Moq;
-using System.Collections.Immutable;
 
 namespace AuctionSite.Tests.Unit.Service
 {
-    public class ProductServiceTests
+    public class ProductServiceTests : ServiceTest
     {
-        private readonly Mock<IResponseFactory> _responseFactory;
         private readonly Mock<IProductFactory> _productFactory;
         private readonly Mock<IProductRepository> _productRepository;
         private readonly ProductService _service;
 
-        public ProductServiceTests()
+        public ProductServiceTests() : base()
         {
-            _responseFactory = new Mock<IResponseFactory>();
             _productFactory = new Mock<IProductFactory>();
             _productRepository = new Mock<IProductRepository>();
 
@@ -77,9 +74,6 @@ namespace AuctionSite.Tests.Unit.Service
                     Name = request.Name
                 });
 
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string msg) => new ResponseModel { Success = false, Error = msg });
-
             var request = new AddProductRequest
             {
                 Description = "description",
@@ -111,9 +105,6 @@ namespace AuctionSite.Tests.Unit.Service
             _productRepository.Setup(x => x.DeleteProductByIdAsync(It.IsAny<int>()))
                 .Callback((int id) => products.Remove(products.Find(x => x.Id == id)));
 
-            _responseFactory.Setup(x => x.CreateSuccess())
-                .Returns(new ResponseModel { Success = true });
-
             const int Id = 3;
 
             var res = await _service.DeleteProductByIdAsync(Id);
@@ -137,9 +128,6 @@ namespace AuctionSite.Tests.Unit.Service
 
             _productRepository.Setup(x => x.DeleteProductByIdAsync(It.IsAny<int>()))
                 .Callback((int id) => throw new Exception(ErrorMessage));
-
-            _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string msg) => new ResponseModel { Success = false, Error = msg });
 
             const int Id = 3;
 
@@ -166,8 +154,7 @@ namespace AuctionSite.Tests.Unit.Service
             _productFactory.Setup(x => x.CreateModel(It.IsAny<Product>()))
                 .Returns((Product product) => new ProductModel { Id = product.Id, Name = product.Name, Description = product.Description });
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<ProductModel>()))
-                .Returns((ProductModel data) => new DataResponseModel<ProductModel> { Data = data, Success = true });
+            MockDataResponse<ProductModel>();
 
             var res = _service.GetProductById(product.Id);
 
@@ -192,8 +179,7 @@ namespace AuctionSite.Tests.Unit.Service
             _productFactory.Setup(x => x.CreateModel(It.IsAny<Product>()))
                 .Returns((Product product) => new ProductModel { Id = product.Id, Name = product.Name, Description = product.Description });
 
-            _responseFactory.Setup(x => x.CreateFailure<ProductModel>(It.IsAny<string>()))
-                .Returns((string msg) => new DataResponseModel<ProductModel> { Data = null, Success = false, Error = msg });
+            MockDataResponse<ProductModel>();
 
             var res = _service.GetProductById(product.Id);
 
@@ -219,8 +205,7 @@ namespace AuctionSite.Tests.Unit.Service
             _productFactory.Setup(x => x.CreateModel(It.IsAny<Product>()))
                 .Returns((Product product) => new ProductModel { Id = product.Id, Name = product.Name, Description = product.Description });
 
-            _responseFactory.Setup(x => x.CreateFailure<ProductModel>(It.IsAny<string>()))
-                .Returns((string msg) => new DataResponseModel<ProductModel> { Data = null, Success = false, Error = msg });
+            MockDataResponse<ProductModel>();
 
             var res = _service.GetProductById(product.Id);
 
@@ -258,12 +243,7 @@ namespace AuctionSite.Tests.Unit.Service
             _productFactory.Setup(x => x.CreateListItem(It.IsAny<Product>()))
                 .Returns((Product prod) => new ProductListItemModel { Id = prod.Id, Name = prod.Name });
 
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<IEnumerable<ProductListItemModel>>()))
-                .Returns((IEnumerable<ProductListItemModel> data) => new DataResponseModel<IEnumerable<ProductListItemModel>>
-                {
-                    Data = data,
-                    Success = true
-                });
+            MockDataResponse<IEnumerable<ProductListItemModel>>();
 
             var request = new PagedRequest
             {
@@ -307,13 +287,7 @@ namespace AuctionSite.Tests.Unit.Service
             _productFactory.Setup(x => x.CreateListItem(It.IsAny<Product>()))
                 .Returns((Product prod) => new ProductListItemModel { Id = prod.Id, Name = prod.Name });
 
-            _responseFactory.Setup(x => x.CreateFailure<IEnumerable<ProductListItemModel>>(It.IsAny<string>()))
-                .Returns((string msg) => new DataResponseModel<IEnumerable<ProductListItemModel>>
-                {
-                    Data = null,
-                    Success = false,
-                    Error = msg
-                });
+            MockDataResponse<IEnumerable<ProductListItemModel>>();
 
             var request = new PagedRequest
             {
@@ -330,10 +304,10 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public void GetPageCount_RequestWithSize()
         {
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<int>()))
-                .Returns((int data) => new DataResponseModel<int> { Data = data, Success = true });
+            MockDataResponse<int>();
 
             const int Count = 20;
+
             _productRepository.Setup(x => x.GetPageCount(It.IsAny<int>()))
                 .Returns(Count);
 
@@ -348,8 +322,7 @@ namespace AuctionSite.Tests.Unit.Service
         [Fact]
         public void GetPageCount_RequestWithoutSize()
         {
-            _responseFactory.Setup(x => x.CreateSuccess(It.IsAny<int>()))
-                .Returns((int data) => new DataResponseModel<int> { Data = data, Success = true });
+            MockDataResponse<int>();
 
             _productRepository.Setup(x => x.GetPageCount(It.IsAny<int>()))
                 .Returns((int size) => size);

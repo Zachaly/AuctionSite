@@ -40,7 +40,7 @@ namespace AuctionSite.Tests.Integration
                 UserId = user.Id,
             };
 
-            await AddToDatabase(new List<Cart> { cart });
+            await AddToDatabase(cart);
 
             var request = new AddCartRequest
             {
@@ -76,7 +76,7 @@ namespace AuctionSite.Tests.Integration
                 Stocks = new List<Stock> { stock },
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var carts = new List<Cart>
             {
@@ -128,7 +128,7 @@ namespace AuctionSite.Tests.Integration
                 Stocks = new List<Stock> { stock },
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var carts = new List<Cart>
             {
@@ -232,11 +232,11 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var cart = new Cart { Id = 1, UserId = user.Id };
 
-            await AddToDatabase(new List<Cart> { cart });
+            await AddToDatabase(cart);
 
             var request = new AddToCartRequest
             {
@@ -280,11 +280,11 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var cart = new Cart { Id = 1, UserId = user.Id };
 
-            await AddToDatabase(new List<Cart> { cart });
+            await AddToDatabase(cart);
 
             var request = new AddToCartRequest
             {
@@ -335,7 +335,7 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var response = await _httpClient.DeleteAsync($"{ApiUrl}/item/{StockId}");
             
@@ -377,7 +377,7 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var response = await _httpClient.DeleteAsync($"{ApiUrl}/item/2137");
 

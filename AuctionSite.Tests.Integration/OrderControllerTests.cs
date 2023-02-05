@@ -2,11 +2,6 @@
 using AuctionSite.Models.Order;
 using AuctionSite.Models.Order.Request;
 using AuctionSite.Models.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Integration
 {
@@ -67,7 +62,7 @@ namespace AuctionSite.Tests.Integration
                 }
             };
 
-            await AddToDatabase(new List<Cart> { cart });
+            await AddToDatabase(cart);
 
             var request = new AddOrderRequest
             {
@@ -98,7 +93,7 @@ namespace AuctionSite.Tests.Integration
 
             var order = CreateTestOrder(2, user.Id);
             
-            await AddToDatabase(new List<Order> { order });
+            await AddToDatabase(order);
 
             var response = await _httpClient.GetAsync($"{ApiUrl}/{order.Id}");
             var content = await response.Content.ReadFromJsonAsync<DataResponseModel<OrderModel>>();
@@ -117,7 +112,7 @@ namespace AuctionSite.Tests.Integration
 
             var order = CreateTestOrder(2, user.Id);
 
-            await AddToDatabase(new List<Order> { order });
+            await AddToDatabase(order);
 
             var response = await _httpClient.GetAsync($"{ApiUrl}/2137");
 

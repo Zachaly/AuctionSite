@@ -29,7 +29,7 @@ namespace AuctionSite.Tests.Integration
                 Price = 12.34M
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var request = new AddStockRequest
             {
@@ -66,7 +66,7 @@ namespace AuctionSite.Tests.Integration
                 Price = 12.34M
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             var request = new AddStockRequest
             {
@@ -108,7 +108,7 @@ namespace AuctionSite.Tests.Integration
                 Price = 12.34M
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             const int Id = 3;
 
@@ -142,7 +142,7 @@ namespace AuctionSite.Tests.Integration
                 Price = 12.34M
             };
 
-            await AddToDatabase(new List<Product> { product });
+            await AddToDatabase(product);
 
             const int Id = 2137;
 
