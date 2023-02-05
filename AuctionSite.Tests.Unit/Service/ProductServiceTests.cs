@@ -245,7 +245,7 @@ namespace AuctionSite.Tests.Unit.Service
 
             MockDataResponse<IEnumerable<ProductListItemModel>>();
 
-            var request = new PagedRequest
+            var request = new GetProductsRequest
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -254,6 +254,53 @@ namespace AuctionSite.Tests.Unit.Service
             var res = _service.GetProducts(request);
 
             var testList = products.Skip((pageIndex ?? 0) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
+
+            Assert.True(res.Success);
+            Assert.Equal(testList.Count, res.Data.Count());
+            Assert.Equivalent(testList.Select(x => x.Id), res.Data.Select(x => x.Id), true);
+        }
+
+        [Theory]
+        [InlineData(0, 5)]
+        [InlineData(5, 1)]
+        [InlineData(null, 2)]
+        [InlineData(0, null)]
+        public void GetProducts_UserIdSpecified_Success(int? pageIndex, int? pageSize)
+        {
+            var products = new List<Product>
+            {
+                new Product { Id = 1, Name = "name1", OwnerId = "id" },
+                new Product { Id = 2, Name = "name2", OwnerId = "idd" },
+                new Product { Id = 3, Name = "name3", OwnerId = "iddd" },
+                new Product { Id = 4, Name = "name4", OwnerId = "id" },
+                new Product { Id = 5, Name = "name5", OwnerId = "id" },
+                new Product { Id = 6, Name = "name6", OwnerId = "id" },
+                new Product { Id = 7, Name = "name7", OwnerId = "id2"},
+                new Product { Id = 8, Name = "name8", OwnerId = "id3"},
+                new Product { Id = 9, Name = "name9", OwnerId = "id4"},
+                new Product { Id = 10, Name = "name10", OwnerId = "id5"},
+                new Product { Id = 11, Name = "name11", OwnerId = "id"},
+            };
+
+            _productRepository.Setup(x => x.GetProductsByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Func<Product, ProductListItemModel>>()))
+                .Returns((string id, int pageSize, int index, Func<Product, ProductListItemModel> selector)
+                    => products.Where(x => x.OwnerId == id).Skip(index * pageSize).Take(pageSize).Select(selector));
+
+            _productFactory.Setup(x => x.CreateListItem(It.IsAny<Product>()))
+                .Returns((Product prod) => new ProductListItemModel { Id = prod.Id, Name = prod.Name });
+
+            MockDataResponse<IEnumerable<ProductListItemModel>>();
+
+            var request = new GetProductsRequest
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                UserId = "id"
+            };
+
+            var res = _service.GetProducts(request);
+
+            var testList = products.Where(x => x.OwnerId == request.UserId).Skip((pageIndex ?? 0) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
 
             Assert.True(res.Success);
             Assert.Equal(testList.Count, res.Data.Count());
@@ -289,7 +336,7 @@ namespace AuctionSite.Tests.Unit.Service
 
             MockDataResponse<IEnumerable<ProductListItemModel>>();
 
-            var request = new PagedRequest
+            var request = new GetProductsRequest
             {
                 PageIndex = 1,
                 PageSize = 2,
@@ -328,6 +375,40 @@ namespace AuctionSite.Tests.Unit.Service
                 .Returns((int size) => size);
 
             var request = new GetPageCountRequest { };
+
+            var res = _service.GetPageCount(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(10, res.Data);
+        }
+
+        [Fact]
+        public void GetPageCount_UserIdSpecified_RequestWithSize()
+        {
+            MockDataResponse<int>();
+
+            const int Count = 20;
+
+            _productRepository.Setup(x => x.GetUserPageCount(It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(Count);
+
+            var request = new GetPageCountRequest { UserId = "id", PageSize = 2 };
+
+            var res = _service.GetPageCount(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(Count, res.Data);
+        }
+
+        [Fact]
+        public void GetPageCount_UserIdSpecified_RequestWithoutSize()
+        {
+            MockDataResponse<int>();
+
+            _productRepository.Setup(x => x.GetUserPageCount(It.IsAny<string>(), It.IsAny<int>()))
+                .Returns((string _, int size) => size);
+
+            var request = new GetPageCountRequest { UserId = "id" };
 
             var res = _service.GetPageCount(request);
 

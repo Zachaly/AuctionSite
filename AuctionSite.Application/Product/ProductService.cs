@@ -63,7 +63,9 @@ namespace AuctionSite.Application
 
         public DataResponseModel<int> GetPageCount(GetPageCountRequest request)
         {
-            var count = _productRepository.GetPageCount(request.PageSize ?? 10);
+            var count = request.UserId is not null ? 
+                _productRepository.GetUserPageCount(request.UserId, request.PageSize ?? 10) : 
+                _productRepository.GetPageCount(request.PageSize ?? 10);
 
             return _responseFactory.CreateSuccess(count);
         }
@@ -87,15 +89,22 @@ namespace AuctionSite.Application
             }
         }
 
-        public DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(PagedRequest request)
+        public DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(GetProductsRequest request)
         {
             var index = request.PageIndex ?? 0;
             var pageSize = request.PageSize ?? 10;
 
             try
             {
-                var data = _productRepository.GetProducts(index, pageSize, product => _productFactory.CreateListItem(product));
-
+                IEnumerable<ProductListItemModel> data;
+                if(request.UserId is not null)
+                {
+                    data = _productRepository.GetProductsByUserId(request.UserId, pageSize, index, product => _productFactory.CreateListItem(product));
+                }
+                else
+                {
+                    data = _productRepository.GetProducts(index, pageSize, product => _productFactory.CreateListItem(product));
+                }
                 return _responseFactory.CreateSuccess(data);
             }
             catch(Exception ex)

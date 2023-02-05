@@ -3,5 +3,6 @@
     public class GetPageCountRequest
     {
         public int? PageSize { get; set; }
+        public string? UserId { get; set; }
     }
 }

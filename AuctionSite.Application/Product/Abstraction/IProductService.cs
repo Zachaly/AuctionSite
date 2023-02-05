@@ -10,7 +10,7 @@ namespace AuctionSite.Application.Abstraction
         Task<ResponseModel> AddProductAsync(AddProductRequest request);
         Task<ResponseModel> DeleteProductByIdAsync(int id);
         DataResponseModel<ProductModel> GetProductById(int id);
-        DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(PagedRequest request);
+        DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(GetProductsRequest request);
         DataResponseModel<int> GetPageCount(GetPageCountRequest request);
     }
 }
