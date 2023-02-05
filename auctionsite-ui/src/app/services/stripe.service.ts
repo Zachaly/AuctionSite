@@ -26,7 +26,7 @@ export class StripeService {
     return this.http.post<DataResponseModel<string>>(`${API_URL}/customer`, request, this.httpOptions())
   }
 
-  postPayment(request: AddPaymentRequest): Observable<DataResponseModel<string>>{
+  postPayment(request: AddPaymentRequest): Observable<DataResponseModel<string>> {
     return this.http.post<DataResponseModel<string>>(`${API_URL}/payment`, request, this.httpOptions())
   }
 }

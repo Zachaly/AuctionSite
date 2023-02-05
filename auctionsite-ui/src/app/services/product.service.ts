@@ -10,14 +10,14 @@ import UploadProductImagesRequest from 'src/models/request/UploadProductImagesRe
 import ResponseModel from 'src/models/ResponseModel';
 import { AuthService } from './auth.service';
 
+const API_URL = 'https://localhost:5001/api/product'
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  apiUrl: string = 'https://localhost:5001/api/product'
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-  }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   httpOptions = () => ({
     headers: new HttpHeaders({
@@ -26,48 +26,48 @@ export class ProductService {
     })
   })
 
-  addProduct(product: AddProductRequest) : Observable<ResponseModel> {
-    return this.http.post<ResponseModel>(this.apiUrl, product, this.httpOptions())
+  addProduct(product: AddProductRequest): Observable<ResponseModel> {
+    return this.http.post<ResponseModel>(API_URL, product, this.httpOptions())
   }
 
-  getProducts(request: PagedRequest) : Observable<DataResponseModel<ProductListItem[]>>{
+  getProducts(request: PagedRequest): Observable<DataResponseModel<ProductListItem[]>> {
     let params = new HttpParams()
-    if(request.pageIndex){
+    if (request.pageIndex) {
       params = params.append('PageIndex', request.pageIndex)
     }
 
-    if(request.pageSize){
+    if (request.pageSize) {
       params = params.append('PageSize', request.pageSize)
     }
 
-    return this.http.get<DataResponseModel<ProductListItem[]>>(this.apiUrl, {
+    return this.http.get<DataResponseModel<ProductListItem[]>>(API_URL, {
       params
     })
   }
 
-  getProduct(id: number) : Observable<DataResponseModel<ProductModel>> {
-    return this.http.get<DataResponseModel<ProductModel>>(`${this.apiUrl}/${id}`)
+  getProduct(id: number): Observable<DataResponseModel<ProductModel>> {
+    return this.http.get<DataResponseModel<ProductModel>>(`${API_URL}/${id}`)
   }
 
-  uploadImages(request: UploadProductImagesRequest) : Observable<any> {
+  uploadImages(request: UploadProductImagesRequest): Observable<any> {
     const form = new FormData()
     form.append('ProductId', request.productId.toString())
 
-    for(let i = 0; i < request.images.length; i++){
+    for (let i = 0; i < request.images.length; i++) {
       form.append('Images', request.images.item(i)!)
     }
 
-    return this.http.post(`${this.apiUrl}/image`, form, {
+    return this.http.post(`${API_URL}/image`, form, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.authService.userData.authToken}`
       })
     })
   }
 
-  getPageCount(pageSize: number) : Observable<DataResponseModel<number>>{
+  getPageCount(pageSize: number): Observable<DataResponseModel<number>> {
     let params = new HttpParams()
     params = params.append('pageSize', pageSize)
-    return this.http.get<DataResponseModel<number>>(`${this.apiUrl}/page-count`, {
+    return this.http.get<DataResponseModel<number>>(`${API_URL}/page-count`, {
       params
     })
   }

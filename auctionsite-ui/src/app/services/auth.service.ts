@@ -12,13 +12,14 @@ const httpOptions = {
   })
 }
 
-const authTokenKey = 'auth-token'
+const AUTH_TOKEN_KEY = 'auth-token'
+
+const API_URL = 'https://localhost:5001/api/auth'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:5001/api/auth'
   userData: UserModel = {
     userName: '',
     userId: '',
@@ -31,14 +32,14 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   register(model: RegisterModel, onSuccess: Function, onError: Function) {
-    this.http.post(`${this.apiUrl}/register`, model, httpOptions).subscribe({
+    this.http.post(`${API_URL}/register`, model, httpOptions).subscribe({
       next: res => onSuccess(res),
       error: err => onError(err)
     })
   }
 
   login(credentials: LoginModel, onSuccess: Function, onError: Function) {
-    this.http.post<DataResponseModel<UserModel>>(`${this.apiUrl}/login`, credentials, httpOptions)
+    this.http.post<DataResponseModel<UserModel>>(`${API_URL}/login`, credentials, httpOptions)
       .subscribe({
         next: (res) => {
           if (res.data) {
@@ -59,7 +60,7 @@ export class AuthService {
       authToken: ''
     }
     this.userSubject.next(this.userData)
-    localStorage.setItem(authTokenKey, '')
+    localStorage.setItem(AUTH_TOKEN_KEY, '')
     this.toggleAuth()
   }
 
@@ -77,10 +78,10 @@ export class AuthService {
   }
 
   readUserData() {
-    if (localStorage.getItem(authTokenKey)) {
-      this.http.get<DataResponseModel<UserModel>>(`${this.apiUrl}/user`, {
+    if (localStorage.getItem(AUTH_TOKEN_KEY)) {
+      this.http.get<DataResponseModel<UserModel>>(`${API_URL}/user`, {
         headers: new HttpHeaders({
-          'Authorization': `Bearer ${localStorage.getItem(authTokenKey)}`
+          'Authorization': `Bearer ${localStorage.getItem(AUTH_TOKEN_KEY)}`
         })
       }).subscribe(res => {
         if (res.success) {
@@ -92,8 +93,8 @@ export class AuthService {
     }
   }
 
-  loadUserDataFromApi(){
-    this.http.get<DataResponseModel<UserModel>>(`${this.apiUrl}/user`, {
+  loadUserDataFromApi() {
+    this.http.get<DataResponseModel<UserModel>>(`${API_URL}/user`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.userData.authToken}`
       })
@@ -106,6 +107,6 @@ export class AuthService {
   }
 
   saveAuthToken() {
-    localStorage.setItem(authTokenKey, this.userData.authToken)
+    localStorage.setItem(AUTH_TOKEN_KEY, this.userData.authToken)
   }
 }

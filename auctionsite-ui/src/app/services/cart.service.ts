@@ -6,11 +6,12 @@ import DataResponseModel from 'src/models/DataResponseModel';
 import AddCartItemRequest from 'src/models/request/AddCartItemRequest';
 import { AuthService } from './auth.service';
 
+const API_URL = 'https:localhost:5001/api/cart'
+
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private apiUrl = 'https:localhost:5001/api/cart'
 
   authToken = () => `Bearer ${this.authService.userData.authToken}`
   httpOptions = () => ({
@@ -34,11 +35,11 @@ export class CartService {
   }
 
   addCart(userId: string): Observable<any> {
-    return this.http.put(this.apiUrl, { userId }, this.httpOptions())
+    return this.http.put(API_URL, { userId }, this.httpOptions())
   }
 
   getCartCount(userId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/count/${userId}`, {
+    return this.http.get(`${API_URL}/count/${userId}`, {
       headers: new HttpHeaders({
         'Authorization': this.authToken()
       })
@@ -55,11 +56,11 @@ export class CartService {
   }
 
   addCartItem(request: AddCartItemRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/item`, request, this.httpOptions())
+    return this.http.post(`${API_URL}/item`, request, this.httpOptions())
   }
 
   getCart(userId: string): Observable<DataResponseModel<CartModel>> {
-    return this.http.get<DataResponseModel<CartModel>>(`${this.apiUrl}/${userId}`, {
+    return this.http.get<DataResponseModel<CartModel>>(`${API_URL}/${userId}`, {
       headers: {
         'Authorization': this.authToken()
       }
@@ -67,7 +68,7 @@ export class CartService {
   }
 
   removeFromCart(itemId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/item/${itemId}`, {
+    return this.http.delete(`${API_URL}/item/${itemId}`, {
       headers: {
         'Authorization': this.authToken()
       }
