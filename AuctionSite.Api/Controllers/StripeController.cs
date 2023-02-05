@@ -17,7 +17,12 @@ namespace AuctionSite.Api.Controllers
         {
             _stripeService = stripeService;
         }
-
+        
+        /// <summary>
+        /// Creates new stripe customer with data given in request
+        /// </summary>
+        /// <response code="200">Added user's id</response>
+        /// <response code="400">Invalid request</response>
         [HttpPost("customer")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -28,6 +33,11 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnOkOrBadRequest();
         }
 
+        /// <summary>
+        /// Creates new stripe payment with data given in request
+        /// </summary>
+        /// <response code="200">New payment's id</response>
+        /// <response code="400">Invalid request</response>
         [HttpPost("payment")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

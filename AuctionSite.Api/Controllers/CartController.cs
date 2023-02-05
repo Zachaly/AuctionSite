@@ -19,6 +19,11 @@ namespace AuctionSite.Api.Controllers
             _cartService = cartService;
         }
 
+        /// <summary>
+        /// Returns a cart of given user
+        /// </summary>
+        /// <response code="200">Cart Model</response>
+        /// <response code="404">Cart not found</response>
         [HttpGet("{userId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -29,6 +34,11 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnOkOrNotFound();
         }
 
+        /// <summary>
+        /// Returns number of items in given user's cart
+        /// </summary>
+        /// <response code="200">Number of items</response>
+        /// <response code="404">Cart does not exist</response>
         [HttpGet("count/{userId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -39,6 +49,11 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnOkOrBadRequest();
         }
 
+        /// <summary>
+        /// Adds new cart to database with data given in request
+        /// </summary>
+        /// <response code="201">Cart created successfully</response>
+        /// <response code="400">Invald request</response>
         [HttpPut]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -49,6 +64,11 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnCreatedOrBadRequest("");
         }
 
+        /// <summary>
+        /// Adds new item to cart
+        /// </summary>
+        /// <response code="201">Cart item created successfully</response>
+        /// <response code="400">Invalid request</response>
         [HttpPost("item")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -59,6 +79,11 @@ namespace AuctionSite.Api.Controllers
             return res.ReturnCreatedOrBadRequest("");
         }
 
+        /// <summary>
+        /// Removes item from cart
+        /// </summary>
+        /// <response code="204">Item removed successfully</response>
+        /// <response code="400">Failed to remove item</response>
         [HttpDelete("item/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
