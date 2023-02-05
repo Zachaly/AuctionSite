@@ -1,4 +1,5 @@
 export default interface PagedRequest {
     pageIndex?: number,
-    pageSize?: number
+    pageSize?: number,
+    userId?: string
 }

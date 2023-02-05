@@ -40,6 +40,10 @@ export class ProductService {
       params = params.append('PageSize', request.pageSize)
     }
 
+    if(request.userId) {
+      params = params.append('UserId', request.userId)
+    }
+
     return this.http.get<DataResponseModel<ProductListItem[]>>(API_URL, {
       params
     })
@@ -64,9 +68,12 @@ export class ProductService {
     })
   }
 
-  getPageCount(pageSize: number): Observable<DataResponseModel<number>> {
+  getPageCount(pageSize: number, userId?: string): Observable<DataResponseModel<number>> {
     let params = new HttpParams()
     params = params.append('pageSize', pageSize)
+    if(userId){
+      params = params.append('userId', userId)
+    }
     return this.http.get<DataResponseModel<number>>(`${API_URL}/page-count`, {
       params
     })

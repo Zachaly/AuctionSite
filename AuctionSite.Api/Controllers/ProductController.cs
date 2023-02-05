@@ -31,9 +31,9 @@ namespace AuctionSite.Api.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public ActionResult<DataResponseModel<IEnumerable<ProductListItemModel>>> Get([FromQuery] PagedRequest pagedRequest)
+        public ActionResult<DataResponseModel<IEnumerable<ProductListItemModel>>> Get([FromQuery] GetProductsRequest request)
         {
-            var res = _productService.GetProducts(pagedRequest);
+            var res = _productService.GetProducts(request);
 
             return res.ReturnOkOrBadRequest();
         }

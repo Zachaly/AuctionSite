@@ -50,5 +50,20 @@ namespace AuctionSite.Database.Repository
                 .OrderByDescending(product => product.Created)
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize).Select(selector);
+
+        public IEnumerable<T> GetProductsByUserId<T>(string id, int pageSize, int pageIndex, Func<Product, T> selector)
+            => _dbContext.Product
+                .Include(product => product.Images)
+                .Where(product => product.OwnerId == id)
+                .OrderByDescending(product => product.Created)
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize).Select(selector);
+
+        public int GetUserPageCount(string userId, int pageSize)
+        {
+            var count = (decimal)_dbContext.Product.Where(product => product.OwnerId == userId).Count();
+
+            return (int)Math.Ceiling(count / pageSize);
+        }
     }
 }
