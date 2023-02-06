@@ -7,11 +7,11 @@ using AuctionSite.Models.SaveList.Request;
 namespace AuctionSite.Application
 {
     [Implementation(typeof(IListFactory))]
-    public class ListfFactory : IListFactory
+    public class ListFactory : IListFactory
     {
         private readonly IListStockFactory _listStockFactory;
 
-        public ListfFactory(IListStockFactory listStockFactory)
+        public ListFactory(IListStockFactory listStockFactory)
         {
             _listStockFactory = listStockFactory;
         }

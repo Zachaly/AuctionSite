@@ -4,7 +4,7 @@ using AuctionSite.Domain.Util;
 using AuctionSite.Models.ListStock.Request;
 using AuctionSite.Models.Response;
 
-namespace AuctionSite.Application.ListStock
+namespace AuctionSite.Application
 {
     [Implementation(typeof(IListStockService))]
     public class ListStockService : IListStockService

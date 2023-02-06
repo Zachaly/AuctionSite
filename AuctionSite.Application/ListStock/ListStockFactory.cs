@@ -14,7 +14,7 @@ namespace AuctionSite.Application
             throw new NotImplementedException();
         }
 
-        public ListStockModel CreateModel(AddListStockRequest request)
+        public ListStockModel CreateModel(ListStock request)
         {
             throw new NotImplementedException();
         }

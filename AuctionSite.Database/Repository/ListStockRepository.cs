@@ -3,7 +3,7 @@ using AuctionSite.Domain.Entity;
 
 namespace AuctionSite.Database.Repository
 {
-    internal class ListStockRepository : IListStockRepository
+    public class ListStockRepository : IListStockRepository
     {
         private readonly AppDbContext _dbContext;
 
