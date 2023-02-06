@@ -19,14 +19,34 @@ namespace AuctionSite.Application
             _listStockFactory = listStockFactory;
             _responseFactory = responseFactory;
         }
-        public Task<ResponseModel> AddListStockAsync(AddListStockRequest request)
+        public async Task<ResponseModel> AddListStockAsync(AddListStockRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var stock = _listStockFactory.Create(request);
+
+                await _listStockRepository.AddListStockAsync(stock);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<ResponseModel> DeleteListStockByIdAsync(int id)
+        public async Task<ResponseModel> DeleteListStockByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _listStockRepository.DeleteListStokcByIdAsync(id);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

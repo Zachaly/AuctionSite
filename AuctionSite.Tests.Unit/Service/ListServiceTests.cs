@@ -5,11 +5,6 @@ using AuctionSite.Domain.Entity;
 using AuctionSite.Models.SaveList;
 using AuctionSite.Models.SaveList.Request;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Service
 {

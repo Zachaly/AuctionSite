@@ -17,18 +17,25 @@ namespace AuctionSite.Application
         }
 
         public SaveList Create(AddListRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new SaveList
+            {
+                Name = request.Name,
+                UserId = request.UserId,
+            };
 
         public ListListModel CreateListItem(SaveList list)
-        {
-            throw new NotImplementedException();
-        }
+            => new ListListModel
+            {
+                Id = list.Id,
+                Name = list.Name,
+            };
 
         public ListModel CreateModel(SaveList list)
-        {
-            throw new NotImplementedException();
-        }
+            => new ListModel 
+            { 
+                Id = list.Id,
+                Name = list.Name,
+                Items = list.Stocks.Select(stock => _listStockFactory.CreateModel(stock))
+            };
     }
 }

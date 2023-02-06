@@ -10,13 +10,22 @@ namespace AuctionSite.Application
     public class ListStockFactory : IListStockFactory
     {
         public ListStock Create(AddListStockRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new ListStock
+            {
+                ListId = request.ListId,
+                Quantity = request.Quantity,
+                StockId = request.StockId,
+            };
 
-        public ListStockModel CreateModel(ListStock request)
-        {
-            throw new NotImplementedException();
-        }
+        public ListStockModel CreateModel(ListStock stock)
+            => new ListStockModel
+            {
+                Id = stock.Id,
+                Price = stock.Stock.Product.Price,
+                ProductId = stock.Stock.ProductId,
+                ProductName = stock.Stock.Product.Name,
+                Quantity = stock.Quantity,
+                StockValue = stock.Stock.Value
+            };
     }
 }

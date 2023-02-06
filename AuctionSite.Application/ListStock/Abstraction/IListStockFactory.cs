@@ -7,6 +7,6 @@ namespace AuctionSite.Application.Abstraction
     public interface IListStockFactory
     {
         ListStock Create(AddListStockRequest request);
-        ListStockModel CreateModel(ListStock request);
+        ListStockModel CreateModel(ListStock stock);
     }
 }

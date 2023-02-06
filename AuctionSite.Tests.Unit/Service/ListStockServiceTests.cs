@@ -4,11 +4,6 @@ using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
 using AuctionSite.Models.ListStock.Request;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Service
 {
@@ -77,7 +72,7 @@ namespace AuctionSite.Tests.Unit.Service
                 new ListStock { Id = 4 },
             };
 
-            _listStockRepository.Setup(x => x.DeleteListByIdAsyncStock(It.IsAny<int>()))
+            _listStockRepository.Setup(x => x.DeleteListStokcByIdAsync(It.IsAny<int>()))
                 .Callback((int id) => stocks.Remove(stocks.Find(x => x.Id == id)));
 
             const int Id = 3;
@@ -101,7 +96,7 @@ namespace AuctionSite.Tests.Unit.Service
 
             const string Error = "error";
 
-            _listStockRepository.Setup(x => x.DeleteListByIdAsyncStock(It.IsAny<int>()))
+            _listStockRepository.Setup(x => x.DeleteListStokcByIdAsync(It.IsAny<int>()))
                 .Callback((int id) => throw new Exception(Error));
 
             const int Id = 3;

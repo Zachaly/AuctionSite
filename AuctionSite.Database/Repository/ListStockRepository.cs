@@ -14,12 +14,16 @@ namespace AuctionSite.Database.Repository
 
         public Task AddListStockAsync(ListStock stock)
         {
-            throw new NotImplementedException();
+            _dbContext.ListStock.Add(stock);
+
+            return _dbContext.SaveChangesAsync();
         }
 
-        public Task DeleteListByIdAsyncStock(int id)
+        public Task DeleteListStokcByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            _dbContext.ListStock.Remove(_dbContext.ListStock.Find(id));
+
+            return _dbContext.SaveChangesAsync();
         }
     }
 }

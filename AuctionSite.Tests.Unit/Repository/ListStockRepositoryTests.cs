@@ -1,10 +1,5 @@
 ﻿using AuctionSite.Database.Repository;
 using AuctionSite.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuctionSite.Tests.Unit.Repository
 {
@@ -29,7 +24,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             await  _repository.AddListStockAsync(stock);
 
-            Assert.Contains(_dbContext.ListStock, x => x.Quantity == stock.Id &&
+            Assert.Contains(_dbContext.ListStock, x => x.Quantity == stock.Quantity &&
                 x.StockId == stock.StockId && 
                 x.ListId == stock.ListId);
         }
@@ -48,7 +43,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             const int Id = 2;
 
-            await _repository.DeleteListByIdAsyncStock(Id);
+            await _repository.DeleteListStokcByIdAsync(Id);
 
             Assert.DoesNotContain(_dbContext.ListStock, x => x.Id == Id);
         }

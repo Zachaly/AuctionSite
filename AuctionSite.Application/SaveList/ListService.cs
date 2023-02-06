@@ -21,24 +21,55 @@ namespace AuctionSite.Application
             _responseFactory = responseFactory;
         }
 
-        public Task<ResponseModel> AddListAsync(AddListRequest request)
+        public async Task<ResponseModel> AddListAsync(AddListRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var list = _listFactory.Create(request);
+
+                await _listRepository.AddListAsync(list);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<ResponseModel> DeleteListByIdAsync(int id)
+        public async Task<ResponseModel> DeleteListByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _listRepository.DeleteListByIdAsync(id);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
         public DataResponseModel<ListModel> GetListById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = _listRepository.GetListById(id, list => _listFactory.CreateModel(list));
+
+                return _responseFactory.CreateSuccess(data);
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure<ListModel>(ex.Message);
+            }
         }
 
         public DataResponseModel<IEnumerable<ListListModel>> GetUserLists(string userId)
         {
-            throw new NotImplementedException();
+            var data = _listRepository.GetUserLists(userId, list => _listFactory.CreateListItem(list));
+
+            return _responseFactory.CreateSuccess(data);
         }
     }
 }

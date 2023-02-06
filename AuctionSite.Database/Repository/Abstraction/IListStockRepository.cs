@@ -5,6 +5,6 @@ namespace AuctionSite.Database.Repository.Abstraction
     public interface IListStockRepository
     {
         Task AddListStockAsync(ListStock stock);
-        Task DeleteListByIdAsyncStock(int id);
+        Task DeleteListStokcByIdAsync(int id);
     }
 }
