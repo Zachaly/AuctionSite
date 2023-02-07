@@ -1,9 +1,11 @@
 ﻿using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Domain.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionSite.Database.Repository
 {
+    [Implementation(typeof(IListRepository))]
     public class ListRepository : IListRepository
     {
         private readonly AppDbContext _dbContext;

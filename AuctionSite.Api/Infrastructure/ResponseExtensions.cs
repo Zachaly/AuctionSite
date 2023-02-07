@@ -31,7 +31,7 @@ namespace AuctionSite.Api.Infrastructure
 
         public static ActionResult<DataResponseModel<T>> ReturnOkOrNotFound<T>(this DataResponseModel<T> model)
         {
-            if (!model.Success)
+            if (!model.Success || model.Data is null)
                 return new NotFoundObjectResult(model);
 
             return new OkObjectResult(model);

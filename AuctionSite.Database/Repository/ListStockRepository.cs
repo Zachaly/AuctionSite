@@ -1,8 +1,10 @@
 ﻿using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Domain.Util;
 
 namespace AuctionSite.Database.Repository
 {
+    [Implementation(typeof(IListStockRepository))]
     public class ListStockRepository : IListStockRepository
     {
         private readonly AppDbContext _dbContext;
