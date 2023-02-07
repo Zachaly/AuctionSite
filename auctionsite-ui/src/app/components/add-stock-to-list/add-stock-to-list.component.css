@@ -1,0 +1,28 @@
+.add-stock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.86);
+}
+
+.add-stock > div {
+    width: 400px;
+    height: 250px;
+    top: 40%;
+    left: 40%;
+    position: fixed;
+    background-color: antiquewhite;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.add-stock > div > div {
+    display: flex;
+    width: 100%;
+}

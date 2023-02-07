@@ -1,0 +1,18 @@
+<div class="row mt-2 justify-content-md-center">
+    <div class="col-6">
+        <div class="card m-1 p-2" *ngFor="let item of lists">
+            <h4 class="d-flex justify-content-between align-items-center">
+                <a [routerLink]="['/list', item.id]" class="nav-link"> {{item.name}} </a>
+                <button class="btn btn-danger" (click)="deleteList(item.id)">Remove</button>
+            </h4>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" name="name" [(ngModel)]="newListName">
+            </div>
+            <div class="col">
+                <button class="btn btn-success" (click)="addList()">Add new list</button>
+            </div>
+        </div>
+    </div>
+</div>

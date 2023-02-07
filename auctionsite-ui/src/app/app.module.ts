@@ -27,6 +27,9 @@ import { OrderListPageComponent } from './pages/order-list-page/order-list-page.
 import { AddOrderComponent } from './components/add-order/add-order.component';
 import { AddPaymentComponent } from './components/add-payment/add-payment.component';
 import { OrderItemComponent } from './components/order-item/order-item.component';
+import { UserListsPageComponent } from './pages/user-lists-page/user-lists-page.component';
+import { AddStockToListComponent } from './components/add-stock-to-list/add-stock-to-list.component';
+import { ListPageComponent } from './pages/list-page/list-page.component';
 
 const route = (path: string, component: any) => (
   {
@@ -70,7 +73,9 @@ const routes: Routes = [
   },
   route('add-order/:cartId', AddOrderPageComponent),
   route('orders', OrderListPageComponent),
-  route('order/:id', OrderPageComponent)
+  route('order/:id', OrderPageComponent),
+  route('lists', UserListsPageComponent),
+  route('list/:id', ListPageComponent)
 ]
 
 @NgModule({
@@ -98,6 +103,9 @@ const routes: Routes = [
     AddOrderComponent,
     AddPaymentComponent,
     OrderItemComponent,
+    UserListsPageComponent,
+    AddStockToListComponent,
+    ListPageComponent,
   ],
   imports: [
     BrowserModule,
