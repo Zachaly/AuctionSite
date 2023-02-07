@@ -9,5 +9,6 @@
         public int Quantity { get; set; }
         public ICollection<StockOnHold> StocksOnHold { get; set; }
         public ICollection<OrderStock> OrderStocks { get; set; }
+        public ICollection<ListStock> ListStocks { get; set; }
     }
 }

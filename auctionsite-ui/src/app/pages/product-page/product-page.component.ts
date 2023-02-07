@@ -29,6 +29,8 @@ export class ProductPageComponent implements OnInit {
   currentImage?: number = 0
   selectedQuantity: number = 0
 
+  addingToList = false
+
   constructor(private route: ActivatedRoute, private productService: ProductService, private cartService: CartService, private authService: AuthService) { }
 
   ngOnInit(): void {

@@ -9,5 +9,6 @@ namespace AuctionSite.Domain.Entity
         public ICollection<Product> Products { get; set; }
         public int? CartId { get; set; }
         public Cart? Cart { get; set; }
+        public ICollection<SaveList> Lists { get; set; }
     }
 }

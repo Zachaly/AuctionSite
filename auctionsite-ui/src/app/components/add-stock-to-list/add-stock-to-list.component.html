@@ -1,0 +1,11 @@
+<div class="add-stock">
+    <div>
+        <select class="form-select m-1" name="list" [(ngModel)]="listId">
+            <option *ngFor="let item of lists" [value]="item.id">{{ item.name }}</option>
+        </select>
+        <div>
+            <button class="btn m-1 btn-success w-100" (click)="addToList()">Add</button>
+            <button class="btn m-1 btn-warning w-100" (click)="cancel()">Cancel</button>
+        </div>
+    </div>
+</div>

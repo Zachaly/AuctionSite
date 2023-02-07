@@ -11,17 +11,21 @@
     </div>
     <div class="col col-6">
         <h1 class="text-center">{{ product.name }}</h1>
+        <button class="btn btn-success" (click)="addingToList = true">Add to list</button>
         <p class="fs-4">
             Offer created on: {{ product.created }}
         </p>
         <p class="fs-3">
-            {{product.description}}
+            {{ product.description }} 
         </p>
         <p class="fs-4">
             Price: ${{product.price}}
         </p>
         <p class="fs-5 nav-link">
-            Offer created by: <a class="link-info" [routerLink]="['/profile', product.userId]">{{ product.userName }}</a>
+            Offer created by:
+            <a class="link-info" [routerLink]="['/profile', product.userId]">
+                {{ product.userName }}
+            </a>
         </p>
         <div class="label-flex">
             <label class="fs-3" for="currentStock">{{product.stockName}}:</label>
@@ -41,3 +45,5 @@
             to cart</button>
     </div>
 </div>
+
+<app-add-stock-to-list *ngIf="addingToList" [stockId]="currentStock.id ?? 0" [quantity]="selectedQuantity" (exit)="addingToList = false"/>
