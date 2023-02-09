@@ -69,7 +69,7 @@ namespace AuctionSite.Application
             throw new NotImplementedException();
         }
 
-        public Task<DataResponseModel<IEnumerable<OrderItem>>> GetProductOrders(int productId)
+        public Task<DataResponseModel<IEnumerable<OrderManagementItem>>> GetProductOrders(int productId)
         {
             throw new NotImplementedException();
         }

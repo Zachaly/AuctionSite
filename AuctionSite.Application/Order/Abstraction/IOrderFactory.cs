@@ -11,5 +11,6 @@ namespace AuctionSite.Application.Abstraction
         OrderListItem CreateListItem(Order order);
         OrderModel CreateModel(Order order);
         ProductOrderModel CreateModel(OrderStock stock);
+        OrderManagementItem CreateManagementItem(OrderStock stock);
     }
 }

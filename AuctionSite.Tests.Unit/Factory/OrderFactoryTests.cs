@@ -1,6 +1,8 @@
 ﻿using AuctionSite.Application;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Domain.Enum;
 using AuctionSite.Models.Order.Request;
+using FluentValidation;
 
 namespace AuctionSite.Tests.Unit.Factory
 {
@@ -67,8 +69,9 @@ namespace AuctionSite.Tests.Unit.Factory
                         Name = "product"
                     },
                     Value = "stock",
-                    ProductId = 4
+                    ProductId = 4,
                 },
+                RealizationStatus = RealizationStatus.Pending
             };
 
             var order = new Order
@@ -102,6 +105,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(stock.Stock.Product.Name, item.ProductName);
             Assert.Equal(stock.Stock.ProductId, item.ProductId);
             Assert.Equal(stock.Stock.Product.Price, item.Price);
+            Assert.Equal(stock.RealizationStatus, item.Status);
         }
 
         [Fact]
@@ -116,6 +120,79 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(stockOnHold.Quantity, stock.Quantity);
             Assert.Equal(stockOnHold.StockId, stock.StockId);
             Assert.Equal(OrderId, stock.OrderId);
+            Assert.Equal(RealizationStatus.Pending, stock.RealizationStatus);
+        }
+
+        [Fact]
+        public void CreateProductOrderModel()
+        {
+            var stock = new OrderStock 
+            { 
+                Id = 1,
+                RealizationStatus = RealizationStatus.Pending,
+                Quantity = 2,
+                StockId = 3,
+                Stock = new Stock
+                {
+                    Id = 3,
+                    Value = "val",
+                },
+                Order = new Order
+                {
+                    Name = "johhny",
+                    Address = "Addr",
+                    City = "krk",
+                    CreationDate = DateTime.Now,
+                    Email = "email",
+                    PaymentId = "payment",
+                    PhoneNumber = "1234567890",
+                    PostalCode = "12345"
+                }
+            };
+
+            var model = _factory.CreateModel(stock);
+
+            Assert.Equal(stock.Id, model.Id);
+            Assert.Equal(stock.RealizationStatus, model.Status);
+            Assert.Equal(stock.Quantity, model.Quantity);
+            Assert.Equal(stock.StockId, model.StockId);
+            Assert.Equal(stock.Stock.Value, model.StockName);
+            Assert.Equal(stock.Order.Name, model.Name);
+            Assert.Equal(stock.Order.Address, model.Address);
+            Assert.Equal(stock.Order.Email, model.Email);
+            Assert.Equal(stock.Order.PaymentId, model.PaymentId);
+            Assert.Equal(stock.Order.City, model.City);
+            Assert.Equal(stock.Order.CreationDate.ToString("dd.MM.yyyy"), model.CreationDate);
+            Assert.Equal(stock.Order.PhoneNumber, model.PhoneNumber);
+            Assert.Equal(stock.Order.PostalCode, model.PostalCode);
+        }
+
+        [Fact]
+        public void CreateManagementItem()
+        {
+            var stock = new OrderStock
+            {
+                Id = 2,
+                Quantity = 3,
+                Stock = new Stock
+                {
+                    Product = new Product
+                    {
+                        Price = 123,
+                        Id = 4,
+                        Name = "product"
+                    },
+                    Value = "stock",
+                    ProductId = 4,
+                },
+                RealizationStatus = RealizationStatus.Pending
+            };
+
+            var item = _factory.CreateManagementItem(stock);
+
+            Assert.Equal(stock.Id, item.OrderStockId);
+            Assert.Equal(stock.Stock.Value, item.StockName);
+            Assert.Equal(stock.RealizationStatus, item.Status);
         }
     }
 }

@@ -4,8 +4,10 @@ namespace AuctionSite.Models.Order
 {
     public class ProductOrderModel
     {
+        public int Id { get; set; }
         public int StockId { get; set; }
-        public int StockName { get; set; }
+        public string StockName { get; set; }
+        public int Quantity { get; set; }
         public string City { get; set; }
         public string PostalCode { get; set; }
         public string Email { get; set; }
@@ -13,7 +15,7 @@ namespace AuctionSite.Models.Order
         public string Address { get; set; }
         public string Name { get; set; }
         public string? PaymentId { get; set; }
-        public DateTime CreationDate { get; set; }
+        public string CreationDate { get; set; }
         public RealizationStatus Status { get; set; }
     }
 }

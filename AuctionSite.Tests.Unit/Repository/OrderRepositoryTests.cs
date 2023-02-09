@@ -1,5 +1,6 @@
 ﻿using AuctionSite.Database.Repository;
 using AuctionSite.Domain.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionSite.Tests.Unit.Repository
 {
@@ -118,5 +119,146 @@ namespace AuctionSite.Tests.Unit.Repository
 
             Assert.Equivalent(orders.Where(x => x.UserId == Id).Select(x => x.Id), res.Select(x => x.Id));
         }
+
+        [Fact]
+        public async Task GetProductOrderStocks()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                ProductId = 1,
+                Quantity = 123,
+                Value = "val",
+            };
+
+            var product = new Product
+            {
+                Id = 1,
+                OwnerId = "id",
+                Description = "desc",
+                StockName = "sname",
+                Name = "name",
+                Price = 123,
+                Stocks = new List<Stock>
+                {
+                    stock
+                }
+            };
+
+            AddContent(new List<Product>
+            {
+                product,
+                new Product
+                {
+                    Id = 2,
+                    OwnerId = "id",
+                    Description = "desc",
+                    StockName = "sname",
+                    Name = "name",
+                    Price = 123,
+                    Stocks = new List<Stock>
+                    {
+                        new Stock
+                        {
+                            Id = 2,
+                            ProductId = 2,
+                            Quantity = 1,
+                            Value = "val"
+                        }
+                    }
+                }
+            });
+
+            var order = new Order
+            {
+                Address = "addr",
+                City = "city",
+                Email = "email",
+                PaymentId = "payment",
+                Id = 1,
+                PhoneNumber = "12345",
+                PostalCode = "12345",
+                Name = "name",
+                UserId = "id",
+            };
+
+            AddContent(order);
+
+            AddContent(new List<OrderStock>
+            {
+                new OrderStock { Id = 1, OrderId = order.Id, Quantity = 1, StockId = stock.Id },
+                new OrderStock { Id = 2, OrderId = order.Id, Quantity = 1, StockId = 2 },
+                new OrderStock { Id = 3, OrderId = order.Id, Quantity = 1, StockId = stock.Id },
+                new OrderStock { Id = 4, OrderId = order.Id, Quantity = 1, StockId = 2 },
+                new OrderStock { Id = 5, OrderId = order.Id, Quantity = 1, StockId = stock.Id },
+            });
+
+            var orderStocks = _dbContext.OrderStock.Include(x => x.Stock).ThenInclude(x => x.Product)
+                .Where(x => x.Stock.ProductId == product.Id).ToList();
+
+            var res = _repository.GetProductOrderStocks(product.Id, x => x);
+           
+            Assert.Equivalent(orderStocks.Select(x => x.Id), res.Select(x => x.Id));
+        }
+
+        [Fact]
+        public void GetOrderStockById()
+        {
+            var stock = new Stock
+            {
+                Quantity = 2,
+                Value = "val",
+                Product = new Product
+                {
+                    Description = "Description",
+                    Name = "Name",
+                    OwnerId = "id",
+                    StockName = "Name",
+                }
+            };
+
+            var order = new Order
+            {
+                Address = "addr",
+                City = "krk",
+                Email = "email",
+                Name = "Name",
+                PaymentId = "id",
+                PhoneNumber = "12345",
+                PostalCode = "12345",
+                UserId = "id",
+            };
+
+            var orderStock = new OrderStock { Id = 3, Quantity = 2, RealizationStatus = 0, Order = order, Stock = stock };
+
+            AddContent(orderStock);
+
+            var res = _repository.GetOrderStockByIdAsync(orderStock.Id, x => x);
+
+            Assert.Equal(orderStock.Id, res.Id);
+            Assert.NotNull(res.Stock);
+            Assert.NotNull(res.Order);
+        }
+
+        [Fact]
+        public async Task UpdateOrderStockAsync()
+        {
+            var stock = new OrderStock 
+            { 
+                Id = 3,
+                Quantity = 2,
+                RealizationStatus = 0,
+                OrderId = 3,
+                StockId = 4
+            };
+
+            AddContent(stock);
+
+            stock.RealizationStatus++;
+
+            await _repository.UpdateOrderStock(stock);
+
+            Assert.Equal(1, (int)_dbContext.OrderStock.First(x => x.Id == stock.Id).RealizationStatus);
+        } 
     }
 }

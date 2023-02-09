@@ -1,7 +1,9 @@
 ﻿using AuctionSite.Application;
 using AuctionSite.Application.Abstraction;
+using AuctionSite.Database.Migrations;
 using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Domain.Enum;
 using AuctionSite.Models.Order;
 using AuctionSite.Models.Order.Request;
 using AuctionSite.Models.Response;
@@ -159,6 +161,106 @@ namespace AuctionSite.Tests.Unit.Service
 
             Assert.True(res.Success);
             Assert.Equivalent(res.Data.Select(x => x.Id), orders.Select(x => x.Id));
+        }
+
+        [Fact]
+        public async Task MoveRealizationStatus_Success()
+        {
+            var stock = new OrderStock
+            {
+                RealizationStatus = RealizationStatus.Pending
+            };
+
+            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderStock>>()))
+                .Returns((int _, Func<OrderStock, OrderStock> selector) => selector(stock));
+
+            _orderRepository.Setup(x => x.UpdateOrderStock(It.IsAny<OrderStock>()));
+
+            var res = await _service.MoveRealizationStatus(1);
+
+            Assert.True(res.Success);
+            Assert.Equal(RealizationStatus.Shipment, stock.RealizationStatus);
+        }
+
+        [Fact]
+        public async Task MoveRealizationStatus_MaxStatus_NoChange_Fail()
+        {
+            var stock = new OrderStock
+            {
+                RealizationStatus = RealizationStatus.Delivered
+            };
+
+            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderStock>>()))
+                .Returns((int _, Func<OrderStock, OrderStock> selector) => selector(stock));
+
+            _orderRepository.Setup(x => x.UpdateOrderStock(It.IsAny<OrderStock>()));
+
+            var res = await _service.MoveRealizationStatus(1);
+
+            Assert.False(res.Success);
+            Assert.Equal(RealizationStatus.Delivered, stock.RealizationStatus);
+        }
+
+        [Fact]
+        public async Task MoveRealizationStatus_ExceptionThrown_Fail()
+        {
+            const string Error = "error";
+
+            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderStock>>()))
+                .Callback(() => throw new Exception(Error));
+
+            var res = await _service.MoveRealizationStatus(0);
+
+            Assert.False(res.Success);
+            Assert.Equal(Error, res.Error);
+        }
+
+        [Fact]
+        public async Task GetOrderStockById_Success()
+        {
+            var stock = new OrderStock
+            {
+                Id = 1,
+                Quantity = 2,
+            };
+
+            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, ProductOrderModel>>()))
+                .Returns((int _, Func<OrderStock, ProductOrderModel> selector) => selector(stock));
+
+            _orderFactory.Setup(x => x.CreateModel(It.IsAny<OrderStock>()))
+                .Returns((OrderStock orderStock) => new ProductOrderModel { Id = orderStock.Id, Quantity = orderStock.Quantity });
+
+            MockDataResponse<ProductOrderModel>();
+
+            var res = await _service.GetOrderStockById(0);
+
+            Assert.True(res.Success);
+            Assert.Equal(stock.Quantity, res.Data.Quantity);
+        }
+
+        [Fact]
+        public async Task GetProductOrders_Success()
+        {
+            var orders = new List<OrderStock>
+            {
+                new OrderStock { Id = 1, Quantity = 2 },
+                new OrderStock { Id = 2, Quantity = 2 },
+                new OrderStock { Id = 3, Quantity = 2 },
+                new OrderStock { Id = 4, Quantity = 2 },
+            };
+
+            _orderRepository.Setup(x => x.GetProductOrderStocks(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderItem>>()))
+                .Returns((int _, Func<OrderStock, OrderItem> selector) => orders.Select(selector));
+
+            _orderFactory.Setup(x => x.CreateManagementItem(It.IsAny<OrderStock>()))
+                .Returns((OrderStock stock) => new OrderManagementItem { OrderStockId = stock.Id, Quantity = stock.Quantity });
+
+            MockDataResponse<IEnumerable<OrderItem>>();
+
+            var res = await _service.GetProductOrders(0);
+
+            Assert.True(res.Success);
+            Assert.Equivalent(res.Data.Select(x => x.OrderStockId), orders.Select(x => x.Id));
         }
     }
 }

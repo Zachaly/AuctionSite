@@ -23,6 +23,11 @@ namespace AuctionSite.Application
                 UserId = request.UserId,
             };
 
+        public OrderManagementItem CreateManagementItem(OrderStock stock)
+        {
+            throw new NotImplementedException();
+        }
+
         public OrderListItem CreateListItem(Order order)
             => new OrderListItem
             {
@@ -51,6 +56,11 @@ namespace AuctionSite.Application
                 PhoneNumber = order.PhoneNumber,
                 PostalCode = order.PostalCode,
             };
+
+        public ProductOrderModel CreateModel(OrderStock stock)
+        {
+            throw new NotImplementedException();
+        }
 
         public OrderStock CreateStock(StockOnHold stockOnHold, int orderId)
             => new OrderStock
