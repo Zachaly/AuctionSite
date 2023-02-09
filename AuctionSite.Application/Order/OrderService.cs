@@ -63,5 +63,20 @@ namespace AuctionSite.Application
 
             return Task.FromResult(_responseFactory.CreateSuccess(orders));
         }
+
+        public Task<DataResponseModel<ProductOrderModel>> GetOrderStockById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DataResponseModel<IEnumerable<OrderItem>>> GetProductOrders(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseModel> MoveRealizationStatus(int orderStockId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace AuctionSite.Models.Order
+﻿using AuctionSite.Domain.Enum;
+
+namespace AuctionSite.Models.Order
 {
     public class OrderItem
     {
@@ -8,5 +10,6 @@
         public string StockName { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }  
+        public RealizationStatus Status { get; set; }
     }
 }
