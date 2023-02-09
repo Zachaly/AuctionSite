@@ -224,13 +224,13 @@ namespace AuctionSite.Tests.Unit.Service
                 Quantity = 2,
             };
 
-            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, ProductOrderModel>>()))
-                .Returns((int _, Func<OrderStock, ProductOrderModel> selector) => selector(stock));
+            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderProductModelModel>>()))
+                .Returns((int _, Func<OrderStock, OrderProductModelModel> selector) => selector(stock));
 
             _orderFactory.Setup(x => x.CreateModel(It.IsAny<OrderStock>()))
-                .Returns((OrderStock orderStock) => new ProductOrderModel { Id = orderStock.Id, Quantity = orderStock.Quantity });
+                .Returns((OrderStock orderStock) => new OrderProductModelModel { Id = orderStock.Id, Quantity = orderStock.Quantity });
 
-            MockDataResponse<ProductOrderModel>();
+            MockDataResponse<OrderProductModelModel>();
 
             var res = await _service.GetOrderStockById(0);
 
@@ -255,7 +255,7 @@ namespace AuctionSite.Tests.Unit.Service
             _orderFactory.Setup(x => x.CreateManagementItem(It.IsAny<OrderStock>()))
                 .Returns((OrderStock stock) => new OrderManagementItem { OrderStockId = stock.Id, Quantity = stock.Quantity });
 
-            MockDataResponse<IEnumerable<OrderItem>>();
+            MockDataResponse<IEnumerable<OrderManagementItem>>();
 
             var res = await _service.GetProductOrders(0);
 

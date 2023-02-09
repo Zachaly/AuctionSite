@@ -1,5 +1,6 @@
 ﻿using AuctionSite.Application.Abstraction;
 using AuctionSite.Database.Repository.Abstraction;
+using AuctionSite.Domain.Enum;
 using AuctionSite.Domain.Util;
 using AuctionSite.Models.Order;
 using AuctionSite.Models.Order.Request;
@@ -64,19 +65,41 @@ namespace AuctionSite.Application
             return Task.FromResult(_responseFactory.CreateSuccess(orders));
         }
 
-        public Task<DataResponseModel<ProductOrderModel>> GetOrderStockById(int id)
+        public async Task<DataResponseModel<OrderProductModelModel>> GetOrderStockById(int id)
         {
-            throw new NotImplementedException();
+            var data = _orderRepository.GetOrderStockByIdAsync(id, stock => _orderFactory.CreateModel(stock));
+
+            return _responseFactory.CreateSuccess(data);
         }
 
-        public Task<DataResponseModel<IEnumerable<OrderManagementItem>>> GetProductOrders(int productId)
+        public async Task<DataResponseModel<IEnumerable<OrderManagementItem>>> GetProductOrders(int productId)
         {
-            throw new NotImplementedException();
+            var data = _orderRepository.GetProductOrderStocks(productId, stock => _orderFactory.CreateManagementItem(stock));
+
+            return _responseFactory.CreateSuccess(data);
         }
 
-        public Task<ResponseModel> MoveRealizationStatus(int orderStockId)
+        public async Task<ResponseModel> MoveRealizationStatus(int orderStockId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var stock = _orderRepository.GetOrderStockByIdAsync(orderStockId, stock => stock);
+
+                if(stock.RealizationStatus >= RealizationStatus.Delivered)
+                {
+                    return _responseFactory.CreateFailure("Order already delivered");
+                }
+
+                stock.RealizationStatus++;
+
+                await _orderRepository.UpdateOrderStock(stock);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

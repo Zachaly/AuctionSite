@@ -193,6 +193,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(stock.Id, item.OrderStockId);
             Assert.Equal(stock.Stock.Value, item.StockName);
             Assert.Equal(stock.RealizationStatus, item.Status);
+            Assert.Equal(stock.Quantity, item.Quantity);
         }
     }
 }
