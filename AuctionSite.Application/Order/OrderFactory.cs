@@ -29,7 +29,8 @@ namespace AuctionSite.Application
                 Status = stock.RealizationStatus,
                 OrderStockId = stock.Id,
                 Quantity = stock.Quantity,
-                StockName = stock.Stock.Value
+                StockName = stock.Stock.Value,
+                Created = stock.Order.CreationDate.ToString("dd.MM.yyyy")
             };
 
         public OrderListItem CreateListItem(Order order)
@@ -61,8 +62,8 @@ namespace AuctionSite.Application
                 PostalCode = order.PostalCode,
             };
 
-        public OrderProductModelModel CreateModel(OrderStock stock)
-            => new OrderProductModelModel
+        public OrderProductModel CreateModel(OrderStock stock)
+            => new OrderProductModel
             {
                 Address = stock.Order.Address,
                 City = stock.Order.City,

@@ -65,7 +65,7 @@ namespace AuctionSite.Application
             return Task.FromResult(_responseFactory.CreateSuccess(orders));
         }
 
-        public async Task<DataResponseModel<OrderProductModelModel>> GetOrderStockById(int id)
+        public async Task<DataResponseModel<OrderProductModel>> GetOrderStockById(int id)
         {
             var data = _orderRepository.GetOrderStockByIdAsync(id, stock => _orderFactory.CreateModel(stock));
 
@@ -79,11 +79,11 @@ namespace AuctionSite.Application
             return _responseFactory.CreateSuccess(data);
         }
 
-        public async Task<ResponseModel> MoveRealizationStatus(int orderStockId)
+        public async Task<ResponseModel> MoveRealizationStatus(MoveRealizationStatusRequest request)
         {
             try
             {
-                var stock = _orderRepository.GetOrderStockByIdAsync(orderStockId, stock => stock);
+                var stock = _orderRepository.GetOrderStockByIdAsync(request.StockId, stock => stock);
 
                 if(stock.RealizationStatus >= RealizationStatus.Delivered)
                 {

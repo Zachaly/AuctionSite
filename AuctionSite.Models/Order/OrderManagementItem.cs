@@ -8,5 +8,6 @@ namespace AuctionSite.Models.Order
         public string StockName { get; set; }
         public int Quantity { get; set; }
         public RealizationStatus Status { get; set; }
+        public string Created { get; set; }
     }
 }

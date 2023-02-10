@@ -2,7 +2,7 @@
 
 namespace AuctionSite.Models.Order
 {
-    public class OrderProductModelModel
+    public class OrderProductModel
     {
         public int Id { get; set; }
         public int StockId { get; set; }

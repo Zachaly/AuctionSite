@@ -185,7 +185,11 @@ namespace AuctionSite.Tests.Unit.Factory
                     Value = "stock",
                     ProductId = 4,
                 },
-                RealizationStatus = RealizationStatus.Pending
+                RealizationStatus = RealizationStatus.Pending,
+                Order = new Order
+                {
+                    CreationDate = DateTime.Now,
+                }
             };
 
             var item = _factory.CreateManagementItem(stock);
@@ -194,6 +198,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(stock.Stock.Value, item.StockName);
             Assert.Equal(stock.RealizationStatus, item.Status);
             Assert.Equal(stock.Quantity, item.Quantity);
+            Assert.Equal(stock.Order.CreationDate.ToString("dd.MM.yyyy"), item.Created);
         }
     }
 }

@@ -176,7 +176,9 @@ namespace AuctionSite.Tests.Unit.Service
 
             _orderRepository.Setup(x => x.UpdateOrderStock(It.IsAny<OrderStock>()));
 
-            var res = await _service.MoveRealizationStatus(1);
+            var request = new MoveRealizationStatusRequest { StockId = 1 };
+
+            var res = await _service.MoveRealizationStatus(request);
 
             Assert.True(res.Success);
             Assert.Equal(RealizationStatus.Shipment, stock.RealizationStatus);
@@ -195,7 +197,9 @@ namespace AuctionSite.Tests.Unit.Service
 
             _orderRepository.Setup(x => x.UpdateOrderStock(It.IsAny<OrderStock>()));
 
-            var res = await _service.MoveRealizationStatus(1);
+            var request = new MoveRealizationStatusRequest { StockId = 1 };
+
+            var res = await _service.MoveRealizationStatus(request);
 
             Assert.False(res.Success);
             Assert.Equal(RealizationStatus.Delivered, stock.RealizationStatus);
@@ -209,7 +213,9 @@ namespace AuctionSite.Tests.Unit.Service
             _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderStock>>()))
                 .Callback(() => throw new Exception(Error));
 
-            var res = await _service.MoveRealizationStatus(0);
+            var request = new MoveRealizationStatusRequest { StockId = 1 };
+
+            var res = await _service.MoveRealizationStatus(request);
 
             Assert.False(res.Success);
             Assert.Equal(Error, res.Error);
@@ -224,13 +230,13 @@ namespace AuctionSite.Tests.Unit.Service
                 Quantity = 2,
             };
 
-            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderProductModelModel>>()))
-                .Returns((int _, Func<OrderStock, OrderProductModelModel> selector) => selector(stock));
+            _orderRepository.Setup(x => x.GetOrderStockByIdAsync(It.IsAny<int>(), It.IsAny<Func<OrderStock, OrderProductModel>>()))
+                .Returns((int _, Func<OrderStock, OrderProductModel> selector) => selector(stock));
 
             _orderFactory.Setup(x => x.CreateModel(It.IsAny<OrderStock>()))
-                .Returns((OrderStock orderStock) => new OrderProductModelModel { Id = orderStock.Id, Quantity = orderStock.Quantity });
+                .Returns((OrderStock orderStock) => new OrderProductModel { Id = orderStock.Id, Quantity = orderStock.Quantity });
 
-            MockDataResponse<OrderProductModelModel>();
+            MockDataResponse<OrderProductModel>();
 
             var res = await _service.GetOrderStockById(0);
 
