@@ -1,4 +1,4 @@
-<div class="card">
+<div [class]="'card bg-' + colorClass()">
     <div class="cart-header text-center fs-5">
         <a class="nav-link" [routerLink]="['/product', item.productId]">
             {{ item.productName}} - {{ item.stockName }}
@@ -13,6 +13,9 @@
         </div>
         <div>
             Price: ${{countPrice()}}
+        </div>
+        <div *ngIf="item.status == 1">
+            <button class="btn btn-success w-100" (click)="moveStatusClick()">Received</button>
         </div>
     </div>
 </div>

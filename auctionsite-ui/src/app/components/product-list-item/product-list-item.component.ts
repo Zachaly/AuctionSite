@@ -7,5 +7,5 @@ import ProductListItem from 'src/models/ProductListItem';
   styleUrls: ['./product-list-item.component.css']
 })
 export class ProductListItemComponent {
-  @Input() product: ProductListItem = { id: 0, name: '', imageId: 0}
+  @Input() product: ProductListItem = { id: 0, name: '', imageId: 0 }
 }

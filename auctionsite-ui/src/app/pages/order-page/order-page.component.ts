@@ -27,4 +27,8 @@ export class OrderPageComponent implements OnInit {
         .subscribe(res => this.order = res.data!)
     })
   }
+
+  setReceived(stockId: number) {
+    this.orderService.moveRealizationStatus(stockId).subscribe()
+  }
 }

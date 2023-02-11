@@ -1,0 +1,5 @@
+<div class="row justify-content-center">
+    <div class="col-6">
+        <app-order-management-item [order]="order" *ngFor="let order of orders" (moveStatus)="moveStatus(order.orderStockId)"/>
+    </div>
+</div>

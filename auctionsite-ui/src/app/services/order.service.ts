@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import DataResponseModel from 'src/models/DataResponseModel';
 import OrderListItem from 'src/models/OrderListItem';
+import OrderManagementItem from 'src/models/OrderManagementItem';
 import OrderModel from 'src/models/OrderModel';
 import AddOrderRequest from 'src/models/request/AddOrderRequest';
 import { AuthService } from './auth.service';
@@ -41,5 +42,13 @@ export class OrderService {
         'Authorization': `Bearer ${this.authService.userData.authToken}`
       })
     })
+  }
+
+  moveRealizationStatus(stockId: number) : Observable<any> {
+    return this.http.patch(`${API_URL}/move-realization-status`, { stockId }, this.httpOptions())
+  }
+
+  getProductOrders(productId: number) : Observable<DataResponseModel<OrderManagementItem[]>>{
+    return this.http.get<DataResponseModel<OrderManagementItem[]>>(`${API_URL}/stocks/${productId}`, this.httpOptions())
   }
 }
