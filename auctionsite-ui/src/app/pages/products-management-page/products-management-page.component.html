@@ -1,0 +1,5 @@
+<h2 class="m-2 text-center">Your products:</h2>
+<div class="d-flex flex-wrap">
+    <app-product-management-list-item [product]="product" *ngFor="let product of products" />
+</div>
+<app-page-bar [count]="pageCount" (changePage)="changePage($event)" />

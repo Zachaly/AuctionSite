@@ -44,5 +44,28 @@ namespace AuctionSite.Database.Repository
 
         public IEnumerable<T> GetOrdersByUserId<T>(string userId, Func<Order, T> selector)
             => _dbContext.Order.Where(order => order.UserId == userId).Select(selector);
+
+        public T GetOrderStockByIdAsync<T>(int id, Func<OrderStock, T> selector)
+            => _dbContext.OrderStock
+                .Include(stock => stock.Stock)
+                .Include(stock => stock.Order)
+                .Where(stock => stock.Id == id)
+                .Select(selector)
+                .FirstOrDefault();
+
+
+        public IEnumerable<T> GetProductOrderStocks<T>(int productId, Func<OrderStock, T> selector)
+            => _dbContext.OrderStock
+                .Include(stock => stock.Stock)
+                .Include(stock => stock.Order)
+                .Where(stock => stock.Stock.ProductId == productId)
+                .Select(selector);
+
+        public Task UpdateOrderStock(OrderStock stock)
+        {
+            _dbContext.OrderStock.Update(stock);
+
+            return _dbContext.SaveChangesAsync();
+        }
     }
 }

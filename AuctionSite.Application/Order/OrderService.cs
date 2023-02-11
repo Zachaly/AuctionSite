@@ -1,5 +1,6 @@
 ﻿using AuctionSite.Application.Abstraction;
 using AuctionSite.Database.Repository.Abstraction;
+using AuctionSite.Domain.Enum;
 using AuctionSite.Domain.Util;
 using AuctionSite.Models.Order;
 using AuctionSite.Models.Order.Request;
@@ -62,6 +63,43 @@ namespace AuctionSite.Application
             var orders = _orderRepository.GetOrdersByUserId(userId, order => _orderFactory.CreateListItem(order));
 
             return Task.FromResult(_responseFactory.CreateSuccess(orders));
+        }
+
+        public async Task<DataResponseModel<OrderProductModel>> GetOrderStockById(int id)
+        {
+            var data = _orderRepository.GetOrderStockByIdAsync(id, stock => _orderFactory.CreateModel(stock));
+
+            return _responseFactory.CreateSuccess(data);
+        }
+
+        public async Task<DataResponseModel<IEnumerable<OrderManagementItem>>> GetProductOrders(int productId)
+        {
+            var data = _orderRepository.GetProductOrderStocks(productId, stock => _orderFactory.CreateManagementItem(stock));
+
+            return _responseFactory.CreateSuccess(data);
+        }
+
+        public async Task<ResponseModel> MoveRealizationStatus(MoveRealizationStatusRequest request)
+        {
+            try
+            {
+                var stock = _orderRepository.GetOrderStockByIdAsync(request.StockId, stock => stock);
+
+                if(stock.RealizationStatus >= RealizationStatus.Delivered)
+                {
+                    return _responseFactory.CreateFailure("Order already delivered");
+                }
+
+                stock.RealizationStatus++;
+
+                await _orderRepository.UpdateOrderStock(stock);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

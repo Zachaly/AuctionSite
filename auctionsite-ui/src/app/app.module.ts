@@ -30,6 +30,11 @@ import { OrderItemComponent } from './components/order-item/order-item.component
 import { UserListsPageComponent } from './pages/user-lists-page/user-lists-page.component';
 import { AddStockToListComponent } from './components/add-stock-to-list/add-stock-to-list.component';
 import { ListPageComponent } from './pages/list-page/list-page.component';
+import { OrderManagementItemComponent } from './components/order-management-item/order-management-item.component';
+import { ProductsManagementPageComponent } from './pages/products-management-page/products-management-page.component';
+import { OrderManagementPageComponent } from './pages/order-management-page/order-management-page.component';
+import { ProductManagementPageComponent } from './pages/product-management-page/product-management-page.component';
+import { ProductManagementListItemComponent } from './components/product-management-list-item/product-management-list-item.component';
 
 const route = (path: string, component: any) => (
   {
@@ -39,43 +44,22 @@ const route = (path: string, component: any) => (
 )
 
 const routes: Routes = [
-  {
-    path: '',
-    component: MainPageComponent
-  },
-  {
-    path: 'login',
-    component: LoginPageComponent
-  },
-  {
-    path: 'register',
-    component: RegisterPageComponent
-  },
-  {
-    path: 'profile/:userId',
-    component: ProfilePageComponent
-  },
-  {
-    path: 'update-profile',
-    component: UpdateProfilePageComponent
-  },
-  {
-    path: 'add-product',
-    component: AddProductPageComponent
-  },
-  {
-    path: 'product/:id',
-    component: ProductPageComponent
-  },
-  {
-    path: 'cart',
-    component: CartPageComponent
-  },
+  route('', MainPageComponent),
+  route('login', LoginPageComponent),
+  route('register', RegisterPageComponent),
+  route('profile/:userId', ProfilePageComponent),
+  route('update-profile', UpdateProfilePageComponent),
+  route('add-product', AddProductPageComponent),
+  route('product/:id', ProductPageComponent),
+  route('cart', CartPageComponent),
   route('add-order/:cartId', AddOrderPageComponent),
   route('orders', OrderListPageComponent),
   route('order/:id', OrderPageComponent),
   route('lists', UserListsPageComponent),
-  route('list/:id', ListPageComponent)
+  route('list/:id', ListPageComponent),
+  route('product-management', ProductsManagementPageComponent),
+  route('product-management/:productId', ProductManagementPageComponent),
+  route('order-management/:id', OrderManagementPageComponent)
 ]
 
 @NgModule({
@@ -106,6 +90,11 @@ const routes: Routes = [
     UserListsPageComponent,
     AddStockToListComponent,
     ListPageComponent,
+    OrderManagementItemComponent,
+    ProductsManagementPageComponent,
+    OrderManagementPageComponent,
+    ProductManagementPageComponent,
+    ProductManagementListItemComponent,
   ],
   imports: [
     BrowserModule,

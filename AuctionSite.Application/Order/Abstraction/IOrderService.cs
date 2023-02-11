@@ -9,5 +9,8 @@ namespace AuctionSite.Application.Abstraction
         Task<DataResponseModel<OrderModel>> GetOrderByIdAsync(int id);
         Task<DataResponseModel<IEnumerable<OrderListItem>>> GetOrdersByUserIdAsync(string userId);
         Task<ResponseModel> AddOrderAsync(AddOrderRequest request);
+        Task<ResponseModel> MoveRealizationStatus(MoveRealizationStatusRequest request);
+        Task<DataResponseModel<IEnumerable<OrderManagementItem>>> GetProductOrders(int productId);
+        Task<DataResponseModel<OrderProductModel>> GetOrderStockById(int id);
     }
 }

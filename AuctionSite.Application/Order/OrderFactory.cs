@@ -23,6 +23,16 @@ namespace AuctionSite.Application
                 UserId = request.UserId,
             };
 
+        public OrderManagementItem CreateManagementItem(OrderStock stock)
+            => new OrderManagementItem
+            {
+                Status = stock.RealizationStatus,
+                OrderStockId = stock.Id,
+                Quantity = stock.Quantity,
+                StockName = stock.Stock.Value,
+                Created = stock.Order.CreationDate.ToString("dd.MM.yyyy")
+            };
+
         public OrderListItem CreateListItem(Order order)
             => new OrderListItem
             {
@@ -45,11 +55,30 @@ namespace AuctionSite.Application
                     ProductName = stock.Stock.Product.Name,
                     Quantity = stock.Quantity,
                     StockName = stock.Stock.Value,
+                    Status = stock.RealizationStatus
                 }),
                 Name = order.Name,
                 PaymentId = order.PaymentId,
                 PhoneNumber = order.PhoneNumber,
                 PostalCode = order.PostalCode,
+            };
+
+        public OrderProductModel CreateModel(OrderStock stock)
+            => new OrderProductModel
+            {
+                Address = stock.Order.Address,
+                City = stock.Order.City,
+                CreationDate = stock.Order.CreationDate.ToString("dd.MM.yyyy"),
+                Email = stock.Order.Email,
+                Id = stock.Id,
+                Name = stock.Order.Name,
+                PaymentId = stock.Order.PaymentId,
+                PhoneNumber = stock.Order.PhoneNumber,
+                PostalCode = stock.Order.PostalCode,
+                Quantity = stock.Quantity,
+                Status = stock.RealizationStatus,
+                StockId = stock.StockId,
+                StockName = stock.Stock.Value
             };
 
         public OrderStock CreateStock(StockOnHold stockOnHold, int orderId)

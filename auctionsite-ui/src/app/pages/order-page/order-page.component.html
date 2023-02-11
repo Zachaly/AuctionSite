@@ -8,7 +8,8 @@
         <app-profile-list-item name="City" [value]="order.city" />
         <app-profile-list-item name="Payment Id" [value]="order.paymentId" />
         <div>
-            <app-order-item *ngFor="let item of order.items" [item]="item"/>
+            <app-order-item *ngFor="let item of order.items" [item]="item"
+                (moveStatus)="setReceived(item.orderStockId)" />
         </div>
     </div>
 </div>
