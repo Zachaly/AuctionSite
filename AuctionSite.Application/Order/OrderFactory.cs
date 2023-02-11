@@ -55,6 +55,7 @@ namespace AuctionSite.Application
                     ProductName = stock.Stock.Product.Name,
                     Quantity = stock.Quantity,
                     StockName = stock.Stock.Value,
+                    Status = stock.RealizationStatus
                 }),
                 Name = order.Name,
                 PaymentId = order.PaymentId,
