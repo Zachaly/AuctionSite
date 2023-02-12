@@ -5,6 +5,7 @@ using AuctionSite.Domain.Entity;
 using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Moq;
+using FluentValidation.Results;
 
 namespace AuctionSite.Tests.Unit.Service
 {
@@ -189,6 +190,9 @@ namespace AuctionSite.Tests.Unit.Service
 
             _stockRepository.Setup(x => x.GetStockById(It.IsAny<int>(), It.IsAny<Func<Stock, Stock>>()))
                 .Returns(stock);
+
+            _responseFactory.Setup(x => x.CreateValidationError(It.IsAny<ValidationResult>()))
+                .Returns(new ResponseModel { Success = false });
 
             var request = new UpdateStockRequest
             {

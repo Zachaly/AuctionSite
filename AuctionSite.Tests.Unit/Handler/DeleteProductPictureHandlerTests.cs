@@ -34,7 +34,7 @@ namespace AuctionSite.Tests.Unit.Handler
             _fileService.Setup(x => x.RemoveProfilePicture(It.IsAny<string>()));
 
             _productImageRepository.Setup(x => x.GetProductImageById(It.IsAny<int>(), It.IsAny<Func<ProductImage, string>>()))
-                .Returns(() => "image.jpg");
+                .ReturnsAsync(() => "image.jpg");
 
             _productImageRepository.Setup(x => x.DeleteProductImageByIdAsync(It.IsAny<int>()));
 
@@ -51,16 +51,16 @@ namespace AuctionSite.Tests.Unit.Handler
         {
             const string Error = "error";
 
-            _fileService.Setup(x => x.RemoveProfilePicture(It.IsAny<string>()))
+            _fileService.Setup(x => x.RemoveProductImage(It.IsAny<string>()))
                 .Callback(() => throw new Exception(Error));
 
             _productImageRepository.Setup(x => x.GetProductImageById(It.IsAny<int>(), It.IsAny<Func<ProductImage, string>>()))
-                .Returns(() => "image.jpg");
+                .ReturnsAsync(() => "image.jpg");
 
             _productImageRepository.Setup(x => x.DeleteProductImageByIdAsync(It.IsAny<int>()));
 
             _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string err) => new ResponseModel { Success = true, Error = err });
+                .Returns((string err) => new ResponseModel { Success = false, Error = err });
 
             var res = await _handler.Handle(new DeleteProductPictureCommand { ImageId = 1 }, default);
 
@@ -72,10 +72,10 @@ namespace AuctionSite.Tests.Unit.Handler
         public async Task Handle_ImageNotFound_Fail()
         {
             _productImageRepository.Setup(x => x.GetProductImageById(It.IsAny<int>(), It.IsAny<Func<ProductImage, string>>()))
-                .Returns(() => null);
+                .ReturnsAsync(() => null);
 
             _responseFactory.Setup(x => x.CreateFailure(It.IsAny<string>()))
-                .Returns((string err) => new ResponseModel { Success = true, Error = err });
+                .Returns((string err) => new ResponseModel { Success = false, Error = err });
 
             var res = await _handler.Handle(new DeleteProductPictureCommand { ImageId = 1 }, default);
 

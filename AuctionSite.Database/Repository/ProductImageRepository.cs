@@ -23,7 +23,11 @@ namespace AuctionSite.Database.Repository
 
         public Task DeleteProductImageByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var image = _dbContext.ProductImage.FirstOrDefault(x => x.Id == id);
+
+            _dbContext.ProductImage.Remove(image);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public async Task<T> GetProductImageById<T>(int id, Func<ProductImage, T> selector)

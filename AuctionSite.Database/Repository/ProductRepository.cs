@@ -68,7 +68,9 @@ namespace AuctionSite.Database.Repository
 
         public Task UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            _dbContext.Product.Update(product);
+
+            return _dbContext.SaveChangesAsync();
         }
     }
 }

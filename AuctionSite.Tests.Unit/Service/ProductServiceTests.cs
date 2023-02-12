@@ -8,6 +8,7 @@ using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Moq;
+using FluentValidation.Results;
 
 namespace AuctionSite.Tests.Unit.Service
 {
@@ -537,6 +538,9 @@ namespace AuctionSite.Tests.Unit.Service
                 .Returns(product);
 
             _productRepository.Setup(x => x.UpdateProductAsync(It.IsAny<Product>()));
+
+            _responseFactory.Setup(x => x.CreateValidationError(It.IsAny<ValidationResult>()))
+                .Returns(new ResponseModel { Success = false });
 
             var request = new UpdateProductRequest
             {

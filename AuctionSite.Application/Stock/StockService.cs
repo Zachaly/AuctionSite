@@ -59,9 +59,29 @@ namespace AuctionSite.Application
             }
         }
 
-        public Task<ResponseModel> UpdateStockAsync(UpdateStockRequest request)
+        public async Task<ResponseModel> UpdateStockAsync(UpdateStockRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var validaton = new UpdateStockValidator().Validate(request);
+                if (!validaton.IsValid)
+                {
+                    return _responseFactory.CreateValidationError(validaton);
+                }
+
+                var stock = _stockRepository.GetStockById(request.Id, stock => stock);
+
+                stock.Value = request.Value ?? stock.Value;
+                stock.Quantity = request.Quantity ?? stock.Quantity;
+
+                await _stockRepository.UpdateStockAsync(stock);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

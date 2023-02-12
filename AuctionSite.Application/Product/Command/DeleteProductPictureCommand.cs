@@ -25,9 +25,27 @@ namespace AuctionSite.Application.Command
             _responseFactory = responseFactory;
         }
 
-        public Task<ResponseModel> Handle(DeleteProductPictureCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseModel> Handle(DeleteProductPictureCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var fileName = await _productImageRepository.GetProductImageById(request.ImageId, image => image.FileName);
+
+                if(string.IsNullOrEmpty(fileName))
+                {
+                    return _responseFactory.CreateFailure("Image not found");
+                }
+
+                await _productImageRepository.DeleteProductImageByIdAsync(request.ImageId);
+
+                _fileService.RemoveProductImage(fileName);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }

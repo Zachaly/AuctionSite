@@ -29,13 +29,15 @@ namespace AuctionSite.Database.Repository
         }
 
         public T GetStockById<T>(int id, Func<Stock, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.Stock
+                .Where(stock => stock.Id == id)
+                .Select(selector).FirstOrDefault();
 
         public Task UpdateStockAsync(Stock stock)
         {
-            throw new NotImplementedException();
+            _dbContext.Stock.Update(stock);
+
+            return _dbContext.SaveChangesAsync();
         }
     }
 }
