@@ -415,5 +415,141 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.True(res.Success);
             Assert.Equal(10, res.Data);
         }
+
+        [Fact]
+        public async Task UpdateProductAsync_Success()
+        {
+            var product = new Product
+            {
+                Id = 1,
+                Name = "product",
+                Description = "Description",
+                Price = 123,
+                StockName = "stock"
+            };
+
+            _productRepository.Setup(x => x.GetProductById(It.IsAny<int>(), It.IsAny<Func<Product, Product>>()))
+                .Returns(product);
+
+            _productRepository.Setup(x => x.UpdateProductAsync(It.IsAny<Product>()));
+
+            var request = new UpdateProductRequest
+            {
+                Id = 1,
+                Description = "new description",
+                Name = "new prod name",
+                Price = 321,
+                StockName = "new stock name"
+            };
+
+            var res = await _service.UpdateProductAsync(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(request.Description, product.Description);
+            Assert.Equal(request.Name, product.Name);
+            Assert.Equal(request.Price, product.Price);
+            Assert.Equal(request.StockName, product.StockName);
+        }
+
+        [Fact]
+        public async Task UpdateProductAsync_NullRequest_Success()
+        {
+            var product = new Product
+            {
+                Id = 1,
+                Name = "product",
+                Description = "Description",
+                Price = 123,
+                StockName = "stock"
+            };
+
+            _productRepository.Setup(x => x.GetProductById(It.IsAny<int>(), It.IsAny<Func<Product, Product>>()))
+                .Returns(product);
+
+            _productRepository.Setup(x => x.UpdateProductAsync(It.IsAny<Product>()));
+
+            var request = new UpdateProductRequest
+            {
+                Id = 1,
+                Description = null,
+                Name = null,
+                Price = null,
+                StockName = null
+            };
+
+            var res = await _service.UpdateProductAsync(request);
+
+            Assert.True(res.Success);
+            Assert.NotEqual(request.Description, product.Description);
+            Assert.NotEqual(request.Name, product.Name);
+            Assert.NotEqual(request.Price, product.Price);
+            Assert.NotEqual(request.StockName, product.StockName);
+        }
+
+        [Fact]
+        public async Task UpdateProductAsync_ExceptionThrown_Fail()
+        {
+            var product = new Product
+            {
+                Id = 1,
+                Name = "product",
+                Description = "Description",
+                Price = 123,
+                StockName = "stock"
+            };
+
+            _productRepository.Setup(x => x.GetProductById(It.IsAny<int>(), It.IsAny<Func<Product, Product>>()))
+                .Returns(product);
+
+            const string Error = "error";
+
+            _productRepository.Setup(x => x.UpdateProductAsync(It.IsAny<Product>()))
+                .Callback(() => throw new Exception(Error));
+
+            var request = new UpdateProductRequest
+            {
+                Id = 1,
+                Description = "new description",
+                Name = "new prod name",
+                Price = 321,
+                StockName = "new stock name"
+            };
+
+            var res = await _service.UpdateProductAsync(request);
+
+            Assert.False(res.Success);
+            Assert.Equal(Error, res.Error);
+        }
+
+        [Fact]
+        public async Task UpdateProductAsync_InvalidRequest_Fail()
+        {
+            var product = new Product
+            {
+                Id = 1,
+                Name = "product",
+                Description = "Description",
+                Price = 123,
+                StockName = "stock"
+            };
+
+            _productRepository.Setup(x => x.GetProductById(It.IsAny<int>(), It.IsAny<Func<Product, Product>>()))
+                .Returns(product);
+
+            _productRepository.Setup(x => x.UpdateProductAsync(It.IsAny<Product>()));
+
+            var request = new UpdateProductRequest
+            {
+                Id = 1,
+                Description = "new description",
+                Name = new string('a', 100),
+                Price = 321,
+                StockName = "new stock name"
+            };
+
+            var res = await _service.UpdateProductAsync(request);
+
+            Assert.False(res.Success);
+        }
     }
 }

@@ -3,7 +3,7 @@ using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Models.Response;
 using MediatR;
 
-namespace AuctionSite.Application.Product.Command
+namespace AuctionSite.Application.Command
 {
     public class DeleteProductPictureCommand : IRequest<ResponseModel>
     {

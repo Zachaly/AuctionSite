@@ -112,5 +112,10 @@ namespace AuctionSite.Application
                 return _responseFactory.CreateFailure<IEnumerable<ProductListItemModel>>(ex.Message);
             }
         }
+
+        public Task<ResponseModel> UpdateProductAsync(UpdateProductRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -80,5 +80,29 @@ namespace AuctionSite.Tests.Unit.Repository
 
             Assert.Equal(images.FirstOrDefault(x => x.Id == Id).FileName, res.FileName);
         }
+
+        [Fact]
+        public async Task DeleteProductPictureByIdAsync()
+        {
+            var images = new List<ProductImage>()
+            {
+                new ProductImage { Id = 1, FileName = "name1", ProductId = 2 },
+                new ProductImage { Id = 2, FileName = "name2", ProductId = 2 },
+                new ProductImage { Id = 3, FileName = "name3", ProductId = 2 },
+                new ProductImage { Id = 4, FileName = "name4", ProductId = 2 },
+                new ProductImage { Id = 5, FileName = "name1", ProductId = 3 },
+                new ProductImage { Id = 6, FileName = "name2", ProductId = 3 },
+                new ProductImage { Id = 7, FileName = "name3", ProductId = 3 },
+                new ProductImage { Id = 8, FileName = "name4", ProductId = 3 },
+            };
+
+            AddContent(images);
+
+            const int Id = 3;
+
+            await _repository.DeleteProductImageByIdAsync(Id);
+
+            Assert.DoesNotContain(_dbContext.ProductImage, x => x.Id == Id);
+        }
     }
 }

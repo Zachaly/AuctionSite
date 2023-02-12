@@ -167,5 +167,29 @@ namespace AuctionSite.Tests.Unit.Repository
 
             Assert.Equal(2, count);
         }
+
+        [Fact]
+        public async Task UpdateProductAsync()
+        {
+            var product = new Product
+            {
+                Id = 1,
+                Description = "desc",
+                Name = "name",
+                StockName = "optname",
+                OwnerId = "id",
+                Price = 123,
+            };
+
+            AddContent(product);
+
+            const int NewPrice = 321;
+
+            product.Price = NewPrice;
+
+            await _repository.UpdateProductAsync(product);
+
+            Assert.Contains(_dbContext.Product, x => x.Id == product.Id && x.Price == NewPrice);
+        }
     }
 }

@@ -116,5 +116,123 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.False(res.Success);
             Assert.Equal(ErrorMessage, res.Error);
         }
+
+        [Fact]
+        public async Task UpdateStockAsync_Success()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                Value = "val",
+                Quantity = 10
+            };
+
+            _stockRepository.Setup(x => x.UpdateStockAsync(It.IsAny<Stock>()));
+
+            _stockRepository.Setup(x => x.GetStockById(It.IsAny<int>(), It.IsAny<Func<Stock, Stock>>()))
+                .Returns(stock);
+
+            var request = new UpdateStockRequest
+            {
+                Id = 1,
+                Quantity = 20,
+                Value = "new val"
+            };
+
+            var res = await _service.UpdateStockAsync(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(request.Value, stock.Value);
+            Assert.Equal(request.Quantity, stock.Quantity);
+        }
+
+        [Fact]
+        public async Task UpdateStockAsync_NullRequest_Success()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                Value = "val",
+                Quantity = 10
+            };
+
+            _stockRepository.Setup(x => x.UpdateStockAsync(It.IsAny<Stock>()));
+
+            _stockRepository.Setup(x => x.GetStockById(It.IsAny<int>(), It.IsAny<Func<Stock, Stock>>()))
+                .Returns(stock);
+
+            var request = new UpdateStockRequest
+            {
+                Id = 1,
+                Quantity = null,
+                Value = null
+            };
+
+            var res = await _service.UpdateStockAsync(request);
+
+            Assert.True(res.Success);
+            Assert.NotEqual(request.Value, stock.Value);
+            Assert.NotEqual(request.Quantity, stock.Quantity);
+        }
+
+        [Fact]
+        public async Task UpdateStockAsync_InvalidRequest_Fail()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                Value = "val",
+                Quantity = 10
+            };
+
+            _stockRepository.Setup(x => x.UpdateStockAsync(It.IsAny<Stock>()));
+
+            _stockRepository.Setup(x => x.GetStockById(It.IsAny<int>(), It.IsAny<Func<Stock, Stock>>()))
+                .Returns(stock);
+
+            var request = new UpdateStockRequest
+            {
+                Id = 1,
+                Quantity = 20,
+                Value = new string('a', 50)
+            };
+
+            var res = await _service.UpdateStockAsync(request);
+
+            Assert.False(res.Success);
+            Assert.NotEqual(request.Value, stock.Value);
+            Assert.NotEqual(request.Quantity, stock.Quantity);
+        }
+
+        [Fact]
+        public async Task UpdateStockAsync_ExceptionThrown_Fail()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                Value = "val",
+                Quantity = 10
+            };
+
+            const string Error = "error";
+
+            _stockRepository.Setup(x => x.UpdateStockAsync(It.IsAny<Stock>()))
+                .Callback(() => throw new Exception(Error));
+
+            _stockRepository.Setup(x => x.GetStockById(It.IsAny<int>(), It.IsAny<Func<Stock, Stock>>()))
+                .Returns(stock);
+
+            var request = new UpdateStockRequest
+            {
+                Id = 1,
+                Quantity = 20,
+                Value = "new value"
+            };
+
+            var res = await _service.UpdateStockAsync(request);
+
+            Assert.False(res.Success);
+            Assert.Equal(Error, res.Error);
+        }
     }
 }
