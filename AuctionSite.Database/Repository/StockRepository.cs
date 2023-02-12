@@ -27,5 +27,15 @@ namespace AuctionSite.Database.Repository
 
             return _dbContext.SaveChangesAsync();
         }
+
+        public T GetStockById<T>(int id, Func<Stock, T> selector)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateStockAsync(Stock stock)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

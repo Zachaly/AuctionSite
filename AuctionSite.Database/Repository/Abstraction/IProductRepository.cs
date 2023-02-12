@@ -11,5 +11,6 @@ namespace AuctionSite.Database.Repository.Abstraction
         Task DeleteProductByIdAsync(int id);
         int GetPageCount(int pageSize);
         int GetUserPageCount(string userId, int pageSize);
+        Task UpdateProductAsync(Product product);
     }
 }

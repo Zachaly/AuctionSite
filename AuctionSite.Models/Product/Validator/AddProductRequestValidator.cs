@@ -8,7 +8,6 @@ namespace AuctionSite.Models.Product.Validator
     {
         public AddProductRequestValidator(AbstractValidator<AddStockRequest> stockValidator)
         {
-            
             RuleFor(x => x.Price).NotEmpty().GreaterThan(0);
             RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.StockName).NotEmpty().MaximumLength(25);

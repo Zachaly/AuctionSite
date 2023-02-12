@@ -58,5 +58,10 @@ namespace AuctionSite.Application
                 return _responseFactory.CreateFailure(ex.Message);
             }
         }
+
+        public Task<ResponseModel> UpdateStockAsync(UpdateStockRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -98,5 +98,9 @@ namespace AuctionSite.Application
             }
         }
 
+        public void RemoveProductImage(string fileName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
