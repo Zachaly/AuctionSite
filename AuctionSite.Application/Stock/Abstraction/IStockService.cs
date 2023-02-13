@@ -7,5 +7,6 @@ namespace AuctionSite.Application.Abstraction
     {
         Task<ResponseModel> AddStockAsync(AddStockRequest request);
         Task<ResponseModel> DeleteStockByIdAsync(int id);
+        Task<ResponseModel> UpdateStockAsync(UpdateStockRequest request);
     }
 }

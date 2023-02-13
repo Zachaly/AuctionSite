@@ -6,6 +6,7 @@ import ProductListItem from 'src/models/ProductListItem';
 import ProductModel from 'src/models/ProductModel';
 import AddProductRequest from 'src/models/request/AddProductRequest';
 import PagedRequest from 'src/models/request/PagedRequest';
+import UpdateProductRequest from 'src/models/request/UpdateProductRequest';
 import UploadProductImagesRequest from 'src/models/request/UploadProductImagesRequest';
 import ResponseModel from 'src/models/ResponseModel';
 import { AuthService } from './auth.service';
@@ -78,4 +79,13 @@ export class ProductService {
       params
     })
   }
+
+  updateProduct(request: UpdateProductRequest) : Observable<ResponseModel>{
+    return this.http.put<ResponseModel>(API_URL, request, this.httpOptions())
+  }
+
+  deleteImage(id: number) : Observable<any>{
+    return this.http.delete(`${API_URL}/image/${id}`, this.httpOptions())
+  }
+
 }

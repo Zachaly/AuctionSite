@@ -1,0 +1,10 @@
+<div class="card mt-1">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"> <input type="text" class="form-control" [(ngModel)]="stock.value"></li>
+        <li class="list-group-item"> <input type="number" class="form-control" [(ngModel)]="stock.quantity"></li>
+        <li class="list-group-item d-flex">
+            <button class="btn btn-warning w-100 m-1" (click)="updateClick()">Update</button>
+            <button class="btn btn-danger w-100 m-1" (click)="deleteClick()">Delete</button>
+        </li>
+    </ul>
+</div>

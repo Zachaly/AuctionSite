@@ -35,6 +35,7 @@ import { ProductsManagementPageComponent } from './pages/products-management-pag
 import { OrderManagementPageComponent } from './pages/order-management-page/order-management-page.component';
 import { ProductManagementPageComponent } from './pages/product-management-page/product-management-page.component';
 import { ProductManagementListItemComponent } from './components/product-management-list-item/product-management-list-item.component';
+import { UpdateStockItemComponent } from './components/update-stock-item/update-stock-item.component';
 
 const route = (path: string, component: any) => (
   {
@@ -95,6 +96,7 @@ const routes: Routes = [
     OrderManagementPageComponent,
     ProductManagementPageComponent,
     ProductManagementListItemComponent,
+    UpdateStockItemComponent,
   ],
   imports: [
     BrowserModule,

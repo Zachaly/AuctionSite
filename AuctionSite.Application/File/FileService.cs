@@ -98,5 +98,19 @@ namespace AuctionSite.Application
             }
         }
 
+        public void RemoveProductImage(string fileName)
+        {
+            if (fileName == _defaultPicture || string.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+
+            var path = Path.Combine(_productPicturePath, fileName);
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
     }
 }

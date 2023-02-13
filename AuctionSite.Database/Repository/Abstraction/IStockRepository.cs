@@ -6,5 +6,7 @@ namespace AuctionSite.Database.Repository.Abstraction
     {
         Task AddStockAsync(Stock stock);
         Task DeleteStockByIdAsync(int id);
+        Task UpdateStockAsync(Stock stock);
+        T GetStockById<T>(int id, Func<Stock, T> selector);
     }
 }

@@ -150,5 +150,89 @@ namespace AuctionSite.Tests.Integration
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Fact]
+        public async Task PutAsync_Success()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                ProductId = 1,
+                Quantity = 10,
+                Value = "value1"
+            };
+
+            await AddToDatabase(stock);
+
+            await Authenticate();
+
+            var request = new UpdateStockRequest
+            {
+                Id = stock.Id,
+                Quantity = 20
+            };
+
+            var response = await _httpClient.PutAsJsonAsync(ApiPath, request);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Contains(GetFromDatabase<Stock>(), x => x.Id == request.Id && x.Quantity == request.Quantity);
+        }
+
+        [Fact]
+        public async Task PutAsync_InvalidRequest_Fail()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                ProductId = 1,
+                Quantity = 10,
+                Value = "value1"
+            };
+
+            await AddToDatabase(stock);
+
+            await Authenticate();
+
+            var request = new UpdateStockRequest
+            {
+                Id = stock.Id,
+                Quantity = -1
+            };
+
+            var response = await _httpClient.PutAsJsonAsync(ApiPath, request);
+            var content = await response.Content.ReadFromJsonAsync<ResponseModel>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.DoesNotContain(GetFromDatabase<Stock>(), x => x.Id == request.Id && x.Quantity == request.Quantity);
+            Assert.Contains(content.ValidationErrors.Keys, x => x == "Quantity");
+        }
+
+        [Fact]
+        public async Task PutAsync_StockNotFound_Fail()
+        {
+            var stock = new Stock
+            {
+                Id = 1,
+                ProductId = 1,
+                Quantity = 10,
+                Value = "value1"
+            };
+
+            await AddToDatabase(stock);
+
+            await Authenticate();
+
+            var request = new UpdateStockRequest
+            {
+                Id = 2137,
+                Quantity = 20
+            };
+
+            var response = await _httpClient.PutAsJsonAsync(ApiPath, request);
+            var content = await response.Content.ReadFromJsonAsync<ResponseModel>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotEmpty(content.Error);
+        }
     }
 }

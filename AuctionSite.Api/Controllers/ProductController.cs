@@ -113,5 +113,39 @@ namespace AuctionSite.Api.Controllers
 
             return res.ReturnOkOrBadRequest();
         }
+
+        /// <summary>
+        /// Updates given product with data given in request
+        /// </summary>
+        /// <response code="204">Product updated successfully</response>
+        /// <response code="400">Invalid request</response>
+        [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [Authorize]
+        public async Task<ActionResult<ResponseModel>> UpdateProductAsync(UpdateProductRequest request)
+        {
+            var res = await _productService.UpdateProductAsync(request);
+
+            return res.ReturnNoContentOrBadRequest();
+        }
+
+        /// <summary>
+        /// Removes product image with given id
+        /// </summary>
+        /// <response code="204">Image removed successfully</response>
+        /// <response code="400">Failed to remove image</response>
+        [HttpDelete("image/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [Authorize]
+        public async Task<ActionResult<ResponseModel>> DeleteProductImageByIdAsync(int id)
+        {
+            var command = new DeleteProductPictureCommand { ImageId = id };
+
+            var res = await _mediator.Send(command);
+
+            return res.ReturnNoContentOrBadRequest();
+        }
     }
 }

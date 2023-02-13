@@ -65,5 +65,12 @@ namespace AuctionSite.Database.Repository
 
             return (int)Math.Ceiling(count / pageSize);
         }
+
+        public Task UpdateProductAsync(Product product)
+        {
+            _dbContext.Product.Update(product);
+
+            return _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -112,5 +112,33 @@ namespace AuctionSite.Application
                 return _responseFactory.CreateFailure<IEnumerable<ProductListItemModel>>(ex.Message);
             }
         }
+
+        public async Task<ResponseModel> UpdateProductAsync(UpdateProductRequest request)
+        {
+            try
+            {
+                var validation = new UpdateProductRequestValidator().Validate(request);
+
+                if(!validation.IsValid)
+                {
+                    return _responseFactory.CreateValidationError(validation);
+                }
+
+                var product = _productRepository.GetProductById(request.Id, prod => prod);
+
+                product.Name = request.Name ?? product.Name;
+                product.Description = request.Description ?? product.Description;
+                product.Price = request.Price ?? product.Price;
+                product.StockName = request.StockName ?? product.StockName;
+
+                await _productRepository.UpdateProductAsync(product);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
+        }
     }
 }

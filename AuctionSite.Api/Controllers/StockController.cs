@@ -45,5 +45,21 @@ namespace AuctionSite.Api.Controllers
 
             return res.ReturnNoContentOrBadRequest();
         }
+
+
+        /// <summary>
+        /// Updates stock with data given in request
+        /// </summary>
+        /// <response code="204">Stock updated successfully</response>
+        /// <response code="400">Invalid request</response>
+        [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ResponseModel>> UpdateStockAsync(UpdateStockRequest request)
+        {
+            var res = await _stockService.UpdateStockAsync(request);
+
+            return res.ReturnNoContentOrBadRequest();
+        }
     }
 }

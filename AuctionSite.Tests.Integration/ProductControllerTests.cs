@@ -395,5 +395,100 @@ namespace AuctionSite.Tests.Integration
             Assert.True(content.Success);
             Assert.Equal(4, content.Data);
         }
+
+        [Fact]
+        public async Task UpdateProductAsync_Success()
+        {
+            await Authenticate();
+
+            var userId = GetAuthenticatedUser().Id;
+
+            var product = new Product
+            {
+                Id = 1,
+                Description = "decrption",
+                Name = "product",
+                StockName = "stock name",
+                OwnerId = userId,
+                Price = 123,
+            };
+
+            await AddToDatabase(product);
+
+            var request = new UpdateProductRequest
+            {
+                Id = product.Id,
+                Description = "new description"
+            };
+
+            var response = await _httpClient.PutAsJsonAsync(ApiPath, request);
+            
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Contains(GetFromDatabase<Product>(), x => x.Id == request.Id && x.Description == request.Description);
+        }
+
+        [Fact]
+        public async Task UpdateProductAsync_InvalidRequest_Fail()
+        {
+            await Authenticate();
+
+            var userId = GetAuthenticatedUser().Id;
+
+            var product = new Product
+            {
+                Id = 1,
+                Description = "decrption",
+                Name = "product",
+                StockName = "stock name",
+                OwnerId = userId,
+                Price = 123,
+            };
+
+            await AddToDatabase(product);
+
+            var request = new UpdateProductRequest
+            {
+                Id = product.Id,
+                Description = new string('a', 250)
+            };
+
+            var response = await _httpClient.PutAsJsonAsync(ApiPath, request);
+            var content = await response.Content.ReadFromJsonAsync<ResponseModel>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.DoesNotContain(GetFromDatabase<Product>(), x => x.Id == request.Id && x.Description == request.Description);
+            Assert.Contains(content.ValidationErrors.Keys, x => x == "Description");
+        }
+
+        [Fact]
+        public async Task UpdateProductAsync_ProductNotFound_Fail()
+        {
+            await Authenticate();
+
+            var userId = GetAuthenticatedUser().Id;
+
+            var product = new Product
+            {
+                Id = 1,
+                Description = "decrption",
+                Name = "product",
+                StockName = "stock name",
+                OwnerId = userId,
+                Price = 123,
+            };
+
+            await AddToDatabase(product);
+
+            var request = new UpdateProductRequest
+            {
+                Id = 2137
+            };
+
+            var response = await _httpClient.PutAsJsonAsync(ApiPath, request);
+            var content = await response.Content.ReadFromJsonAsync<ResponseModel>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotEmpty(content.Error);
+        }
     }
 }

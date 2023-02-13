@@ -9,5 +9,6 @@ namespace AuctionSite.Application.Abstraction
         Task<string> SaveProfilePicture(IFormFile file);
         FileStream GetProductPicture(string fileName);
         Task<IEnumerable<string>> SaveProductImages(IEnumerable<IFormFile> files);
+        void RemoveProductImage(string fileName);
     }
 }

@@ -27,5 +27,17 @@ namespace AuctionSite.Database.Repository
 
             return _dbContext.SaveChangesAsync();
         }
+
+        public T GetStockById<T>(int id, Func<Stock, T> selector)
+            => _dbContext.Stock
+                .Where(stock => stock.Id == id)
+                .Select(selector).FirstOrDefault();
+
+        public Task UpdateStockAsync(Stock stock)
+        {
+            _dbContext.Stock.Update(stock);
+
+            return _dbContext.SaveChangesAsync();
+        }
     }
 }
