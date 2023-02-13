@@ -1,5 +1,66 @@
 <div class="row justify-content-center">
-    <div class="col-6">
-        <app-order-management-item [order]="order" *ngFor="let order of orders" (moveStatus)="moveStatus(order.orderStockId)"/>
+    <div class="col-9">
+        <div class="row">
+            <form class="col mt-2" (ngSubmit)="submit()">
+                <h2>Product</h2>
+                <div class="mt-2">
+                    <label for="name">Product name</label>
+                    <input type="text" name="name" class="form-control" [(ngModel)]="updateProduct.name">
+                    <app-error-list [errors]="validationErrors.Name" />
+                </div>
+                <div class="mt-2">
+                    <label for="description">Product description</label>
+                    <textarea name="description" class="form-control" rows="5"
+                        [(ngModel)]="updateProduct.description"></textarea>
+                    <app-error-list [errors]="validationErrors.Description" />
+                </div>
+                <div class="mt-2">
+                    <label for="price">Price</label>
+                    <input type="number" name="price" class="form-control" [(ngModel)]="updateProduct.price">
+                    <app-error-list [errors]="validationErrors.Price" />
+                </div>
+                <div class="mt-2">
+                    <label for="price">Stock name</label>
+                    <input type="text" name="price" class="form-control" [(ngModel)]="updateProduct.stockName">
+                    <app-error-list [errors]="validationErrors.StockName" />
+                </div>
+                <div class="mt-2">
+                    <label for="images">New images</label>
+                    <input type="file" name="images" class="form-control" multiple (change)="selectImages($event)">
+                </div>
+                <div class="d-flex flex-wrap mt-2">
+                    <div *ngFor="let id of images" class="image-item">
+                        <div>
+                            <app-image type="product" [id]="id" class="mw-100 mh-100" (onClick)="deleteImage(id)"/>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-success mt-2 form-control">Update product</button>
+            </form>
+            <div class="col mt-2">
+                <h2>Stocks</h2>
+                <div class="mt-2">
+                    <label for="opt-value">Stock value</label>
+                    <input type="text" name="opt-value" class="form-control" [(ngModel)]="newStock.value">
+                </div>
+                <div class="mt-2">
+                    <label for="pot-quantity">Quantity</label>
+                    <input type="number" name="opt-quantity" class="form-control" value="0"
+                        [(ngModel)]="newStock.quantity">
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-success mt-2" (click)="addStock()">Add stock</button>
+                </div>
+                <div class="mt-2">
+                    <app-update-stock-item (update)="updateStock($event)" (delete)="deleteStock(stock.id!)"
+                        *ngFor="let stock of stocks" [stock]="stock" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <h2 class="mt-2">Orders</h2>
+        <app-order-management-item [order]="order" *ngFor="let order of orders"
+            (moveStatus)="moveStatus(order.orderStockId)" />
     </div>
 </div>

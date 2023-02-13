@@ -1,4 +1,4 @@
 <div [class]="'card p-1 m-1 bg-' + colorClass()">
-    <h2 class="text-center">{{ order.created }} - {{ order.stockName }} - {{ order.quantity }} </h2>
+    <h3 class="text-center">{{ order.created }} - {{ order.stockName }} - {{ order.quantity }} </h3>
     <button *ngIf="order.status == 0" class="btn btn-info" (click)="moveStatusClick()">Move status</button>
 </div>

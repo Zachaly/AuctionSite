@@ -1,0 +1,7 @@
+.image-item {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    margin: 2px;
+    border: 2px dashed rgb(27, 23, 23);
+}
