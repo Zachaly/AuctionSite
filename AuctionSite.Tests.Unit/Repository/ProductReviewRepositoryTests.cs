@@ -70,6 +70,12 @@ namespace AuctionSite.Tests.Unit.Repository
         [Fact]
         public void GetReviewsByProductId()
         {
+            AddContent(new List<ApplicationUser>
+            {
+                new ApplicationUser { Id = "id" },
+                new ApplicationUser { Id = "id2" },
+            });
+
             var reviews = new List<ProductReview>
             {
                 new ProductReview { Id = 1, Content = "content", UserId = "id", ProductId = 1 },

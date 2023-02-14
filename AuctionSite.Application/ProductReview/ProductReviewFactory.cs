@@ -10,13 +10,22 @@ namespace AuctionSite.Application
     public class ProductReviewFactory : IProductReviewFactory
     {
         public ProductReview Create(AddProductReviewRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductReview
+            {
+                ProductId = request.ProductId,
+                UserId = request.UserId,
+                Score = request.Score,
+                Content = request.Content,
+            };
 
         public ProductReviewListModel CreateModel(ProductReview review)
-        {
-            throw new NotImplementedException();
-        }
+            => new ProductReviewListModel
+            {
+                Content = review.Content,
+                Id = review.Id,
+                Score = review.Score,
+                UserId = review.UserId,
+                UserName = review.User.UserName
+            };
     }
 }

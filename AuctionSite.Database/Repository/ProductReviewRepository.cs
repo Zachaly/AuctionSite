@@ -1,6 +1,7 @@
 ﻿using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionSite.Database.Repository
 {
@@ -16,32 +17,43 @@ namespace AuctionSite.Database.Repository
 
         public Task AddReviewAsync(ProductReview review)
         {
-            throw new NotImplementedException();
+            _dbContext.ProductReview.Add(review);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public Task DeleteReviewByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var review = _dbContext.ProductReview.FirstOrDefault(x => x.Id == id);
+
+            _dbContext.ProductReview.Remove(review);
+
+            return _dbContext.SaveChangesAsync();
         }
 
         public T GetProductReviewByProductAndUserId<T>(int productId, string userId, Func<ProductReview, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.ProductReview
+                .Where(review => review.ProductId == productId && review.UserId == userId)
+                .Select(selector)
+                .FirstOrDefault();
 
         public T GetReviewById<T>(int id, Func<ProductReview, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.ProductReview
+                .Where(review => review.Id == id)
+                .Select(selector)
+                .FirstOrDefault();
 
         public IEnumerable<T> GetReviewsByProductId<T>(int productId, Func<ProductReview, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.ProductReview
+                .Include(review => review.User)
+                .Where(review => review.ProductId == productId)
+                .Select(selector);
 
         public Task UpdateReviewAsync(ProductReview review)
         {
-            throw new NotImplementedException();
+            _dbContext.ProductReview.Update(review);
+
+            return _dbContext.SaveChangesAsync();
         }
     }
 }

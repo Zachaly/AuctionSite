@@ -21,24 +21,65 @@ namespace AuctionSite.Application
             _productReviewFactory = productReviewFactory;
             _responseFactory = responseFactory;
         }
-        public Task<ResponseModel> AddProductReviewAsync(AddProductReviewRequest request)
+        public async Task<ResponseModel> AddProductReviewAsync(AddProductReviewRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(_productReviewRepository.GetProductReviewByProductAndUserId(request.ProductId, request.UserId, x => x) is not null)
+                {
+                    return _responseFactory.CreateFailure("Review exists");
+                }
+
+                var review = _productReviewFactory.Create(request);
+
+                await _productReviewRepository.AddReviewAsync(review);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<ResponseModel> DeleteProductReviewAsync(int id)
+        public async Task<ResponseModel> DeleteProductReviewAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _productReviewRepository.DeleteReviewByIdAsync(id);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
 
-        public Task<DataResponseModel<IEnumerable<ProductReviewListModel>>> GetProductReviewsAsync(int id)
+        public async Task<DataResponseModel<IEnumerable<ProductReviewListModel>>> GetProductReviewsAsync(int id)
         {
-            throw new NotImplementedException();
+            var data = _productReviewRepository.GetReviewsByProductId(id, review => _productReviewFactory.CreateModel(review));
+
+            return _responseFactory.CreateSuccess(data);
         }
 
-        public Task<ResponseModel> UpdateProductReviewAsync(UpdateProductReviewRequest request)
+        public async Task<ResponseModel> UpdateProductReviewAsync(UpdateProductReviewRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var review = _productReviewRepository.GetReviewById(request.Id, review => review);
+
+                review.Score = request.Score ?? review.Score;
+                review.Content = request.Content ?? review.Content;
+
+                await _productReviewRepository.UpdateReviewAsync(review);
+
+                return _responseFactory.CreateSuccess();
+            }
+            catch(Exception ex)
+            {
+                return _responseFactory.CreateFailure(ex.Message);
+            }
         }
     }
 }
