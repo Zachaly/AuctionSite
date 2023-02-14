@@ -16,6 +16,7 @@ namespace AuctionSite.Database
         public DbSet<OrderStock> OrderStock { get; set; }
         public DbSet<SaveList> SaveList { get; set; }
         public DbSet<ListStock> ListStock { get; set; }
+        public DbSet<ProductReview> ProductReview { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -54,6 +55,12 @@ namespace AuctionSite.Database
                 .HasMany(stock => stock.ListStocks)
                 .WithOne(stock => stock.Stock)
                 .HasForeignKey(stock => stock.StockId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Product>()
+                .HasMany(product => product.Reviews)
+                .WithOne(review => review.Product)
+                .HasForeignKey(review => review.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

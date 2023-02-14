@@ -12,5 +12,6 @@
         public decimal Price { get; set; }
         public ICollection<ProductImage> Images { get; set; }
         public DateTime Created { get; set; }
+        public ICollection<ProductReview> Reviews { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace AuctionSite.Domain.Entity
         public int? CartId { get; set; }
         public Cart? Cart { get; set; }
         public ICollection<SaveList> Lists { get; set; }
+        public ICollection<ProductReview> ProductReviews { get; set; }
     }
 }
