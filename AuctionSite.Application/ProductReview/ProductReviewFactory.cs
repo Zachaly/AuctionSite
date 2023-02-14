@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuctionSite.Application.Abstraction;
+using AuctionSite.Domain.Entity;
+using AuctionSite.Domain.Util;
+using AuctionSite.Models.ProductReview;
+using AuctionSite.Models.ProductReview.Request;
 
-namespace AuctionSite.Application.ProductReview
+namespace AuctionSite.Application
 {
-    internal class ProductReviewFactory
+    [Implementation(typeof(IProductReviewFactory))]
+    public class ProductReviewFactory : IProductReviewFactory
     {
+        public ProductReview Create(AddProductReviewRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProductReviewListModel CreateModel(ProductReview review)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

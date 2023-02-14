@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuctionSite.Domain.Entity;
+using AuctionSite.Models.ProductReview.Request;
+using AuctionSite.Models.ProductReview;
 
-namespace AuctionSite.Application.ProductReview.Abstraction
+namespace AuctionSite.Application.Abstraction
 {
-    internal interface IProductReviewFactory
+    public interface IProductReviewFactory
     {
+        ProductReview Create(AddProductReviewRequest request);
+        ProductReviewListModel CreateModel(ProductReview review);
     }
 }

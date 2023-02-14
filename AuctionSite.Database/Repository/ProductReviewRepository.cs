@@ -1,8 +1,10 @@
 ﻿using AuctionSite.Database.Repository.Abstraction;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Domain.Util;
 
 namespace AuctionSite.Database.Repository
 {
+    [Implementation(typeof(IProductReviewRepository))]
     public class ProductReviewRepository : IProductReviewRepository
     {
         private readonly AppDbContext _dbContext;
@@ -22,7 +24,12 @@ namespace AuctionSite.Database.Repository
             throw new NotImplementedException();
         }
 
-        public T GetProductReviewByProductAndUserId<T>(int productId, int userId, Func<ProductReview, T> selector)
+        public T GetProductReviewByProductAndUserId<T>(int productId, string userId, Func<ProductReview, T> selector)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetReviewById<T>(int id, Func<ProductReview, T> selector)
         {
             throw new NotImplementedException();
         }

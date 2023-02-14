@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuctionSite.Models.ProductReview;
+using AuctionSite.Models.ProductReview.Request;
+using AuctionSite.Models.Response;
 
-namespace AuctionSite.Application.ProductReview.Abstraction
+namespace AuctionSite.Application.Abstraction
 {
-    internal interface IProductReviewService
+    public interface IProductReviewService
     {
+        Task<ResponseModel> AddProductReviewAsync(AddProductReviewRequest request);
+        Task<ResponseModel> UpdateProductReviewAsync(UpdateProductReviewRequest request);
+        Task<ResponseModel> DeleteProductReviewAsync(int id);
+        Task<DataResponseModel<IEnumerable<ProductReviewListModel>>> GetProductReviewsAsync(int id);
     }
 }
