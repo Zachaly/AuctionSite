@@ -36,6 +36,9 @@ import { OrderManagementPageComponent } from './pages/order-management-page/orde
 import { ProductManagementPageComponent } from './pages/product-management-page/product-management-page.component';
 import { ProductManagementListItemComponent } from './components/product-management-list-item/product-management-list-item.component';
 import { UpdateStockItemComponent } from './components/update-stock-item/update-stock-item.component';
+import { AddReviewComponent } from './components/add-review/add-review.component';
+import { ReviewListItemComponent } from './components/review-list-item/review-list-item.component';
+import { UpdateReviewComponent } from './components/update-review/update-review.component';
 
 const route = (path: string, component: any) => (
   {
@@ -97,6 +100,9 @@ const routes: Routes = [
     ProductManagementPageComponent,
     ProductManagementListItemComponent,
     UpdateStockItemComponent,
+    AddReviewComponent,
+    ReviewListItemComponent,
+    UpdateReviewComponent,
   ],
   imports: [
     BrowserModule,

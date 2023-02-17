@@ -74,14 +74,13 @@ export class ProductManagementPageComponent implements OnInit {
           name: data.name,
           description: data.description,
           stockName: data.stockName,
-          price: parseFloat(data.price)
+          price: parseFloat(data.price.replace(',', '.'))
         }
         this.newStock.productId = data.id
 
         this.stocks = data.stocks
 
         this.images = data.imageIds
-        console.log(data.imageIds)
       })
   }
 
@@ -108,7 +107,7 @@ export class ProductManagementPageComponent implements OnInit {
   submit() {
     this.productService.updateProduct(this.updateProduct).subscribe({
       next: res => {
-        if (!this.images) {
+        if (!this.imageFiles) {
           return
         }
 
