@@ -16,12 +16,12 @@
                 </div>
                 <div class="mt-2">
                     <label for="price">Price</label>
-                    <input type="number" name="price" class="form-control" [(ngModel)]="updateProduct.price">
+                    <input type="text" name="price" class="form-control" [(ngModel)]="updateProduct.price">
                     <app-error-list [errors]="validationErrors.Price" />
                 </div>
                 <div class="mt-2">
-                    <label for="price">Stock name</label>
-                    <input type="text" name="price" class="form-control" [(ngModel)]="updateProduct.stockName">
+                    <label for="stock-name">Stock name</label>
+                    <input type="text" name="stock-name" class="form-control" [(ngModel)]="updateProduct.stockName">
                     <app-error-list [errors]="validationErrors.StockName" />
                 </div>
                 <div class="mt-2">

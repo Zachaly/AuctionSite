@@ -16,7 +16,7 @@
             Offer created on: {{ product.created }}
         </p>
         <p class="fs-3">
-            {{ product.description }} 
+            {{ product.description }}
         </p>
         <p class="fs-4">
             Price: ${{product.price}}
@@ -43,7 +43,17 @@
         </div>
         <button type="button" *ngIf="isAuthorized()" class="btn btn-success form-control mt-1" (click)="addToCart()">Add
             to cart</button>
+
+        <div>
+            <app-update-review *ngIf="userReview; else addRev" [review]="userReview"  (delete)="deleteReview($event)" (submit)="updateReview($event)"/>
+            <ng-template #addRev>
+                <app-add-review #addRev [productId]="product.id" (submit)="addReview($event)" />
+            </ng-template>
+
+            <app-review-list-item [review]="review" *ngFor="let review of reviews" />
+        </div>
     </div>
 </div>
 
-<app-add-stock-to-list *ngIf="addingToList" [stockId]="currentStock.id ?? 0" [quantity]="selectedQuantity" (exit)="addingToList = false"/>
+<app-add-stock-to-list *ngIf="addingToList" [stockId]="currentStock.id ?? 0" [quantity]="selectedQuantity"
+    (exit)="addingToList = false" />

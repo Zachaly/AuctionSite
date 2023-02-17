@@ -1,0 +1,14 @@
+<div *ngIf="authorized">
+    <form class="mt-2" (ngSubmit)="onSubmit()">
+        <h3>Add review</h3>
+        <div>
+            <label for="content">Content</label>
+            <textarea class="form-control" name="content" [(ngModel)]="request.content"></textarea>
+        </div>
+        <div class="mt-2">
+            <label for="score">Score {{ request.score }}/10</label>
+            <input type="range" min="1" max="10" class="form-control" name="score" [(ngModel)]="request.score">
+        </div>
+        <button class="btn btn-success mt-2 w-100">Add review</button>
+    </form>
+</div>
