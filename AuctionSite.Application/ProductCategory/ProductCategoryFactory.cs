@@ -9,8 +9,10 @@ namespace AuctionSite.Application
     public class ProductCategoryFactory : IProductCategoryFactory
     {
         public CategoryModel CreateModel(ProductCategory category)
-        {
-            throw new NotImplementedException();
-        }
+            => new CategoryModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+            };
     }
 }

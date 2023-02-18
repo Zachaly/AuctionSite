@@ -63,9 +63,18 @@ namespace AuctionSite.Application
 
         public DataResponseModel<int> GetPageCount(GetPageCountRequest request)
         {
-            var count = request.UserId is not null ? 
-                _productRepository.GetUserPageCount(request.UserId, request.PageSize ?? 10) : 
-                _productRepository.GetPageCount(request.PageSize ?? 10);
+            var count = 0;
+
+            if (request.CategoryId is not null)
+            {
+                count = _productRepository.GetCategoryPageCount(request.CategoryId.Value, request.PageSize ?? 10);
+            }
+            else
+            {
+                count = request.UserId is not null ?
+                    _productRepository.GetUserPageCount(request.UserId, request.PageSize ?? 10) :
+                    _productRepository.GetPageCount(request.PageSize ?? 10);
+            }
 
             return _responseFactory.CreateSuccess(count);
         }
@@ -101,6 +110,10 @@ namespace AuctionSite.Application
                 {
                     data = _productRepository.GetProductsByUserId(request.UserId, pageSize, index, product => _productFactory.CreateListItem(product));
                 }
+                else if(request.CategoryId is not null)
+                {
+                    data = _productRepository.GetProductsByCategoryId(request.CategoryId.Value, pageSize, index, product => _productFactory.CreateListItem(product));
+                }
                 else
                 {
                     data = _productRepository.GetProducts(index, pageSize, product => _productFactory.CreateListItem(product));
@@ -130,6 +143,7 @@ namespace AuctionSite.Application
                 product.Description = request.Description ?? product.Description;
                 product.Price = request.Price ?? product.Price;
                 product.StockName = request.StockName ?? product.StockName;
+                product.CategoryId = request.CategoryId ?? product.CategoryId;
 
                 await _productRepository.UpdateProductAsync(product);
 

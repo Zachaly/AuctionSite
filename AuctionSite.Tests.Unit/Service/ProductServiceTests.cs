@@ -587,7 +587,7 @@ namespace AuctionSite.Tests.Unit.Service
             MockDataResponse<int>();
 
             _productRepository.Setup(x => x.GetCategoryPageCount(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns((string _, int size) => size);
+                .Returns((int _, int size) => size);
 
             var request = new GetPageCountRequest { CategoryId = 1 };
 

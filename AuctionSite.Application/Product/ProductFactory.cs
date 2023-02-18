@@ -26,6 +26,7 @@ namespace AuctionSite.Application
                 OwnerId = request.UserId,
                 Price = request.Price,
                 Created = DateTime.Now,
+                CategoryId = request.CategoryId,
             };
 
         public ProductImage CreateImage(int productId, string name)
@@ -55,7 +56,9 @@ namespace AuctionSite.Application
                 UserId = product.OwnerId,
                 UserName = product.Owner.UserName,
                 ImageIds = product.Images.Select(x => x.Id),
-                Created = product.Created.ToString("dd.MM.yyyy")
+                Created = product.Created.ToString("dd.MM.yyyy"),
+                CategoryId = product.CategoryId,
+                CategoryName = product.Category?.Name ?? string.Empty,
             };
     }
 }

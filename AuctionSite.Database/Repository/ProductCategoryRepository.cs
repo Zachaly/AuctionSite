@@ -15,8 +15,6 @@ namespace AuctionSite.Database.Repository
         }
 
         public IEnumerable<T> GetProductCategories<T>(Func<ProductCategory, T> selector)
-        {
-            throw new NotImplementedException();
-        }
+            => _dbContext.ProductCategory.Select(selector);
     }
 }

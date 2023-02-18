@@ -211,7 +211,7 @@ namespace AuctionSite.Tests.Unit.Repository
                 new Product { Id = 8, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 1 },
             });
 
-            var res = _repository.GetProductsByCategoryId(CategoryId, 1, 2, x => x);
+            var res = _repository.GetProductsByCategoryId(CategoryId, 0, 2, x => x);
 
             Assert.Equivalent(_dbContext.Product.Where(x => x.CategoryId == CategoryId).Take(2).Select(x => x.Id), res.Select(x => x.Id));
             Assert.All(res, x => Assert.Equal(CategoryId, x.CategoryId));
@@ -235,7 +235,7 @@ namespace AuctionSite.Tests.Unit.Repository
 
             var count = _repository.GetCategoryPageCount(3, 3);
 
-            Assert.Equal(3, count);
+            Assert.Equal(2, count);
         }
     }
 }

@@ -21,9 +21,11 @@ namespace AuctionSite.Application
             _productCategoryFactory = productCategoryFactory;
         }
 
-        public Task<DataResponseModel<IEnumerable<CategoryModel>>> GetCategoriesAsync()
+        public async Task<DataResponseModel<IEnumerable<CategoryModel>>> GetCategoriesAsync()
         {
-            throw new NotImplementedException();
+            var data = _productCategoryRepository.GetProductCategories(category => _productCategoryFactory.CreateModel(category));
+
+            return _responseFactory.CreateSuccess(data);
         }
     }
 }
