@@ -29,6 +29,11 @@ namespace AuctionSite.Database.Repository
             return _dbContext.SaveChangesAsync();
         }
 
+        public int GetCategoryPageCount(int categoryId, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public int GetPageCount(int pageSize)
         {
             var count = (decimal)_dbContext.Product.Count();
@@ -51,7 +56,7 @@ namespace AuctionSite.Database.Repository
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize).Select(selector);
 
-        public IEnumerable<T> GetProductsByCategoryId<T>(int categoryId, Func<Product, T> selector)
+        public IEnumerable<T> GetProductsByCategoryId<T>(int categoryId, int pageIndex, int pageSize, Func<Product, T> selector)
         {
             throw new NotImplementedException();
         }

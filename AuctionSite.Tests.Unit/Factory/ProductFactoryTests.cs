@@ -34,6 +34,7 @@ namespace AuctionSite.Tests.Unit.Factory
                 Stocks = new List<AddStockRequest> { new AddStockRequest { Value = "val", Quantity = 2 } },
                 Price = 12.3M,
                 UserId = "userId",
+                CategoryId = 1
             };
 
             var product = _productFactory.Create(request);
@@ -44,6 +45,7 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Equal(request.Price, product.Price);
             Assert.Equal(request.UserId, product.OwnerId);
             Assert.Single(product.Stocks);
+            Assert.Equal(request.CategoryId, product.CategoryId);
             Assert.NotEqual(default, product.Created);
         }
 
@@ -72,7 +74,9 @@ namespace AuctionSite.Tests.Unit.Factory
                     new ProductImage() { Id = 11, },
                     new ProductImage() { Id = 12, }
                 },
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                CategoryId = 2,
+                Category = new ProductCategory { Id = 2, Name = "cat" }
             };
 
             var model = _productFactory.CreateModel(product);
@@ -87,6 +91,8 @@ namespace AuctionSite.Tests.Unit.Factory
             Assert.Single(product.Stocks);
             Assert.Equivalent(product.Images.Select(x => x.Id), model.ImageIds);
             Assert.NotEmpty(model.Created);
+            Assert.Equal(product.CategoryId, model.CategoryId);
+            Assert.Equal(product.Category.Name, model.CategoryName);
         }
 
         [Fact]
