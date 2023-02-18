@@ -10,11 +10,14 @@
         </div>
     </div>
     <div class="col col-6">
-        <h1 class="text-center">{{ product.name }}</h1>
-        <button class="btn btn-success" (click)="addingToList = true">Add to list</button>
+        <h1 class="text-center">{{ product.name }} <button class="btn btn-success ml-3" [disabled]="!currentStock.id || !selectedQuantity" (click)="addingToList = true">Save</button></h1>
+        <p class="fs-4" *ngIf="product.categoryId">
+            Category: {{ product.categoryName }}
+        </p>
         <p class="fs-4">
             Offer created on: {{ product.created }}
         </p>
+
         <p class="fs-3">
             {{ product.description }}
         </p>
@@ -45,7 +48,8 @@
             to cart</button>
 
         <div>
-            <app-update-review *ngIf="userReview; else addRev" [review]="userReview"  (delete)="deleteReview($event)" (submit)="updateReview($event)"/>
+            <app-update-review *ngIf="userReview; else addRev" [review]="userReview" (delete)="deleteReview($event)"
+                (submit)="updateReview($event)" />
             <ng-template #addRev>
                 <app-add-review #addRev [productId]="product.id" (submit)="addReview($event)" />
             </ng-template>

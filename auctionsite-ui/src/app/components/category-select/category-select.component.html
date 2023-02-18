@@ -1,0 +1,6 @@
+<select name="currentStock" class="form-select m-lg-4" [(ngModel)]="curentCategoryId" (change)="onSelect()">
+    <option [value]="0"></option>
+    <option *ngFor="let category of categories" [ngValue]="category.id">
+        {{ category.name }}
+    </option>
+</select>

@@ -88,4 +88,8 @@ export class AddProductPageComponent implements OnInit {
   selectImages(e: Event): void {
     this.images = (e.target as HTMLInputElement).files
   }
+
+  selectCategory(id: number){
+    this.product.categoryId = id
+  }
 }
