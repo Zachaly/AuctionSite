@@ -10,5 +10,6 @@ namespace AuctionSite.Models.Product.Request
         public string StockName { get; set; }
         public IEnumerable<AddStockRequest> Stocks { get; set; }
         public decimal Price { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

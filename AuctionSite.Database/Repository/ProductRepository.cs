@@ -51,6 +51,11 @@ namespace AuctionSite.Database.Repository
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize).Select(selector);
 
+        public IEnumerable<T> GetProductsByCategoryId<T>(int categoryId, Func<Product, T> selector)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<T> GetProductsByUserId<T>(string id, int pageSize, int pageIndex, Func<Product, T> selector)
             => _dbContext.Product
                 .Include(product => product.Images)
