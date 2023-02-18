@@ -13,5 +13,7 @@
         public ICollection<ProductImage> Images { get; set; }
         public DateTime Created { get; set; }
         public ICollection<ProductReview> Reviews { get; set; }
+        public int? CategoryId { get; set; }
+        public ProductCategory? Category { get; set; }
     }
 }

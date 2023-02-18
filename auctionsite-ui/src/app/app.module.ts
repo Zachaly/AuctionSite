@@ -39,6 +39,7 @@ import { UpdateStockItemComponent } from './components/update-stock-item/update-
 import { AddReviewComponent } from './components/add-review/add-review.component';
 import { ReviewListItemComponent } from './components/review-list-item/review-list-item.component';
 import { UpdateReviewComponent } from './components/update-review/update-review.component';
+import { CategorySelectComponent } from './components/category-select/category-select.component';
 
 const route = (path: string, component: any) => (
   {
@@ -103,6 +104,7 @@ const routes: Routes = [
     AddReviewComponent,
     ReviewListItemComponent,
     UpdateReviewComponent,
+    CategorySelectComponent,
   ],
   imports: [
     BrowserModule,

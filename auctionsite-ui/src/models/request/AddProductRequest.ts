@@ -6,5 +6,6 @@ export default interface AddProductRequest {
     description: string,
     stockName: string,
     price: number,
-    stocks: AddStockRequest[]
+    stocks: AddStockRequest[],
+    categoryId?: number
 }

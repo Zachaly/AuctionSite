@@ -50,7 +50,8 @@ namespace AuctionSite.Tests.Unit.Service
                 StockName = "name",
                 UserId = "id",
                 Price = 123,
-                Stocks = new List<AddStockRequest> { new AddStockRequest { Quantity = 1, Value = "val" } }
+                Stocks = new List<AddStockRequest> { new AddStockRequest { Quantity = 1, Value = "val" } },
+                CategoryId = 2
             };
 
             var res = await _service.AddProductAsync(request);
@@ -426,7 +427,8 @@ namespace AuctionSite.Tests.Unit.Service
                 Name = "product",
                 Description = "Description",
                 Price = 123,
-                StockName = "stock"
+                StockName = "stock",
+                CategoryId = 5
             };
 
             _productRepository.Setup(x => x.GetProductById(It.IsAny<int>(), It.IsAny<Func<Product, Product>>()))
@@ -440,7 +442,8 @@ namespace AuctionSite.Tests.Unit.Service
                 Description = "new description",
                 Name = "new prod name",
                 Price = 321,
-                StockName = "new stock name"
+                StockName = "new stock name",
+                CategoryId = 6
             };
 
             var res = await _service.UpdateProductAsync(request);
@@ -450,6 +453,7 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.Equal(request.Name, product.Name);
             Assert.Equal(request.Price, product.Price);
             Assert.Equal(request.StockName, product.StockName);
+            Assert.Equal(request.CategoryId, product.CategoryId);
         }
 
         [Fact]
@@ -461,7 +465,8 @@ namespace AuctionSite.Tests.Unit.Service
                 Name = "product",
                 Description = "Description",
                 Price = 123,
-                StockName = "stock"
+                StockName = "stock",
+                CategoryId = 3
             };
 
             _productRepository.Setup(x => x.GetProductById(It.IsAny<int>(), It.IsAny<Func<Product, Product>>()))
@@ -475,7 +480,8 @@ namespace AuctionSite.Tests.Unit.Service
                 Description = null,
                 Name = null,
                 Price = null,
-                StockName = null
+                StockName = null,
+                CategoryId = null
             };
 
             var res = await _service.UpdateProductAsync(request);
@@ -485,6 +491,7 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.NotEqual(request.Name, product.Name);
             Assert.NotEqual(request.Price, product.Price);
             Assert.NotEqual(request.StockName, product.StockName);
+            Assert.NotEqual(request.CategoryId, product.CategoryId);
         }
 
         [Fact]
@@ -554,6 +561,87 @@ namespace AuctionSite.Tests.Unit.Service
             var res = await _service.UpdateProductAsync(request);
 
             Assert.False(res.Success);
+        }
+
+        [Fact]
+        public void GetPageCount_CategoryIdSpecified_RequestWithSize()
+        {
+            MockDataResponse<int>();
+
+            const int Count = 20;
+
+            _productRepository.Setup(x => x.GetCategoryPageCount(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(Count);
+
+            var request = new GetPageCountRequest { CategoryId = 1, PageSize = 2 };
+
+            var res = _service.GetPageCount(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(Count, res.Data);
+        }
+
+        [Fact]
+        public void GetPageCount_CategoryIdSpecified_RequestWithoutSize()
+        {
+            MockDataResponse<int>();
+
+            _productRepository.Setup(x => x.GetCategoryPageCount(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns((int _, int size) => size);
+
+            var request = new GetPageCountRequest { CategoryId = 1 };
+
+            var res = _service.GetPageCount(request);
+
+            Assert.True(res.Success);
+            Assert.Equal(10, res.Data);
+        }
+
+        [Theory]
+        [InlineData(0, 5)]
+        [InlineData(5, 1)]
+        [InlineData(null, 2)]
+        [InlineData(0, null)]
+        public void GetProducts_CategoryIdSpecified_Success(int? pageIndex, int? pageSize)
+        {
+            var products = new List<Product>
+            {
+                new Product { Id = 1, Name = "name1", CategoryId = 1 },
+                new Product { Id = 2, Name = "name2", CategoryId = 2  },
+                new Product { Id = 3, Name = "name3", CategoryId = 3  },
+                new Product { Id = 4, Name = "name4", CategoryId = 3  },
+                new Product { Id = 5, Name = "name5", CategoryId = 1  },
+                new Product { Id = 6, Name = "name6", CategoryId = 2  },
+                new Product { Id = 7, Name = "name7", CategoryId = 2 },
+                new Product { Id = 8, Name = "name8", CategoryId = 2 },
+                new Product { Id = 9, Name = "name9", CategoryId = 3 },
+                new Product { Id = 10, Name = "name10", CategoryId = 2 },
+                new Product { Id = 11, Name = "name11", CategoryId = 1 },
+            };
+
+            _productRepository.Setup(x => x.GetProductsByCategoryId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Func<Product, ProductListItemModel>>()))
+                .Returns((int id, int pageSize, int index, Func<Product, ProductListItemModel> selector)
+                    => products.Where(x => x.CategoryId == id).Skip(index * pageSize).Take(pageSize).Select(selector));
+
+            _productFactory.Setup(x => x.CreateListItem(It.IsAny<Product>()))
+                .Returns((Product prod) => new ProductListItemModel { Id = prod.Id, Name = prod.Name });
+
+            MockDataResponse<IEnumerable<ProductListItemModel>>();
+
+            var request = new GetProductsRequest
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                CategoryId = 2
+            };
+
+            var res = _service.GetProducts(request);
+
+            var testList = products.Where(x => x.CategoryId == request.CategoryId).Skip((pageIndex ?? 0) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
+
+            Assert.True(res.Success);
+            Assert.Equal(testList.Count, res.Data.Count());
+            Assert.Equivalent(testList.Select(x => x.Id), res.Data.Select(x => x.Id), true);
         }
     }
 }

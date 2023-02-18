@@ -14,5 +14,7 @@ namespace AuctionSite.Models.Product
         public IEnumerable<StockModel> Stocks { get; set; }
         public IEnumerable<int> ImageIds { get; set; }
         public string Created { get; set; }
+        public int? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
     }
 }
