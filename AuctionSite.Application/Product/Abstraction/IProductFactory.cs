@@ -10,5 +10,6 @@ namespace AuctionSite.Application.Abstraction
         ProductListItemModel CreateListItem(Product product);
         ProductModel CreateModel(Product product);
         ProductImage CreateImage(int productId, string name);
+        FoundProductsModel CreateFoundProducts(IEnumerable<ProductListItemModel> products, int pageCount);
     }
 }

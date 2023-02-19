@@ -13,5 +13,6 @@ namespace AuctionSite.Application.Abstraction
         DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(GetProductsRequest request);
         DataResponseModel<int> GetPageCount(GetPageCountRequest request);
         Task<ResponseModel> UpdateProductAsync(UpdateProductRequest request);
+        DataResponseModel<FoundProductsModel> SearchProducts(GetProductsRequest request);
     }
 }

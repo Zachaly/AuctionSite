@@ -43,6 +43,11 @@ namespace AuctionSite.Database.Repository
             return (int)Math.Ceiling(count / pageSize);
         }
 
+        public int GetPageCount(int? categoryId, string? name, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public T GetProductById<T>(int id, Func<Product, T> selector)
             => _dbContext.Product.Include(product => product.Owner)
                 .Include(product => product.Stocks)
@@ -81,6 +86,11 @@ namespace AuctionSite.Database.Repository
             var count = (decimal)_dbContext.Product.Where(product => product.OwnerId == userId).Count();
 
             return (int)Math.Ceiling(count / pageSize);
+        }
+
+        public IEnumerable<T> SearchProducts<T>(int? categoryId, string? name, int pageIndex, int pageSize, Func<Product, T> selector)
+        {
+            throw new NotImplementedException();
         }
 
         public Task UpdateProductAsync(Product product)

@@ -126,6 +126,11 @@ namespace AuctionSite.Application
             }
         }
 
+        public DataResponseModel<FoundProductsModel> SearchProducts(GetProductsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ResponseModel> UpdateProductAsync(UpdateProductRequest request)
         {
             try
