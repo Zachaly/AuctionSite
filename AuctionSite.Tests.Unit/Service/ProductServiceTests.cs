@@ -683,6 +683,8 @@ namespace AuctionSite.Tests.Unit.Service
                     PageCount = count
                 });
 
+            MockDataResponse<FoundProductsModel>();
+
             var request = new GetProductsRequest
             {
                 Name = "name",

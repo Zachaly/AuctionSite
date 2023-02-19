@@ -2,6 +2,7 @@
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuctionSite.Database.Repository
 {
@@ -9,6 +10,7 @@ namespace AuctionSite.Database.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly AppDbContext _dbContext;
+        private const int LevensteinMax = 5;
 
         public ProductRepository(AppDbContext dbContext)
         {
@@ -45,7 +47,13 @@ namespace AuctionSite.Database.Repository
 
         public int GetPageCount(int? categoryId, string? name, int pageSize)
         {
-            throw new NotImplementedException();
+            var query = _dbContext.Product.Include(product => product.Images)
+                .Where(product => (categoryId == null || product.CategoryId == categoryId) &&
+                (name != null && name.LevenshteinDistance(product.Name) < LevensteinMax));
+
+            
+
+            return (int)Math.Ceiling((decimal)query.Count() / pageSize);
         }
 
         public T GetProductById<T>(int id, Func<Product, T> selector)
@@ -90,8 +98,24 @@ namespace AuctionSite.Database.Repository
 
         public IEnumerable<T> SearchProducts<T>(int? categoryId, string? name, int pageIndex, int pageSize, Func<Product, T> selector)
         {
-            throw new NotImplementedException();
+            var query = _dbContext.Product.Include(product => product.Images)
+                .Where(product => (categoryId == null || product.CategoryId == categoryId) &&
+                (name == null || name.LevenshteinDistance(product.Name) < LevensteinMax));
+
+            if (name is not null)
+            {
+                query = query.OrderByDescending(product => name.LevenshteinDistance(product.Name));
+            }
+            else
+            {
+                query = query.OrderByDescending(product => product.Created);
+            }
+
+            var t = query.ToList();
+
+            return query.Skip(pageIndex * pageSize).Take(pageSize).Select(selector);
         }
+        
 
         public Task UpdateProductAsync(Product product)
         {

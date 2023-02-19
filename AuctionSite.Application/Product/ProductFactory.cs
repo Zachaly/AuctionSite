@@ -30,9 +30,11 @@ namespace AuctionSite.Application
             };
 
         public FoundProductsModel CreateFoundProducts(IEnumerable<ProductListItemModel> products, int pageCount)
-        {
-            throw new NotImplementedException();
-        }
+            => new FoundProductsModel
+            {
+                Products = products,
+                PageCount = pageCount
+            };
 
         public ProductImage CreateImage(int productId, string name)
             => new ProductImage
