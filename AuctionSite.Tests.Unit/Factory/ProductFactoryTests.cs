@@ -1,6 +1,7 @@
 ﻿using AuctionSite.Application;
 using AuctionSite.Application.Abstraction;
 using AuctionSite.Domain.Entity;
+using AuctionSite.Models.Product;
 using AuctionSite.Models.Product.Request;
 using AuctionSite.Models.Stock;
 using AuctionSite.Models.Stock.Request;
@@ -116,6 +117,25 @@ namespace AuctionSite.Tests.Unit.Factory
 
             Assert.Equal(Id, image.ProductId);
             Assert.Equal(File, image.FileName);
+        }
+
+        [Fact]
+        public void CreateFoundProducts()
+        {
+            var products = new List<ProductListItemModel>
+            {
+                new ProductListItemModel { Id = 1 },
+                new ProductListItemModel { Id = 2 },
+                new ProductListItemModel { Id = 3 },
+                new ProductListItemModel { Id = 4 },
+            };
+
+            const int PageCount = 10;
+
+            var model = _productFactory.CreateFoundProducts(products, PageCount);
+
+            Assert.Equal(PageCount, model.PageCount);
+            Assert.Equivalent(products.Select(x => x.Id), model.Products.Select(x => x.Id));
         }
     }
 }

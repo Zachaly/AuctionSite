@@ -9,6 +9,7 @@ using AuctionSite.Models.Stock.Request;
 using AuctionSite.Models.Response;
 using Moq;
 using FluentValidation.Results;
+using System.Net.WebSockets;
 
 namespace AuctionSite.Tests.Unit.Service
 {
@@ -642,6 +643,58 @@ namespace AuctionSite.Tests.Unit.Service
             Assert.True(res.Success);
             Assert.Equal(testList.Count, res.Data.Count());
             Assert.Equivalent(testList.Select(x => x.Id), res.Data.Select(x => x.Id), true);
+        }
+
+        [Fact]
+        public async void SearchProducts_Success()
+        {
+            var products = new List<Product>
+            {
+                new Product { Id = 1, Name = "name1", CategoryId = 1 },
+                new Product { Id = 2, Name = "name2", CategoryId = 2  },
+                new Product { Id = 3, Name = "name3", CategoryId = 3  },
+                new Product { Id = 4, Name = "name4", CategoryId = 3  },
+                new Product { Id = 5, Name = "name5", CategoryId = 1  },
+                new Product { Id = 6, Name = "name6", CategoryId = 2  },
+                new Product { Id = 7, Name = "name7", CategoryId = 2 },
+                new Product { Id = 8, Name = "name8", CategoryId = 2 },
+                new Product { Id = 9, Name = "name9", CategoryId = 3 },
+                new Product { Id = 10, Name = "name10", CategoryId = 2 },
+                new Product { Id = 11, Name = "name11", CategoryId = 1 },
+            };
+
+            _productRepository.Setup(x => x.SearchProducts(It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<int>(),
+                It.IsAny<int>(), It.IsAny<Func<Product, ProductListItemModel>>()))
+                .Returns((int? _, string? __, int index, int size, Func<Product, ProductListItemModel> selector) 
+                    => products.Skip(index * size).Take(size).Select(selector));
+
+            const int PageCount = 10;
+
+            _productRepository.Setup(x => x.GetPageCount(It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<int>()))
+                .Returns(PageCount);
+
+            _productFactory.Setup(x => x.CreateListItem(It.IsAny<Product>()))
+                .Returns((Product prod) => new ProductListItemModel { Id = prod.Id });
+
+            _productFactory.Setup(x => x.CreateFoundProducts(It.IsAny<IEnumerable<ProductListItemModel>>(), It.IsAny<int>()))
+                .Returns((IEnumerable<ProductListItemModel> prods, int count) => new FoundProductsModel
+                {
+                    Products = prods,
+                    PageCount = count
+                });
+
+            var request = new GetProductsRequest
+            {
+                Name = "name",
+                CategoryId = 2,
+                PageIndex = 0,
+                PageSize = 10,
+            };
+
+            var res = _service.SearchProducts(request);
+
+            Assert.True(res.Success);
+            Assert.Equivalent(products.Take(10).Select(x => x.Id), res.Data.Products.Select(x => x.Id));
         }
     }
 }
