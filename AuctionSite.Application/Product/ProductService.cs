@@ -113,7 +113,7 @@ namespace AuctionSite.Application
                 }
                 else if(request.CategoryId is not null)
                 {
-                    data = _productRepository.GetProductsByCategoryId(request.CategoryId.Value, index.Size, index.Index, product => _productFactory.CreateListItem(product));
+                    data = _productRepository.GetProductsByCategoryId(request.CategoryId.Value, index.Index, index.Size, product => _productFactory.CreateListItem(product));
                 }
                 else
                 {

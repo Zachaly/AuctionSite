@@ -2,7 +2,6 @@
 using AuctionSite.Domain.Entity;
 using AuctionSite.Domain.Util;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AuctionSite.Database.Repository
 {
@@ -10,7 +9,6 @@ namespace AuctionSite.Database.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly AppDbContext _dbContext;
-        private const int LevensteinMax = 5;
 
         public ProductRepository(AppDbContext dbContext)
         {
@@ -47,11 +45,9 @@ namespace AuctionSite.Database.Repository
 
         public int GetPageCount(int? categoryId, string? name, int pageSize)
         {
-            var query = _dbContext.Product.Include(product => product.Images)
+            var query = _dbContext.Product
                 .Where(product => (categoryId == null || product.CategoryId == categoryId) &&
-                (name != null && name.LevenshteinDistance(product.Name) < LevensteinMax));
-
-            
+                (name == null || product.Name.Contains(name)));
 
             return (int)Math.Ceiling((decimal)query.Count() / pageSize);
         }
@@ -100,18 +96,16 @@ namespace AuctionSite.Database.Repository
         {
             var query = _dbContext.Product.Include(product => product.Images)
                 .Where(product => (categoryId == null || product.CategoryId == categoryId) &&
-                (name == null || name.LevenshteinDistance(product.Name) < LevensteinMax));
+                (name == null || product.Name.Contains(name)));
 
             if (name is not null)
             {
-                query = query.OrderByDescending(product => name.LevenshteinDistance(product.Name));
+                query = query.OrderByDescending(product => product.Name);
             }
             else
             {
                 query = query.OrderByDescending(product => product.Created);
             }
-
-            var t = query.ToList();
 
             return query.Skip(pageIndex * pageSize).Take(pageSize).Select(selector);
         }

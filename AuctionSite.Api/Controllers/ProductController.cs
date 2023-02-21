@@ -147,5 +147,18 @@ namespace AuctionSite.Api.Controllers
 
             return res.ReturnNoContentOrBadRequest();
         }
+
+        /// <summary>
+        /// Searches for products
+        /// </summary>
+        /// <response code="200">List of products and page count</response>
+        [HttpGet("search")]
+        [ProducesResponseType(200)]
+        public ActionResult<DataResponseModel<FoundProductsModel>> SearchProducts([FromQuery] GetProductsRequest request)
+        {
+            var res = _productService.SearchProducts(request);
+
+            return res.ReturnOkOrBadRequest();
+        }
     }
 }

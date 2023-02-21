@@ -621,7 +621,7 @@ namespace AuctionSite.Tests.Unit.Service
             };
 
             _productRepository.Setup(x => x.GetProductsByCategoryId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Func<Product, ProductListItemModel>>()))
-                .Returns((int id, int pageSize, int index, Func<Product, ProductListItemModel> selector)
+                .Returns((int id, int index, int pageSize, Func<Product, ProductListItemModel> selector)
                     => products.Where(x => x.CategoryId == id).Skip(index * pageSize).Take(pageSize).Select(selector));
 
             _productFactory.Setup(x => x.CreateListItem(It.IsAny<Product>()))

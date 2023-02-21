@@ -19,7 +19,20 @@ namespace AuctionSite.Tests.Integration
                 StockName = $"opt {id}",
                 Stocks = new List<Stock>() { new Stock() { Value = $"value {id}", Quantity = 1, ProductId = id } },
                 OwnerId = userId,
-                Price = id * 10
+                Price = id * 10,
+            };
+
+        private Product CreateTestProduct(int id, string name, int categoryId)
+            => new Product
+            {
+                Id = id,
+                Description = $"desc {id}",
+                Name = name,
+                StockName = $"opt {id}",
+                Stocks = new List<Stock>() { new Stock() { Value = $"value {id}", Quantity = 1, ProductId = id } },
+                OwnerId = $"id{id}",
+                Price = id * 10,
+                CategoryId = categoryId,
             };
 
         [Fact]
@@ -489,6 +502,38 @@ namespace AuctionSite.Tests.Integration
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.NotEmpty(content.Error);
+        }
+
+        [Fact]
+        public async Task SearchProducts_Success()
+        {
+            await AddToDatabase(new List<Product>
+            {
+                CreateTestProduct(1, "name", 1),
+                CreateTestProduct(2, "product", 2),
+                CreateTestProduct(3, "name", 3),
+                CreateTestProduct(4, "product", 3),
+                CreateTestProduct(5, "name", 1),
+                CreateTestProduct(6, "product", 2),
+                CreateTestProduct(7, "name", 1),
+                CreateTestProduct(8, "product", 3),
+                CreateTestProduct(9, "name", 2),
+            });
+
+            var request = new GetProductsRequest
+            {
+                Name = "name",
+                CategoryId = 3,
+            };
+
+            var response = await _httpClient.GetAsync($"{ApiPath}/search?name={request.Name}&categoryId={request.CategoryId}");
+            var content = await response.Content.ReadFromJsonAsync<DataResponseModel<FoundProductsModel>>();
+
+            var testProducts = GetFromDatabase<Product>().Where(x => x.Name == request.Name && x.CategoryId == request.CategoryId).ToList();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(1, content.Data.PageCount);
+            Assert.Equivalent(testProducts.Select(x => x.Id), content.Data.Products.Select(x => x.Id));
         }
     }
 }

@@ -1,7 +1,18 @@
 <nav class="navbar navbar-expand-lg bg-dark">
     <div class="container">
-        <a routerLink="/" class="navbar-brand text-light">Auction site</a>
+        <div class="navbar-brand">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a routerLink="/" class="nav-link text-light">Auction site</a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/search" class="nav-link text-light">Search</a>
+                </li>
+            </ul>
+        </div>
+
         <div class="d-flex" *ngIf="!authorized">
+            <a routerLink="/search" class="nav-link text-light">Search</a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a routerLink="/login" class="nav-link text-light">Login</a>
