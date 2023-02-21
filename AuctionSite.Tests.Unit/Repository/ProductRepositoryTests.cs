@@ -237,5 +237,75 @@ namespace AuctionSite.Tests.Unit.Repository
 
             Assert.Equal(2, count);
         }
+
+        [Fact]
+        public void SearchProducts_CategoryAndNameNull()
+        {
+            AddContent(new List<Product>
+            {
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id1", Price = 123, CategoryId = 1 },
+                new Product { Id = 2, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 3 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id2", Price = 123, CategoryId = 3 },
+                new Product { Id = 4, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 1 },
+                new Product { Id = 5, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id3", Price = 123, CategoryId = 3 },
+                new Product { Id = 6, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id4", Price = 123, CategoryId = 3 },
+                new Product { Id = 7, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id5", Price = 123, CategoryId = 1 },
+                new Product { Id = 8, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 3 },
+                new Product { Id = 9, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 2 },
+            });
+
+            var res = _repository.SearchProducts(null, null, 0, 3, x => x);
+
+            Assert.Equal(_dbContext.Product.Take(3).Select(x => x.Id), res.Select(x => x.Id));
+        }
+
+        [Fact]
+        public void SearchProducts_With_CategoryAndName()
+        {
+            AddContent(new List<Product>
+            {
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id1", Price = 123, CategoryId = 1 },
+                new Product { Id = 2, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 3 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id2", Price = 123, CategoryId = 3 },
+                new Product { Id = 4, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 1 },
+                new Product { Id = 5, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id3", Price = 123, CategoryId = 3 },
+                new Product { Id = 6, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id4", Price = 123, CategoryId = 3 },
+                new Product { Id = 7, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id5", Price = 123, CategoryId = 1 },
+                new Product { Id = 8, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 3 },
+                new Product { Id = 9, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 2 },
+            });
+
+            const int CategoryId = 2;
+            const string Name = "name";
+
+            var res = _repository.SearchProducts(CategoryId, Name, 0, 3, x => x);
+
+            Assert.Equal(_dbContext.Product.Where(x => x.CategoryId == CategoryId && x.Name == Name).Take(3).Select(x => x.Id),
+                res.Select(x => x.Id));
+        }
+
+        [Fact]
+        public void GetPageCount_With_CategoryIdAndName()
+        {
+            AddContent(new List<Product>
+            {
+                new Product { Id = 1, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id1", Price = 123, CategoryId = 1 },
+                new Product { Id = 2, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 3 },
+                new Product { Id = 3, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id2", Price = 123, CategoryId = 3 },
+                new Product { Id = 4, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 1 },
+                new Product { Id = 5, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id3", Price = 123, CategoryId = 3 },
+                new Product { Id = 6, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id4", Price = 123, CategoryId = 3 },
+                new Product { Id = 7, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id5", Price = 123, CategoryId = 1 },
+                new Product { Id = 8, Description = "desc", Name = "product", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 3 },
+                new Product { Id = 9, Description = "desc", Name = "name", StockName = "optname", OwnerId = "id", Price = 123, CategoryId = 2 },
+            });
+
+            const int CategoryId = 3;
+            const string Name = "name";
+
+            var res = _repository.GetPageCount(CategoryId, Name, 1);
+
+            Assert.Equal(2, res);
+        }
     }
 }

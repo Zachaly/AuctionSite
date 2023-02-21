@@ -1,5 +1,12 @@
-<h2> Available offers: </h2>
-<div class="d-flex flex-wrap">
-    <app-product-list-item *ngFor="let product of products" [product]="product" />
+<div class="row">
+    <div class="col-2">
+        <h5 *ngFor="let category of categories" class="mt-2"><a [routerLink]="['/category', category.id]" class="nav-link">{{ category.name }}</a></h5>
+    </div>
+    <div class="col-10">
+        <h2> Available offers: </h2>
+        <div class="d-flex flex-wrap">
+            <app-product-list-item *ngFor="let product of products" [product]="product" />
+        </div>
+        <app-page-bar [count]="pageCount" (changePage)="changePage($event)" />
+    </div>
 </div>
-<app-page-bar [count]="pageCount" (changePage)="changePage($event)" />

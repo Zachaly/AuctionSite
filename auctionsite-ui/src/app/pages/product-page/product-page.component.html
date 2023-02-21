@@ -12,7 +12,7 @@
     <div class="col col-6">
         <h1 class="text-center">{{ product.name }} <button class="btn btn-success ml-3" [disabled]="!currentStock.id || !selectedQuantity" (click)="addingToList = true">Save</button></h1>
         <p class="fs-4" *ngIf="product.categoryId">
-            Category: {{ product.categoryName }}
+            Category: <a [routerLink]="['/category', product.categoryId]" class="nav-link">{{ product.categoryName }}</a>
         </p>
         <p class="fs-4">
             Offer created on: {{ product.created }}

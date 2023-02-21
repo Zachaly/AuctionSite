@@ -1,0 +1,5 @@
+<h2> Available offers: </h2>
+<div class="d-flex flex-wrap">
+    <app-product-list-item *ngFor="let product of products" [product]="product" />
+</div>
+<app-page-bar [count]="pageCount" (changePage)="changePage($event)" />

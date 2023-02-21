@@ -40,6 +40,8 @@ import { AddReviewComponent } from './components/add-review/add-review.component
 import { ReviewListItemComponent } from './components/review-list-item/review-list-item.component';
 import { UpdateReviewComponent } from './components/update-review/update-review.component';
 import { CategorySelectComponent } from './components/category-select/category-select.component';
+import { CategoryPageComponent } from './pages/category-page/category-page.component';
+import { SearchPageComponent } from './pages/search-page/search-page.component';
 
 const route = (path: string, component: any) => (
   {
@@ -64,7 +66,9 @@ const routes: Routes = [
   route('list/:id', ListPageComponent),
   route('product-management', ProductsManagementPageComponent),
   route('product-management/:productId', ProductManagementPageComponent),
-  route('order-management/:id', OrderManagementPageComponent)
+  route('order-management/:id', OrderManagementPageComponent),
+  route('category/:id', CategoryPageComponent),
+  route('search', SearchPageComponent)
 ]
 
 @NgModule({
@@ -105,6 +109,8 @@ const routes: Routes = [
     ReviewListItemComponent,
     UpdateReviewComponent,
     CategorySelectComponent,
+    CategoryPageComponent,
+    SearchPageComponent,
   ],
   imports: [
     BrowserModule,

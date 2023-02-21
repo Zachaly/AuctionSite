@@ -24,6 +24,8 @@ namespace AuctionSite.Application
             _productRepository = productRepository;
         }
 
+        private (int Index, int Size) GetIndexAndSize(PagedRequest request) => (request.PageIndex ?? 0, request.PageSize ?? 10);
+
         public async Task<ResponseModel> AddProductAsync(AddProductRequest request)
         {
             var validation = new AddProductRequestValidator(new AddStockRequestValidator()).Validate(request);
@@ -100,23 +102,22 @@ namespace AuctionSite.Application
 
         public DataResponseModel<IEnumerable<ProductListItemModel>> GetProducts(GetProductsRequest request)
         {
-            var index = request.PageIndex ?? 0;
-            var pageSize = request.PageSize ?? 10;
+            var index = GetIndexAndSize(request);
 
             try
             {
                 IEnumerable<ProductListItemModel> data;
                 if(request.UserId is not null)
                 {
-                    data = _productRepository.GetProductsByUserId(request.UserId, pageSize, index, product => _productFactory.CreateListItem(product));
+                    data = _productRepository.GetProductsByUserId(request.UserId, index.Size, index.Index, product => _productFactory.CreateListItem(product));
                 }
                 else if(request.CategoryId is not null)
                 {
-                    data = _productRepository.GetProductsByCategoryId(request.CategoryId.Value, pageSize, index, product => _productFactory.CreateListItem(product));
+                    data = _productRepository.GetProductsByCategoryId(request.CategoryId.Value, index.Index, index.Size, product => _productFactory.CreateListItem(product));
                 }
                 else
                 {
-                    data = _productRepository.GetProducts(index, pageSize, product => _productFactory.CreateListItem(product));
+                    data = _productRepository.GetProducts(index.Index, index.Size, product => _productFactory.CreateListItem(product));
                 }
                 return _responseFactory.CreateSuccess(data);
             }
@@ -124,6 +125,20 @@ namespace AuctionSite.Application
             {
                 return _responseFactory.CreateFailure<IEnumerable<ProductListItemModel>>(ex.Message);
             }
+        }
+
+        public DataResponseModel<FoundProductsModel> SearchProducts(GetProductsRequest request)
+        {
+            var index = GetIndexAndSize(request);
+
+            var products = _productRepository.SearchProducts(request.CategoryId, request.Name,
+                index.Index, index.Size, product => _productFactory.CreateListItem(product));
+
+            var count = _productRepository.GetPageCount(request.CategoryId, request.Name, index.Size);
+
+            var data = _productFactory.CreateFoundProducts(products, count);
+
+            return _responseFactory.CreateSuccess(data);
         }
 
         public async Task<ResponseModel> UpdateProductAsync(UpdateProductRequest request)

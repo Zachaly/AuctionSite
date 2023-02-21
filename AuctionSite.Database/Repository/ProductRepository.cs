@@ -43,6 +43,15 @@ namespace AuctionSite.Database.Repository
             return (int)Math.Ceiling(count / pageSize);
         }
 
+        public int GetPageCount(int? categoryId, string? name, int pageSize)
+        {
+            var query = _dbContext.Product
+                .Where(product => (categoryId == null || product.CategoryId == categoryId) &&
+                (name == null || product.Name.Contains(name)));
+
+            return (int)Math.Ceiling((decimal)query.Count() / pageSize);
+        }
+
         public T GetProductById<T>(int id, Func<Product, T> selector)
             => _dbContext.Product.Include(product => product.Owner)
                 .Include(product => product.Stocks)
@@ -82,6 +91,25 @@ namespace AuctionSite.Database.Repository
 
             return (int)Math.Ceiling(count / pageSize);
         }
+
+        public IEnumerable<T> SearchProducts<T>(int? categoryId, string? name, int pageIndex, int pageSize, Func<Product, T> selector)
+        {
+            var query = _dbContext.Product.Include(product => product.Images)
+                .Where(product => (categoryId == null || product.CategoryId == categoryId) &&
+                (name == null || product.Name.Contains(name)));
+
+            if (name is not null)
+            {
+                query = query.OrderByDescending(product => product.Name);
+            }
+            else
+            {
+                query = query.OrderByDescending(product => product.Created);
+            }
+
+            return query.Skip(pageIndex * pageSize).Take(pageSize).Select(selector);
+        }
+        
 
         public Task UpdateProductAsync(Product product)
         {

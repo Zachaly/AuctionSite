@@ -29,6 +29,13 @@ namespace AuctionSite.Application
                 CategoryId = request.CategoryId,
             };
 
+        public FoundProductsModel CreateFoundProducts(IEnumerable<ProductListItemModel> products, int pageCount)
+            => new FoundProductsModel
+            {
+                Products = products,
+                PageCount = pageCount
+            };
+
         public ProductImage CreateImage(int productId, string name)
             => new ProductImage
             {
